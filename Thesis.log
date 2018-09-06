@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  6 SEP 2018 18:22
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  6 SEP 2018 18:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1137,6 +1137,8 @@ Package hyperref Info: Option `unicode' set `true' on input line 4383.
 File: puenc.def 2018/02/06 v6.86b Hyperref: PDF Unicode definition (HO)
 )
 Package hyperref Info: Option `CJKbookmarks' set `true' on input line 4383.
+Package hyperref Info: Option `bookmarks' set `true' on input line 4383.
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 4383.
 Package hyperref Info: Hyper figures OFF on input line 4509.
 Package hyperref Info: Link nesting OFF on input line 4514.
 Package hyperref Info: Hyper index ON on input line 4517.
@@ -2365,7 +2367,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 110.
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 110.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 110.
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 26F9401DB61992771D7AC51ABD8E1D79.
+(rerunfilecheck)             Checksum: B4F71BBAE8E6581D52BE5F59B2583615.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -2379,7 +2381,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 110.
 Here is how much of TeX's memory you used:
  40084 strings out of 492970
  824895 string characters out of 6133939
- 876288 words of memory out of 5000000
+ 876332 words of memory out of 5000000
  43411 multiletter control sequences out of 15000+600000
  626846 words of font info for 190 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
