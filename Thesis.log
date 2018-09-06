@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  6 SEP 2018 18:38
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  7 SEP 2018 03:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2182,18 +2182,18 @@ LaTeX Font Warning: Font shape `TU/STHeiti(0)/bx/n' undefined
 
 ] (./B2-ABSTRACT-E.tex) [3] [4
 
-] (./Thesis.toc)
+] (./Thesis.toc [5])
 \tf@toc=\write6
 \openout6 = `Thesis.toc'.
 
- [5] [6
-
-] (./Thesis.lof)
+ [6] (./Thesis.lof)
 \tf@lof=\write7
 \openout7 = `Thesis.lof'.
 
 
-[7] [8
+[7
+
+] [8
 
 ] (./Thesis.lot)
 \tf@lot=\write8
@@ -2204,9 +2204,8 @@ LaTeX Font Warning: Font shape `TU/STHeiti(0)/bx/n' undefined
 ] (./CHAP1.tex
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 5.
+(hyperref)                be the same. Added a new anchor on input line 14.
 
-)
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2216,15 +2215,16 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 [1
 
 ]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2
-
-] (./CHAP2.tex)
+[2])
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2240,7 +2240,10 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [4
 
-] (./CHAP3.tex)
+] (./CHAP2.tex
+File: ./Figures/Android-Framework.png Graphic file (type bmp)
+<./Figures/Android-Framework.png>
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2254,9 +2257,13 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[6
+[6]
+File: ./Figures/Activity-lifecycle.png Graphic file (type bmp)
+<./Figures/Activity-lifecycle.png>
 
-] (./CHAP4.tex)
+
+LaTeX Warning: Float too large for page by 0.18858pt on input line 55.
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2270,9 +2277,11 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[8
+[8]
 
-] (./CHAP5.tex)
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 74.
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2280,47 +2289,121 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [9]
+File: ./Figures/handler-code.png Graphic file (type bmp)
+<./Figures/handler-code.png>
+File: ./Figures/Handler-apis.png Graphic file (type bmp)
+<./Figures/Handler-apis.png>
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[10
+[10]
+File: ./Figures/Handler-framework.png Graphic file (type bmp)
+<./Figures/Handler-framework.png>
 
-] (./CHAP6.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
 
-[11]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[12
-
-] (./CHAP7.tex)
+[11])
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[13]
+[12] (./CHAP3.tex
+Missing character: There is no ， in font [lmroman12-regular]:mapping=tex-text;!
+
+
+LaTeX Font Warning: Font shape `TU/STSong(0)/bx/it' undefined
+(Font)              using `TU/STSong(0)/bx/n' instead on input line 33.
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[14
+[13
 
-] (./Thesis.bbl) [15
+]
+File: ./Figures/code-sample.png Graphic file (type bmp)
+<./Figures/code-sample.png>
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[14]
+File: ./Figures/rundroid-overview.png Graphic file (type bmp)
+<./Figures/rundroid-overview.png>
+
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 137.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[15]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[16]
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 147.
+
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 156.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[17])
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[18] (./CHAP4.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[19
 
 ]
 
@@ -2329,7 +2412,70 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[16
+[20
+
+] (./CHAP5.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[21]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[22
+
+] (./CHAP6.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[23]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[24
+
+] (./CHAP7.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[25]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[26
+
+] (./Thesis.bbl
+
+Package natbib Warning: Empty `thebibliography' environment on input line 9.
+
+) [27
+
+]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[28
 
 ] (./D2-ACHNOWLEDGEMENT.tex)
 
@@ -2338,14 +2484,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[17]
+[29]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[18
+[30
 
 ] (./D3-MYACHIEVEMENTS.tex
 Overfull \hbox (31.7625pt too wide) in paragraph at lines 9--10
@@ -2360,14 +2506,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[19]
+[31]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 110.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 110.
  (./Thesis.aux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 110.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 110.
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: B4F71BBAE8E6581D52BE5F59B2583615.
+(rerunfilecheck)             Checksum: A86F2249B52B8DF03B061706381314F3.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -2379,12 +2525,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 110.
  ) 
 Here is how much of TeX's memory you used:
- 40084 strings out of 492970
- 824895 string characters out of 6133939
- 876332 words of memory out of 5000000
- 43411 multiletter control sequences out of 15000+600000
- 626846 words of font info for 190 fonts, out of 8000000 for 9000
+ 40451 strings out of 492970
+ 846024 string characters out of 6133939
+ 889226 words of memory out of 5000000
+ 43767 multiletter control sequences out of 15000+600000
+ 632390 words of font info for 192 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 57i,11n,81p,10408b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,12n,81p,10408b,428s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Thesis.pdf (37 pages).
+Output written on Thesis.pdf (49 pages).

@@ -1,0 +1,6 @@
+\beamer@sectionintoc {1}{ Why we need RunDroid}{3}{0}{1}
+\beamer@sectionintoc {2}{How RunDroid works}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{How RunDroid works}{6}{0}{2}
+\beamer@subsectionintoc {2}{2}{RunDroid for Visualization}{9}{0}{2}
+\beamer@subsectionintoc {2}{3}{RunDroid on fault localization}{10}{0}{2}
+\beamer@sectionintoc {3}{Customized work \& Furture work}{13}{0}{3}

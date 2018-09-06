@@ -24,23 +24,70 @@
 \HyPL@Entry{18<</S/D>>}
 \@writefile{toc}{\contentsline {section}{\numberline {一}绪论}{1}{section.0.1}}
 \newlabel{ch1}{{一}{1}{绪论}{section.0.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {一.1}xxx}{1}{subsection.0.1.1}}
-\@writefile{toc}{\contentsline {subsubsection}{xxxxx}{1}{section*.4}}
-\citation{sun2016monitoring}
-\@writefile{toc}{\contentsline {section}{\numberline {二}基本概念及准备知识 }{3}{section.0.2}}
-\newlabel{ch2}{{二}{3}{基本概念及准备知识 }{section.0.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {三}X }{5}{section.0.3}}
-\newlabel{ch3}{{三}{5}{X }{section.0.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {四}X}{7}{section.0.4}}
-\newlabel{ch4}{{四}{7}{X}{section.0.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {五}X}{9}{section.0.5}}
-\newlabel{ch5}{{五}{9}{X}{section.0.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {六}X}{11}{section.0.6}}
-\newlabel{ch6}{{六}{11}{X}{section.0.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {七}X }{13}{section.0.7}}
-\newlabel{ch7}{{七}{13}{X }{section.0.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {一.1}研究背景}{1}{subsection.0.1.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {一.2}研究意义}{1}{subsection.0.1.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {一.3} Android分析技术介绍}{1}{subsection.0.1.3}}
+\@writefile{toc}{\contentsline {subsubsection}{静态分析技术}{1}{section*.4}}
+\@writefile{toc}{\contentsline {subsubsection}{ 动态分析技术}{2}{section*.4}}
+\@writefile{toc}{\contentsline {subsubsection}{基于其他技术的分析方法}{3}{section*.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {一.4} 本文的主要工作}{3}{subsection.0.1.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {一.5}本文的组织结构}{3}{subsection.0.1.5}}
+\@writefile{toc}{\contentsline {section}{\numberline {二}Android系统相关背景介绍 }{5}{section.0.2}}
+\newlabel{ch2}{{二}{5}{Android系统相关背景介绍 }{section.0.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {二.1}Android系统结构介绍}{5}{subsection.0.2.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Android系统框架图\relax }}{6}{figure.caption.5}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:Android-Framework}{{1}{6}{Android系统框架图\relax }{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {二.2}Android中的Activity}{7}{subsection.0.2.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Activity的生命周期\relax }}{8}{figure.caption.6}}
+\newlabel{fig:Activity-lifecycle}{{2}{8}{Activity的生命周期\relax }{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {二.3} Android中的多线程交互}{9}{subsection.0.2.3}}
+\@writefile{toc}{\contentsline {subsubsection}{基于Java的多线程交互}{9}{section*.7}}
+\@writefile{toc}{\contentsline {subsubsection}{基于Handler的多线程消息调度}{9}{section*.7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Handler的使用实例\relax }}{10}{figure.caption.8}}
+\newlabel{fig:handler-code}{{3}{10}{Handler的使用实例\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Handler 各API之间的调用关系\relax }}{10}{figure.caption.9}}
+\newlabel{fig:handler-apis}{{4}{10}{Handler 各API之间的调用关系\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Handler的工作原理\relax }}{11}{figure.caption.10}}
+\newlabel{fig:handler-framework}{{5}{11}{Handler的工作原理\relax }{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {二.4}本文遇到的困难与挑战}{12}{subsection.0.2.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {二.5} 本章小结}{12}{subsection.0.2.5}}
+\@writefile{toc}{\contentsline {section}{\numberline {三}RunDroid系统的设计与实现 }{13}{section.0.3}}
+\newlabel{ch3}{{三}{13}{RunDroid系统的设计与实现 }{section.0.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.1}系统功能介绍}{13}{subsection.0.3.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.2}概念定义}{13}{subsection.0.3.2}}
+\newlabel{equ:extend_invoke}{{1}{13}{概念定义}{equation.0.3.1}{}}
+\newlabel{equ:cg_sample}{{2}{13}{概念定义}{equation.0.3.2}{}}
+\newlabel{equ:dcg_sample}{{3}{14}{概念定义}{equation.0.3.3}{}}
+\newlabel{equ:def_edcg}{{4}{14}{}{equation.0.3.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.3} 设计思路介绍}{14}{subsection.0.3.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  面向过程编程语言的函数调用的示例\relax }}{15}{figure.caption.11}}
+\newlabel{fig:code_sample}{{6}{15}{面向过程编程语言的函数调用的示例\relax }{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.4}技术路线（偏工程性）}{15}{subsection.0.3.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  RunDroid基本架构图\relax }}{16}{figure.caption.12}}
+\newlabel{fig:rundroid_overview}{{7}{16}{RunDroid基本架构图\relax }{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.5}相关技术介绍}{17}{subsection.0.3.5}}
+\@writefile{toc}{\contentsline {subsubsection}{ srcML介绍}{17}{section*.13}}
+\@writefile{toc}{\contentsline {subsubsection}{Xposed框架介绍}{17}{section*.13}}
+\@writefile{toc}{\contentsline {subsubsection}{ Neo4j介绍}{17}{section*.13}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.6}模块实现介绍}{18}{subsection.0.3.6}}
+\@writefile{toc}{\contentsline {subsubsection}{源代码预处理组件（Preprocessor）}{18}{section*.14}}
+\@writefile{toc}{\contentsline {subsubsection}{ 运行时日志记录器（Runtime Logger）}{18}{section*.14}}
+\@writefile{toc}{\contentsline {subsubsection}{调用图构建器（Call-graph Builder）}{18}{section*.14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.7}构建过程介绍}{18}{subsection.0.3.7}}
+\@writefile{toc}{\contentsline {subsubsection}{如何构建函数调用图}{18}{section*.15}}
+\@writefile{toc}{\contentsline {subsubsection}{如何构建Activity的生命周期}{18}{section*.15}}
+\@writefile{toc}{\contentsline {subsubsection}{ 如何构建多线程触发关系}{18}{section*.15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {三.8}本章小结}{18}{subsection.0.3.8}}
+\@writefile{toc}{\contentsline {section}{\numberline {四}X}{19}{section.0.4}}
+\newlabel{ch4}{{四}{19}{X}{section.0.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {五}X}{21}{section.0.5}}
+\newlabel{ch5}{{五}{21}{X}{section.0.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {六}X}{23}{section.0.6}}
+\newlabel{ch6}{{六}{23}{X}{section.0.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {七}X }{25}{section.0.7}}
+\newlabel{ch7}{{七}{25}{X }{section.0.7}{}}
 \bibdata{sigproc}
-\bibcite{sun2016monitoring}{{1}{2016}{{Sun\ et~al.}}{{Sun and Qin}}}
-\@writefile{toc}{\contentsline {chapter}{参考文献}{15}{section*.5}}
-\@writefile{toc}{\contentsline {chapter}{致谢}{17}{section*.7}}
-\@writefile{toc}{\contentsline {chapter}{攻读硕士学位期间发表论文和参与科研情况}{19}{section*.8}}
+\@writefile{toc}{\contentsline {chapter}{参考文献}{27}{section*.16}}
+\@writefile{toc}{\contentsline {chapter}{致谢}{29}{section*.18}}
+\@writefile{toc}{\contentsline {chapter}{攻读硕士学位期间发表论文}{31}{section*.19}}
