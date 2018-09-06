@@ -37,11 +37,16 @@
 \pagestyle{plain}
 %\setlength{\baselineskip}{0.5\baselineskip}
 %中文摘要
-\input{B1-ABSTRACT.tex}
-%英文摘要
-\input{B2-ABSTRACT-E.tex}
-% 目录
 
+\cleardoublepage
+\input{B1-ABSTRACT.tex}
+
+%英文摘要
+\cleardoublepage
+\input{B2-ABSTRACT-E.tex}
+
+
+% 目录
 \setcounter{tocdepth}{3}
 {\leading{16.5pt}\tableofcontents}
 %
@@ -49,10 +54,9 @@
 \listoffigures
 \listoftables}
 %\listofalgorithms
-\pagenumbering{gobble}
+% \pagenumbering{gobble}
 
-\clearpage
-\newpage
+\cleardoublepage
 \pagenumbering{arabic}
 \pagestyle{fancy}
 
@@ -71,16 +75,31 @@
 \input{CHAP6.tex}
 \cleardoublepage
 \input{CHAP7.tex}
+
+
+
 \cleardoublepage
-\input{D1-REFRENCE.tex}
-\clearpage
+
+ \rhead[]{\heiti{华东师范大学硕士学位论文}}
+ \lhead[\heiti{华东师范大学硕士学位论文}]{}
 \phantomsection
+
+\addcontentsline{toc}{chapter}{参考文献}
+\bibliographystyle{plain1}
+\bibliography{sigproc}
+
+
+\cleardoublepage
+
+\phantomsection
+%\rhead[致谢]{ The performance of new graduates}
+% \lhead[致谢]{ The performance of new graduates}
+
 \addcontentsline{toc}{chapter}{致谢}
 \input{D2-ACHNOWLEDGEMENT.tex}
-\ifpeerview \clearpage\ \newpage \else \fi
 
-%\clearpage\ 
-\newpage
+
+\cleardoublepage
 \phantomsection
 \addcontentsline{toc}{chapter}{攻读硕士学位期间发表论文和参与科研情况}
 \input{D3-MYACHIEVEMENTS.tex}

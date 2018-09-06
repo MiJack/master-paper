@@ -7,6 +7,7 @@
 \usepackage{setspace}%设置间距
 \usepackage{fancyhdr}
 \usepackage{graphics}
+\usepackage{verbatim}
 \usepackage{indentfirst,latexsym,graphicx,colortbl}
 \usepackage[boxruled,algoruled,algochapter]{algorithm2e}
 \usepackage{bm}                     % 处理数学公式中的黑斜体的宏包
@@ -217,6 +218,7 @@ escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\
 %============================= 页面设置 ================================%
 %-------------------- 定义页眉和页脚 使用fancyhdr 宏包 -----------------%
 % 定义页眉与正文间双隔线
+\begin{comment}
 \newcommand{\makeheadrule}{%
 \makebox[0pt][l]{\rule[.7\baselineskip]{\headwidth}{0.4pt}}%
 \rule[0.85\baselineskip]{\headwidth}{0.4pt} \vskip-.8\baselineskip}
@@ -228,3 +230,4 @@ escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\
 \raisebox{0.1em}{.}\mkern 2mu\raisebox{0.4em}{.}%
 \mkern2mu\raisebox{0.7em}{.}\mkern 1mu}}
 \makeindex
+\end{comment}
