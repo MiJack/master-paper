@@ -1,0 +1,93 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                           %
+%          LaTeX File for Doctor (Master) Thesis of ECNU                    %
+%            华东师范大学博士（硕士）论文模板 ____lizb                           %
+%                                                                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,utf8,openright,a4paper,fancyhdr,twoside]{ctexbook}
+
+\input{COMS.tex}
+
+\newif\ifpeerview           
+\peerviewfalse              
+
+                     
+
+\leading{17.5pt}
+%=============================== 正文部分 ================================%
+\begin{document}
+
+
+%中文封面
+\input{A1-COVER.tex}
+%英文封面
+\clearpage\ \newpage
+\input{A2-COVER-E.tex}
+%所有权声明
+\clearpage\ \newpage
+\input{A3-COPYRIGHT.tex}
+%答辩委员会名单
+\clearpage\ \newpage
+\input{A4-MEMBERLIST.tex}
+
+\clearpage\ \newpage
+\newpage \pagenumbering{roman} \pagestyle{plain}
+%\setlength{\baselineskip}{0.5\baselineskip}
+%中文摘要
+\input{B1-ABSTRACT.tex}
+%英文摘要
+\input{B2-ABSTRACT-E.tex}
+
+\setcounter{tocdepth}{2}
+{\leading{16.5pt}\tableofcontents}
+%
+{\leading{16.5pt}
+\listoffigures
+\listoftables}
+%\listofalgorithms
+
+\clearpage\ \newpage
+
+\newpage
+\pagenumbering{arabic}
+\pagestyle{fancy}
+
+
+\input{CHAP1.tex}
+\input{CHAP2.tex}
+\input{CHAP3.tex}
+\input{CHAP4.tex}
+\input{CHAP5.tex}
+\input{CHAP6.tex}
+\input{CHAP7.tex}
+\input{App-HML.tex}
+
+
+
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{参考文献}
+\input{D1-REFRENCE.tex}
+
+\clearpage
+
+\pagestyle{plain}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{致谢}
+\input{D2-ACHNOWLEDGEMENT.tex}
+\ifpeerview \clearpage\ \newpage \else \fi
+
+%\clearpage\ 
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{攻读博士学位期间发表论文和参与科研情况}
+\input{D3-MYACHIEVEMENTS.tex}
+
+%\printindex
+
+
+
+\end{document}

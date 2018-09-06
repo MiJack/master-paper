@@ -1,0 +1,228 @@
+
+%============================= 宏包 ================================%
+\usepackage{dsfont}
+\usepackage[CJKbookmarks]{hyperref}
+\usepackage{shortvrb,indentfirst,ulem,makeidx}
+\usepackage{multirow}
+\usepackage{setspace}%设置间距
+\usepackage{fancyhdr}
+\usepackage{graphics}
+\usepackage{indentfirst,latexsym,graphicx,colortbl}
+\usepackage[boxruled,algoruled,algochapter]{algorithm2e}
+\usepackage{bm}                     % 处理数学公式中的黑斜体的宏包
+\usepackage{amsmath}                % AMSLaTeX宏包 用来排出更加漂亮的公式
+%\usepackage{amsfonts}
+\usepackage{amssymb}                % AMSLaTeX宏包 用来排出更加漂亮的公式
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}               % 不同于\mathcal or \mathfrak 之类的英文花体字体
+\usepackage[subnum]{cases}
+%\usepackage{zed-csp}
+\usepackage{subfig}
+%\usepackage{times}
+\usepackage{amsthm}
+\pagestyle{fancy}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{algorithmic} 
+%\usepackage{subcaption}
+\usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
+\usepackage{leading}
+\usepackage{titlesec}
+%\usepackage{CJKnumb}
+%\usepackage{titletoc}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{automata}
+\newcommand{\mytilde}{$\sim$}
+\fancyhead{} % clear all fields
+\fancyhead[RO,LE]{\bfseries 华东师范大学博士学位论文}
+%\fancyfoot[LE,RO]{\thepage}
+%\fancyhead[RE]{\small \CAST@value@titlemark}
+\fancyhead[LO]{\small \leftmark} \fancyhead[RE]{\small \leftmark}
+%\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[CO,CE]{\thepage}
+
+
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}  
+
+%==============================定义文字块 ================================%
+\newcommand{\changefont}[3]{
+\fontfamily{#1} \fontseries{#2} \fontshape{#3} \selectfont}
+
+%举例%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{example_type}{Theorem}[section]
+\newtheorem{example_def}[example_type]{例\hspace*{0.5mm}}
+\newcommand{\example}[1]{\begin{example_def}#1\end{example_def}}
+
+%定义%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{define_type}{Theorem}[section]
+\newtheorem{define_def}[define_type]{定义\hspace*{0.5mm}}
+\newcommand{\define}[1]{\begin{define_def}#1\end{define_def}}
+
+%定理%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{theorem_type}{Theorem}[section]
+\newtheorem{theorem_def}[theorem_type]{定理\hspace*{0.5mm}}
+\newcommand{\theorem}[1]{\begin{theorem_def}#1\end{theorem_def}}
+
+%命题%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{proposition_type}{Theorem}[section]
+\newtheorem{proposition_def}[proposition_type]{命题\hspace*{0.5mm}}
+\newcommand{\proposition}[1]{\begin{proposition_def}#1\end{proposition_def}}
+
+\renewcommand{\algorithmcfname}{算法}
+\renewcommand{\algorithmicrequire}{ \textbf{输入：}} %Use Input in the format of Algorithm  
+\renewcommand{\algorithmicensure}{ \textbf{输出：}} %UseOutput in the format of Algorithm  
+\tikzstyle{auto}=[draw,text width=7em,text centered, minimum height=2.5em]
+\tikzstyle{sc} = [auto, minimum height=3em, rounded corners]
+\tikzstyle{autoo}=[draw,text width=7.7em,text centered, minimum height=2.5em]
+\tikzstyle{scc} = [autoo, minimum height=3em, rounded corners]
+\tikzstyle{autos}=[draw,text width=3em,text centered, minimum height=2.5em]
+\tikzstyle{scs} = [autos, minimum height=3em, rounded corners]
+
+\tikzstyle{mido}=[draw,text width=6.5em,text centered, minimum height=2.5em]
+\tikzstyle{middlen} = [mido, minimum height=3em, rounded corners]
+
+\tikzstyle{smido}=[draw,text width=5.3em,text centered, minimum height=2.5em]
+\tikzstyle{smiddlen} = [smido, minimum height=3em, rounded corners]
+
+\tikzstyle{bigautoo}=[draw,text width=11em,text centered, minimum height=2.5em]
+\tikzstyle{bigscc} = [bigautoo, minimum height=3em, rounded corners]
+
+
+
+
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\lstset{basicstyle=\footnotesize,numbersep=-6pt,numbers=left,
+escapeinside={||},
+mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\fboxsep}
+
+\lstdefinestyle{ApricotStyle}{basicstyle=\scriptsize,numbersep=-6pt,numbers=left, numberstyle=\scriptsize\color{mygray},
+escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\fboxsep}
+\lstdefinestyle{Apricot} {style=ApricotStyle}
+
+
+\lstdefinestyle{STTTStyle}{stringstyle=\ttfamily,numbersep=-5pt,numbers=left, numberstyle=\scriptsize\color{mygray},
+escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\fboxsep}
+\lstdefinestyle{STTT} {style=STTTStyle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%==============================自定义文字块 ================================%
+\newcommand{\eqdef}{=_{df}}
+\newcommand{\until}{{\textcolor{blue}{\bf \tt  until~}}}
+\newcommand{\init}{{\textcolor{blue}{~\bf \tt  init~}}}
+\newcommand{\while}{{\textcolor{blue}{\bf \tt  while~}}}
+\newcommand{\when}{{\textcolor{blue}{\bf \tt  when}}}
+\newcommand{\wdo}{{\textcolor{blue}{~\bf \tt  do~}}}
+\newcommand{\wod}{{\textcolor{blue}{\bf \tt  od}}}
+\newcommand{\skips}{{\textcolor{blue}{\bf \tt  skip}}}
+\newcommand{\suspend}{{\textcolor{blue}{\bf \tt  suspend}}}
+\newcommand{\out}{{\textcolor{blue}{\bf \tt  out}}}
+\newcommand{\chaos}{{\textcolor{blue}{\bf \tt  chaos}}}
+\newcommand{\stops}{{\textcolor{blue}{\bf \tt  stop}}}
+\newcommand{\glb}{{\textcolor{black}{\bf \tt  glb}}}
+\newcommand{\maximum}{{\textcolor{black}{\bf \tt  max}}}
+\newcommand{\minimum}{{\textcolor{black}{\bf \tt  min}}}
+\newcommand{\term}{{\textcolor{blue}{\bf \tt  term}}}
+\newcommand{\stable}{{\textcolor{blue}{\bf \tt  stable}}}
+\newcommand{\diver}{{\textcolor{blue}{\bf \tt  div}}}
+\newcommand{\post}[2]{\langle {#1}\bowtie{#2}  \rangle}
+\newcommand{\true}{{\textcolor{black}{\bf \tt  T}}}
+\newcommand{\false}{{\textcolor{black}{\bf \tt  F}}}
+\newcommand{\sep}{{\bf  ~\mid~}}
+\newcommand{\wait}{{\textcolor{blue}{\bf \tt  wait}}}
+\newcommand{\choice}[3]{#1 ~\langle~ #2 ~\rangle~ #3}
+\newcommand{\then}{{\textcolor{blue}{\bf \tt  then}}}
+\newcommand{\float}{{\textcolor{blue}{\bf \tt  float}}}
+\newcommand{\intType}{{\textcolor{blue}{\bf \tt  int~}}}
+\newcommand{\Boolean}{{\textcolor{blue}{\bf \tt  boolean~}}}
+\newcommand{\Signal}{{\textcolor{blue}{\bf \tt  Signal~}}}
+\newcommand{\inin}{{\textcolor{blue}{\bf \tt  in}}}
+\newcommand{\Template}{{\textcolor{blue}{\bf \tt  Template~}}}
+\newcommand{\Main}{{\textcolor{blue}{\bf \tt  Main~}}}
+\newcommand{\final}{{\textcolor{blue}{\bf \tt  final~}}}
+\newcommand{\parr}{{\textcolor{blue}{\bf \tt  \mid\mid}}}
+\newcommand{\derivative}{{\textcolor{blue}{\bf \tt  dot~}}}
+\newcommand{\lrf}{$\mathcal{L}_{\mathbb{R}_{\mathcal{F}}}$}
+\newcommand{\hoare}[3]{\{#1\} ~#2~ \{#3\}}
+%示例
+%\newcommand{\imp}{\Rightarrow}
+%\newtheorem{thm1}{Theorem}[part]
+%\newtheorem{thm2}{Theorem}[section]
+%\newtheorem{thm3}{Theorem}[subsection]
+
+\newcommand{\hrl}[1]{
+\abovedisplayskip=-10pt
+\belowdisplayskip=10pt
+\begin{align*}
+#1
+\end{align*}
+}
+
+
+%%%%%%%%%%%%%%%%正文章节字体%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\xiaosan}{\fontsize{15pt}{22pt}\selectfont}    % 小三, 1.5倍行距
+\newcommand{\xiaoer}{\fontsize{18pt}{27pt}\selectfont}    % 小二, 1.5倍行距
+\renewcommand{\LARGE}{\fontsize{16pt}{\baselineskip}\selectfont}
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
+\titleformat{\chapter}[hang]{\centering\heiti\LARGE\bfseries}{第\chaptername章}{1em}{}{}
+\titleformat{\section}[hang]{\centering\heiti\sihao\bfseries}{\thesection}{1em}{}{}
+\titleformat{\subsection}[hang]{\xiaosihao\heiti\bfseries}{\thesubsection}{1em}{}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\makeatletter
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize{12.2pt}{14pt}
+   \abovedisplayskip 3\p@ \@plus5\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \belowdisplayskip 3\p@ \@plus5\p@ \@minus5\p@
+   \let\@listi\@listI}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%设置脚注行距%%%%%%%%%%%%%%
+\makeatletter
+\patchcmd{\@makefntext}% <cmd>
+  {#1}% <search>
+  {\leading{15pt}#1}% <replace>
+  {}{}% <success><failure>
+\makeatother
+
+%%%%%%%%%%%%设置caption行距%%%%%%%%%%%%%%
+\makeatletter
+\patchcmd{\@makecaption}% <cmd>
+  {#2}% <search>
+  {\leading{17pt}#2}% <replace>
+  {}{}% <success><failure>
+\makeatother
+%%% ----------------------------------------------------------------------
+
+%============================= 版芯控制 ================================%
+\voffset-10mm \textwidth=150mm \textheight=230mm \headwidth=150mm
+\rightmargin=10mm
+%                                                                       %
+\setlength{\oddsidemargin}{0.45in}
+\setlength{\evensidemargin}{-0.05in}
+
+%============================= 页面设置 ================================%
+%-------------------- 定义页眉和页脚 使用fancyhdr 宏包 -----------------%
+% 定义页眉与正文间双隔线
+\newcommand{\makeheadrule}{%
+\makebox[0pt][l]{\rule[.7\baselineskip]{\headwidth}{0.4pt}}%
+\rule[0.85\baselineskip]{\headwidth}{0.4pt} \vskip-.8\baselineskip}
+\makeatletter
+\renewcommand{\headrule}{%
+{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+\makeheadrule}} \makeatother
+\newcommand{\adots}{\mathinner{\mkern 2mu%
+\raisebox{0.1em}{.}\mkern 2mu\raisebox{0.4em}{.}%
+\mkern2mu\raisebox{0.7em}{.}\mkern 1mu}}
+\makeindex

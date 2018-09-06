@@ -1,0 +1,19 @@
+推荐使用TeXLive+TexStudio进行论文写作
+	TeXLive：http://tug.org/texlive/
+	TexStudio： http://texstudio.sourceforge.net
+
+	
+论文编译命令：xeLatex
+
+
+以上仅供参考
+
+方徽星，2015-05-30，华师师范大学，软件学院
+fang.huixing@gmail.com
+
+
+trouble shooting for MAC/OS about CTex: 
+1. http://www.jinyangli.org/xelatex-mac-font.html
+2. http://yentau.blog.ustc.edu.cn/?p=20
+
+Updated by Ting Su. 2015.12.2, tsuletgo@gmail.com
