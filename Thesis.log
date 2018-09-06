@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  6 SEP 2018 18:16
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  6 SEP 2018 18:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1229,6 +1229,18 @@ Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
 \verbatim@line=\toks18
 \verbatim@in@stream=\read2
 )
+(./gbt7714.sty
+Package: gbt7714 2018/08/05 v1.0.9 GB/T 7714-2015 BibTeX Style
+ (/usr/local/texlive/2018/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip74
+\bibsep=\skip75
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count278
+) (/usr/local/texlive/2018/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2018/02/11 v2.5e e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count279
+))
 (/usr/local/texlive/2018/texmf-dist/tex/latex/base/latexsym.sty
 Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
 \symlasy=\mathgroup4
@@ -1249,8 +1261,8 @@ Package: array 2018/04/07 v2.4g Tabular extension package (FMi)
 \ar@mcellbox=\box52
 \extrarowheight=\dimen183
 \NC@list=\toks19
-\extratabsurround=\skip74
-\backup@length=\skip75
+\extratabsurround=\skip76
+\backup@length=\skip77
 \ar@cellbox=\box53
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/color.sty
@@ -1262,23 +1274,23 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 Package color Info: Driver file: xetex.def on input line 147.
 )
 \everycr=\toks20
-\minrowclearance=\skip76
+\minrowclearance=\skip78
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
 Invalid UTF-8 byte or sequence at line 284 replaced by U+FFFD.
 Invalid UTF-8 byte or sequence at line 299 replaced by U+FFFD.
 Invalid UTF-8 byte or sequence at line 550 replaced by U+FFFD.
 Package: algorithm2e 2017/07/18 v5.2 algorithms environments
-\c@AlgoLine=\count278
+\c@AlgoLine=\count280
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
-\algocf@hangindent=\skip77
+\algocf@hangindent=\skip79
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
 Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
-\c@checkoddpage=\count279
+\c@checkoddpage=\count281
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
@@ -1286,39 +1298,39 @@ Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 (/usr/local/texlive/2018/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
 )
-\skiptotal=\skip78
-\skiplinenumber=\skip79
-\skiprule=\skip80
-\skiphlne=\skip81
-\skiptext=\skip82
-\skiplength=\skip83
-\algomargin=\skip84
-\skipalgocfslide=\skip85
+\skiptotal=\skip80
+\skiplinenumber=\skip81
+\skiprule=\skip82
+\skiphlne=\skip83
+\skiptext=\skip84
+\skiplength=\skip85
+\algomargin=\skip86
+\skipalgocfslide=\skip87
 \algowidth=\dimen184
 \inoutsize=\dimen185
 \inoutindent=\dimen186
 \interspacetitleruled=\dimen187
 \interspacealgoruled=\dimen188
 \interspacetitleboxruled=\dimen189
-\algocf@ruledwidth=\skip86
+\algocf@ruledwidth=\skip88
 \algocf@inoutbox=\box54
 \algocf@inputbox=\box55
-\AlCapSkip=\skip87
-\AlCapHSkip=\skip88
-\algoskipindent=\skip89
+\AlCapSkip=\skip89
+\AlCapHSkip=\skip90
+\algoskipindent=\skip91
 \algocf@nlbox=\box56
 \algocf@hangingbox=\box57
 \algocf@untilbox=\box58
-\algocf@skipuntil=\skip90
+\algocf@skipuntil=\skip92
 \algocf@capbox=\box59
-\algocf@lcaptionbox=\skip91
-\algoheightruledefault=\skip92
-\algoheightrule=\skip93
-\algotitleheightruledefault=\skip94
-\algotitleheightrule=\skip95
-\c@algocfline=\count280
-\c@algocfproc=\count281
-\c@algocf=\count282
+\algocf@lcaptionbox=\skip93
+\algoheightruledefault=\skip94
+\algoheightrule=\skip95
+\algotitleheightruledefault=\skip96
+\algotitleheightrule=\skip97
+\c@algocfline=\count282
+\c@algocfproc=\count283
+\c@algocf=\count284
 \algocf@algoframe=\box60
 \algocf@algobox=\box61
 )
@@ -1333,7 +1345,7 @@ LaTeX Info: Redefining \bm on input line 207.
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2017/09/02 v2.17a AMS math features
-\@mathmargin=\skip96
+\@mathmargin=\skip98
 
 For additional information on amsmath, use the `?' option.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -1352,13 +1364,13 @@ LaTeX Info: Redefining \boldsymbol on input line 28.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count283
+\inf@bad=\count285
 LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count284
-\leftroot@=\count285
+\uproot@=\count286
+\leftroot@=\count287
 LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count286
-\DOTSCASE@=\count287
+\classnum@=\count288
+\DOTSCASE@=\count289
 LaTeX Info: Redefining \ldots on input line 472.
 LaTeX Info: Redefining \dots on input line 475.
 LaTeX Info: Redefining \cdots on input line 596.
@@ -1367,15 +1379,15 @@ LaTeX Info: Redefining \cdots on input line 596.
 \big@size=\dimen192
 LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count288
-\c@MaxMatrixCols=\count289
+\macc@depth=\count290
+\c@MaxMatrixCols=\count291
 \dotsspace@=\muskip18
-\c@parentequation=\count290
-\dspbrk@lvl=\count291
+\c@parentequation=\count292
+\dspbrk@lvl=\count293
 \tag@help=\toks22
-\row@=\count292
-\column@=\count293
-\maxfields@=\count294
+\row@=\count294
+\column@=\count295
+\maxfields@=\count296
 \andhelp@=\toks23
 \eqnshift@=\dimen193
 \alignsep@=\dimen194
@@ -1384,8 +1396,8 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \totwidth@=\dimen197
 \lineht@=\dimen198
 \@envbody=\toks24
-\multlinegap=\skip97
-\multlinetaggap=\skip98
+\multlinegap=\skip99
+\multlinetaggap=\skip100
 \mathdisplay@stack=\toks25
 LaTeX Info: Redefining \[ on input line 2817.
 LaTeX Info: Redefining \] on input line 2818.
@@ -1430,22 +1442,22 @@ Package caption3 Info: TeX engine: e-TeX on input line 67.
 \caption@parindent=\dimen260
 \caption@hangindent=\dimen261
 )
-\c@ContinuedFloat=\count295
+\c@ContinuedFloat=\count297
 Package caption Info: hyperref package is loaded.
 )
-\c@KVtest=\count296
-\sf@farskip=\skip99
+\c@KVtest=\count298
+\sf@farskip=\skip101
 \sf@captopadj=\dimen262
-\sf@capskip=\skip100
-\sf@nearskip=\skip101
-\c@subfigure=\count297
-\c@subfigure@save=\count298
-\c@lofdepth=\count299
-\c@subtable=\count300
-\c@subtable@save=\count301
-\c@lotdepth=\count302
-\sf@top=\skip102
-\sf@bottom=\skip103
+\sf@capskip=\skip102
+\sf@nearskip=\skip103
+\c@subfigure=\count299
+\c@subfigure@save=\count300
+\c@lofdepth=\count301
+\c@subtable=\count302
+\c@subtable@save=\count303
+\c@lotdepth=\count304
+\sf@top=\skip104
+\sf@bottom=\skip105
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2017/10/31 v2.20.4
@@ -1454,9 +1466,9 @@ Package: amsthm 2017/10/31 v2.20.4
 \thm@headfont=\toks28
 \thm@notefont=\toks29
 \thm@headpunct=\toks30
-\thm@preskip=\skip104
-\thm@postskip=\skip105
-\thm@headsep=\skip106
+\thm@preskip=\skip106
+\thm@postskip=\skip107
+\thm@headsep=\skip108
 \dth@everypar=\toks31
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
@@ -1464,31 +1476,31 @@ Package: fancyvrb 2008/02/07
 
 Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
 <2008/02/07> (tvz)
-\FV@CodeLineNo=\count303
+\FV@CodeLineNo=\count305
 \FV@InFile=\read3
 \FV@TabBox=\box64
-\c@FancyVerbLine=\count304
-\FV@StepNumber=\count305
+\c@FancyVerbLine=\count306
+\FV@StepNumber=\count307
 \FV@OutFile=\write3
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count306
+\lst@mode=\count308
 \lst@gtempboxa=\box65
 \lst@token=\toks32
-\lst@length=\count307
+\lst@length=\count309
 \lst@currlwidth=\dimen263
-\lst@column=\count308
-\lst@pos=\count309
+\lst@column=\count310
+\lst@pos=\count311
 \lst@lostspace=\dimen264
 \lst@width=\dimen265
-\lst@newlines=\count310
-\lst@lineno=\count311
+\lst@newlines=\count312
+\lst@lineno=\count313
 \lst@maxwidth=\dimen266
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-\c@lstnumber=\count312
-\lst@skipnumbers=\count313
+\c@lstnumber=\count314
+\lst@skipnumbers=\count315
 \lst@framebox=\box66
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/listings/listings.cfg
@@ -1499,38 +1511,34 @@ Package: listings 2015/06/04 1.6 (Carsten Heinz)
 (/usr/local/texlive/2018/texmf-dist/tex/latex/algorithms/algorithmic.sty
 Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
-\c@ALC@unique=\count314
-\c@ALC@line=\count315
-\c@ALC@rem=\count316
-\c@ALC@depth=\count317
-\ALC@tlm=\skip107
-\algorithmicindent=\skip108
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2018/02/11 v2.5e e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count318
+\c@ALC@unique=\count316
+\c@ALC@line=\count317
+\c@ALC@rem=\count318
+\c@ALC@depth=\count319
+\ALC@tlm=\skip109
+\algorithmicindent=\skip110
 )
 (/usr/local/texlive/2018/texmf-dist/tex/latex/leading/leading.sty
 Package: leading 2008/12/11 v0.3 Define leading length
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count319
-\calc@Bcount=\count320
+\calc@Acount=\count320
+\calc@Bcount=\count321
 \calc@Adimen=\dimen267
 \calc@Bdimen=\dimen268
-\calc@Askip=\skip109
-\calc@Bskip=\skip110
+\calc@Askip=\skip111
+\calc@Bskip=\skip112
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count321
-\calc@Cskip=\skip111
+\calc@Ccount=\count322
+\calc@Cskip=\skip113
 ))
 (/usr/local/texlive/2018/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
 \ttl@box=\box67
-\beforetitleunit=\skip112
-\aftertitleunit=\skip113
+\beforetitleunit=\skip114
+\aftertitleunit=\skip115
 \ttl@plus=\dimen269
 \ttl@minus=\dimen270
 \ttl@toksa=\toks33
@@ -1592,10 +1600,10 @@ ode.tex
 \pgf@yc=\dimen283
 \w@pgf@writea=\write4
 \r@pgf@reada=\read4
-\c@pgf@counta=\count322
-\c@pgf@countb=\count323
-\c@pgf@countc=\count324
-\c@pgf@countd=\count325
+\c@pgf@counta=\count323
+\c@pgf@countb=\count324
+\c@pgf@countc=\count325
+\c@pgf@countd=\count326
 \t@pgf@toka=\toks38
 \t@pgf@tokb=\toks39
 \t@pgf@tokc=\toks40
@@ -1617,13 +1625,13 @@ File: pgfsys-dvipdfmx.def 2014/07/09  (rcs-revision 1.14)
 df.def
 File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
 )
-\pgfsys@objnum=\count326
+\pgfsys@objnum=\count327
 )))
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.
 code.tex
 File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
-\pgfsyssoftpath@smallbuffer@items=\count327
-\pgfsyssoftpath@bigbuffer@items=\count328
+\pgfsyssoftpath@smallbuffer@items=\count328
+\pgfsyssoftpath@bigbuffer@items=\count329
 )
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.
 code.tex
@@ -1652,7 +1660,7 @@ Package: pgfcore 2010/04/11 v3.0.1a (rcs-revision 1.7)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen284
-\pgfmath@count=\count329
+\pgfmath@count=\count330
 \pgfmath@box=\box69
 \pgfmath@toks=\toks41
 \pgfmath@stack@operand=\toks42
@@ -1677,7 +1685,7 @@ code.tex)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integ
 erarithmetics.code.tex)))
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count330
+\c@pgfmathroundto@lastzeros=\count331
 ))
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.co
 de.tex
@@ -1715,7 +1723,7 @@ File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
 \pgfpic=\box70
 \pgf@hbox=\box71
 \pgf@layerbox@main=\box72
-\pgf@picture@serial@count=\count331
+\pgf@picture@serial@count=\count332
 )
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicst
 ate.code.tex
@@ -1750,7 +1758,7 @@ File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
 e.tex
 File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
 \pgf@max=\dimen308
-\pgf@sys@shading@range@num=\count332
+\pgf@sys@shading@range@num=\count333
 )
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.cod
 e.tex
@@ -1813,7 +1821,7 @@ Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothan
 dlers.code.tex
 File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
-\pgf@plot@mark@count=\count333
+\pgf@plot@mark@count=\count334
 \pgfplotmarksize=\dimen313
 )
 \tikz@lastx=\dimen314
@@ -1826,19 +1834,19 @@ File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
 \tikz@figbox@bg=\box76
 \tikz@tempbox=\box77
 \tikz@tempbox@bg=\box78
-\tikztreelevel=\count334
-\tikznumberofchildren=\count335
-\tikznumberofcurrentchild=\count336
-\tikz@fig@count=\count337
+\tikztreelevel=\count335
+\tikznumberofchildren=\count336
+\tikznumberofcurrentchild=\count337
+\tikz@fig@count=\count338
 
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.cod
 e.tex
 File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
-\pgfmatrixcurrentrow=\count338
-\pgfmatrixcurrentcolumn=\count339
-\pgf@matrix@numberofcolumns=\count340
+\pgfmatrixcurrentrow=\count339
+\pgfmatrixcurrentcolumn=\count340
+\pgf@matrix@numberofcolumns=\count341
 )
-\tikz@expandcount=\count341
+\tikz@expandcount=\count342
 
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
 s/tikzlibrarytopaths.code.tex
@@ -1895,15 +1903,15 @@ File: pgflibraryshapes.multipart.code.tex 2010/01/07 v3.0.1a (rcs-revision 1.2)
 \pgfnodepartsixbox=\box97
 \pgfnodepartfivebox=\box98
 )))
-\c@example_type=\count342
-\c@define_type=\count343
-\c@theorem_type=\count344
-\c@proposition_type=\count345
+\c@example_type=\count343
+\c@define_type=\count344
+\c@theorem_type=\count345
+\c@proposition_type=\count346
 )
 (/usr/local/texlive/2018/texmf-dist/tex/xelatex/xecjk/xeCJK-listings.sty
 Package: xeCJK-listings 2018/04/07 v3.7.0 xeCJK patch file for listings
-\l__xeCJK_listings_max_char_int=\count346
-\l__xeCJK_listings_flag_int=\count347
+\l__xeCJK_listings_max_char_int=\count347
+\l__xeCJK_listings_flag_int=\count348
 )
 
 LaTeX Warning: Unused global option(s):
@@ -2000,7 +2008,7 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count348
+\c@section@level=\count349
 )
 LaTeX Info: Redefining \ref on input line 19.
 LaTeX Info: Redefining \pageref on input line 19.
@@ -2014,7 +2022,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count349
+\c@lstlisting=\count350
  ABD: EveryShipout initializing macros
 (./A1-COVER.tex
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
@@ -2135,7 +2143,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 * 
 * Font 'STHeiti' does not contain script 'CJK'.
 *************************************************
-\g__fontspec_family_STHeiti_int=\count350
+\g__fontspec_family_STHeiti_int=\count351
 .................................................
 . fontspec info: "no-font-shape"
 . 
@@ -2351,11 +2359,11 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [19]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 111.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 111.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 110.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 110.
  (./Thesis.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 111.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 111.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 110.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 110.
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
 (rerunfilecheck)             Checksum: 26F9401DB61992771D7AC51ABD8E1D79.
 
@@ -2366,14 +2374,14 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 111.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 110.
  ) 
 Here is how much of TeX's memory you used:
- 39740 strings out of 492970
- 820771 string characters out of 6133939
- 869870 words of memory out of 5000000
- 43075 multiletter control sequences out of 15000+600000
- 623849 words of font info for 189 fonts, out of 8000000 for 9000
+ 40084 strings out of 492970
+ 824895 string characters out of 6133939
+ 876288 words of memory out of 5000000
+ 43411 multiletter control sequences out of 15000+600000
+ 626846 words of font info for 190 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  57i,11n,81p,10408b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
 
