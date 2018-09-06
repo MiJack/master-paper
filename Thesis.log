@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  7 SEP 2018 03:26
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  7 SEP 2018 03:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2525,10 +2525,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 110.
  ) 
 Here is how much of TeX's memory you used:
- 40451 strings out of 492970
- 846024 string characters out of 6133939
- 889226 words of memory out of 5000000
- 43767 multiletter control sequences out of 15000+600000
+ 40431 strings out of 492970
+ 844756 string characters out of 6133939
+ 889216 words of memory out of 5000000
+ 43747 multiletter control sequences out of 15000+600000
  632390 words of font info for 192 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  57i,12n,81p,10408b,428s stack positions out of 5000i,500n,10000p,200000b,80000s
