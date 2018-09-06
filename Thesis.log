@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  6 SEP 2018 16:23
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  6 SEP 2018 17:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2123,6 +2123,11 @@ LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <8.53995> not available
 ) [7] [8
 
 ] (./B1-ABSTRACT.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                \hskip 23.89133pt
+(hyperref)                replaced by space on input line 1.
+
 *************************************************
 * fontspec warning: "script-not-exist"
 * 
@@ -2157,7 +2162,7 @@ LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <8.53995> not available
 .................................................
 
 LaTeX Font Warning: Font shape `TU/STHeiti(0)/bx/n' undefined
-(Font)              using `TU/STHeiti(0)/m/n' instead on input line 2.
+(Font)              using `TU/STHeiti(0)/m/n' instead on input line 3.
 
 ) (./B2-ABSTRACT-E.tex [1]) [2] (./Thesis.toc)
 \tf@toc=\write7
@@ -2178,17 +2183,17 @@ LaTeX Font Warning: Font shape `TU/STHeiti(0)/bx/n' undefined
 \tf@lot=\write9
 \openout9 = `Thesis.lot'.
 
- [7] [8
-
-] (./CHAP1.tex) (./CHAP2.tex) (./CHAP3.tex)
-(./CHAP4.tex) (./CHAP5.tex) (./CHAP6.tex) (./CHAP7.tex) (./App-HML.tex
+ [1] (./CHAP1.tex)
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 15.62503pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[1]
+[1
+
+
+]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 15.62503pt.
@@ -2197,55 +2202,148 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [2
 
-]
-附录 A
-) [3] (./D1-REFRENCE.tex
-No file Thesis.bbl.
-) (./D2-ACHNOWLEDGEMENT.tex
-*************************************************
-* fontspec warning: "script-not-exist"
-* 
-* Font 'STKaiti' does not contain script 'CJK'.
-*************************************************
-\g__fontspec_family_STKaiti_int=\count351
-.................................................
-. fontspec info: "no-font-shape"
-. 
-. Could not resolve font "STKaiti/BI" (it probably doesn't exist).
-.................................................
-.................................................
-. fontspec info: "no-font-shape"
-. 
-. Could not resolve font "STKaiti/B" (it probably doesn't exist).
-.................................................
-.................................................
-. fontspec info: "no-font-shape"
-. 
-. Could not resolve font "STKaiti/I" (it probably doesn't exist).
-.................................................
-.................................................
-. fontspec info: "defining-font"
-. 
-. Font family 'STKaiti(0)' created for font 'STKaiti' with options
-. [Script={CJK}].
-.  
-.  This font family consists of the following NFSS series/shapes:
-.  
-. - 'normal' (m/n) with NFSS spec.: <->"STKaiti/OT"
-. - 'small caps'  (m/sc) with NFSS spec.: 
-.................................................
-) [4
+] (./CHAP2.tex)
 
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
 
+[3]
 
-] (./D3-MYACHIEVEMENTS.tex) [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 93.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 93.
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[4
+
+] (./CHAP3.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[5]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[6
+
+] (./CHAP4.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[7]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[8
+
+] (./CHAP5.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[9]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[10
+
+] (./CHAP6.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[11]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[12
+
+] (./CHAP7.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[13]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[14
+
+] (./D1-REFRENCE.tex (./Thesis.bbl
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[15]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[16
+
+])) [17] (./D2-ACHNOWLEDGEMENT.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[18
+
+] (./D3-MYACHIEVEMENTS.tex
+Overfull \hbox (31.7625pt too wide) in paragraph at lines 9--10
+[]\T1/lmr/m/n/12.2 Yujie Yuan, Li-hua Xu, Xusheng Xiao, Andy Podgurski, and Hui
+b-iao Zhu,RunDroid:
+ []
+
+)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 15.62503pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[19]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 92.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 92.
  (./Thesis.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 93.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 93.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 92.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 92.
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 20BB02FFFBF3C3E61A5808925436B71F.
+(rerunfilecheck)             Checksum: 36C3C5A1B3DDD90D0AB9746A5E5A0CFF.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -2254,15 +2352,15 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 93.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 92.
  ) 
 Here is how much of TeX's memory you used:
- 39725 strings out of 492970
- 820477 string characters out of 6133939
- 869216 words of memory out of 5000000
- 43054 multiletter control sequences out of 15000+600000
+ 39718 strings out of 492970
+ 820301 string characters out of 6133939
+ 869238 words of memory out of 5000000
+ 43050 multiletter control sequences out of 15000+600000
  623857 words of font info for 190 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  57i,11n,81p,10408b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Thesis.pdf (21 pages).
+Output written on Thesis.pdf (34 pages).

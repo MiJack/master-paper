@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                           %
 %          LaTeX File for Doctor (Master) Thesis of ECNU                    %
-%            华东师范大学博士（硕士）论文模板 ____lizb                           %
+%            华东师范大学硕士（硕士）论文模板 ____lizb                           %
 %                                                                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -32,48 +32,47 @@
 \input{A4-MEMBERLIST.tex}
 
 \clearpage\ \newpage
-\newpage \pagenumbering{roman} \pagestyle{plain}
+\newpage \pagenumbering{Roman} 
+
+\pagestyle{plain}
 %\setlength{\baselineskip}{0.5\baselineskip}
 %中文摘要
 \input{B1-ABSTRACT.tex}
 %英文摘要
 \input{B2-ABSTRACT-E.tex}
+% 目录
 
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{3}
 {\leading{16.5pt}\tableofcontents}
 %
 {\leading{16.5pt}
 \listoffigures
 \listoftables}
 %\listofalgorithms
+\pagenumbering{gobble}
 
-\clearpage\ \newpage
-
+\clearpage
 \newpage
 \pagenumbering{arabic}
 \pagestyle{fancy}
 
+\cleardoublepage
 
 \input{CHAP1.tex}
+\cleardoublepage
 \input{CHAP2.tex}
+\cleardoublepage
 \input{CHAP3.tex}
+\cleardoublepage
 \input{CHAP4.tex}
+\cleardoublepage
 \input{CHAP5.tex}
+\cleardoublepage
 \input{CHAP6.tex}
+\cleardoublepage
 \input{CHAP7.tex}
-\input{App-HML.tex}
-
-
-
-
-\clearpage
-\phantomsection
-\addcontentsline{toc}{chapter}{参考文献}
+\cleardoublepage
 \input{D1-REFRENCE.tex}
-
-\clearpage
-
-\pagestyle{plain}
 \clearpage
 \phantomsection
 \addcontentsline{toc}{chapter}{致谢}
@@ -83,7 +82,7 @@
 %\clearpage\ 
 \newpage
 \phantomsection
-\addcontentsline{toc}{chapter}{攻读博士学位期间发表论文和参与科研情况}
+\addcontentsline{toc}{chapter}{攻读硕士学位期间发表论文和参与科研情况}
 \input{D3-MYACHIEVEMENTS.tex}
 
 %\printindex

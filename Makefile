@@ -3,4 +3,4 @@ all:
 	open Thesis.pdf
 
 bib:
-	xelatex Thesis; bibtex Thesis; xelatex Thesis; xelatex Thesis
+	xelatex Thesis; bibtex Thesis; xelatex Thesis; xelatex Thesis; open Thesis.pdf

@@ -39,7 +39,7 @@
 \usetikzlibrary{automata}
 \newcommand{\mytilde}{$\sim$}
 \fancyhead{} % clear all fields
-\fancyhead[RO,LE]{\bfseries 华东师范大学博士学位论文}
+\fancyhead[RO,LE]{\bfseries 华东师范大学硕士学位论文}
 %\fancyfoot[LE,RO]{\thepage}
 %\fancyhead[RE]{\small \CAST@value@titlemark}
 \fancyhead[LO]{\small \leftmark} \fancyhead[RE]{\small \leftmark}
@@ -171,8 +171,10 @@ escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\
 \newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
 \newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
 \titleformat{\chapter}[hang]{\centering\heiti\LARGE\bfseries}{第\chaptername章}{1em}{}{}
-\titleformat{\section}[hang]{\centering\heiti\sihao\bfseries}{\thesection}{1em}{}{}
+\titleformat{\section}[hang]{\centering\heiti\sihao\bfseries}{第{\thesection}章}{1em}{}{}
 \titleformat{\subsection}[hang]{\xiaosihao\heiti\bfseries}{\thesubsection}{1em}{}{}
+
+\renewcommand\thesection{\zhnum{section}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
