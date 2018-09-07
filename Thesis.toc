@@ -1,44 +1,45 @@
 \contentsline {chapter}{摘\hskip 2em\relax 要}{I}{Doc-Start}
 \contentsline {chapter}{ABSTRACT}{III}{Doc-Start}
-\contentsline {section}{\numberline {一}绪论}{1}{section.0.1}
-\contentsline {subsection}{\numberline {一.1}研究背景}{1}{subsection.0.1.1}
-\contentsline {subsection}{\numberline {一.2}研究意义}{1}{subsection.0.1.2}
-\contentsline {subsection}{\numberline {一.3} Android分析技术介绍}{1}{subsection.0.1.3}
-\contentsline {subsubsection}{静态分析技术}{1}{section*.4}
-\contentsline {subsubsection}{ 动态分析技术}{2}{section*.4}
-\contentsline {subsubsection}{基于其他技术的分析方法}{3}{section*.4}
-\contentsline {subsection}{\numberline {一.4} 本文的主要工作}{3}{subsection.0.1.4}
-\contentsline {subsection}{\numberline {一.5}本文的组织结构}{3}{subsection.0.1.5}
-\contentsline {section}{\numberline {二}Android系统相关背景介绍 }{5}{section.0.2}
-\contentsline {subsection}{\numberline {二.1}Android系统结构介绍}{5}{subsection.0.2.1}
-\contentsline {subsection}{\numberline {二.2}Android中的Activity}{7}{subsection.0.2.2}
-\contentsline {subsection}{\numberline {二.3} Android中的多线程交互}{9}{subsection.0.2.3}
-\contentsline {subsubsection}{基于Java的多线程交互}{9}{section*.7}
-\contentsline {subsubsection}{基于Handler的多线程消息调度}{9}{section*.7}
-\contentsline {subsection}{\numberline {二.4}本文遇到的困难与挑战}{12}{subsection.0.2.4}
-\contentsline {subsection}{\numberline {二.5} 本章小结}{12}{subsection.0.2.5}
-\contentsline {section}{\numberline {三}RunDroid系统的设计与实现 }{13}{section.0.3}
-\contentsline {subsection}{\numberline {三.1}系统功能介绍}{13}{subsection.0.3.1}
-\contentsline {subsection}{\numberline {三.2}概念定义}{13}{subsection.0.3.2}
-\contentsline {subsection}{\numberline {三.3} 设计思路介绍}{14}{subsection.0.3.3}
-\contentsline {subsection}{\numberline {三.4}技术路线（偏工程性）}{15}{subsection.0.3.4}
-\contentsline {subsection}{\numberline {三.5}相关技术介绍}{17}{subsection.0.3.5}
-\contentsline {subsubsection}{ srcML介绍}{17}{section*.13}
-\contentsline {subsubsection}{Xposed框架介绍}{17}{section*.13}
-\contentsline {subsubsection}{ Neo4j介绍}{17}{section*.13}
-\contentsline {subsection}{\numberline {三.6}模块实现介绍}{18}{subsection.0.3.6}
-\contentsline {subsubsection}{源代码预处理组件（Preprocessor）}{18}{section*.14}
-\contentsline {subsubsection}{ 运行时日志记录器（Runtime Logger）}{18}{section*.14}
-\contentsline {subsubsection}{调用图构建器（Call-graph Builder）}{18}{section*.14}
-\contentsline {subsection}{\numberline {三.7}构建过程介绍}{18}{subsection.0.3.7}
-\contentsline {subsubsection}{如何构建函数调用图}{18}{section*.15}
-\contentsline {subsubsection}{如何构建Activity的生命周期}{18}{section*.15}
-\contentsline {subsubsection}{ 如何构建多线程触发关系}{18}{section*.15}
-\contentsline {subsection}{\numberline {三.8}本章小结}{18}{subsection.0.3.8}
-\contentsline {section}{\numberline {四}X}{19}{section.0.4}
-\contentsline {section}{\numberline {五}X}{21}{section.0.5}
-\contentsline {section}{\numberline {六}X}{23}{section.0.6}
-\contentsline {section}{\numberline {七}X }{25}{section.0.7}
-\contentsline {chapter}{参考文献}{27}{section*.16}
-\contentsline {chapter}{致谢}{29}{section*.18}
-\contentsline {chapter}{攻读硕士学位期间发表论文}{31}{section*.19}
+\contentsline {chapter}{\numberline {第一章\hspace {.3em}}绪论}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}研究背景}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}研究意义}{1}{section.1.2}
+\contentsline {section}{\numberline {1.3}Android分析技术介绍}{1}{section.1.3}
+\contentsline {subsection}{\numberline {1.3.1}静态分析技术}{1}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.2}动态分析技术}{2}{subsection.1.3.2}
+\contentsline {subsection}{\numberline {1.3.3}基于其他技术的分析方法}{3}{subsection.1.3.3}
+\contentsline {section}{\numberline {1.4}本文的主要工作}{3}{section.1.4}
+\contentsline {section}{\numberline {1.5}本文的组织结构}{3}{section.1.5}
+\contentsline {chapter}{\numberline {第二章\hspace {.3em}}Android系统相关背景介绍 }{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Android系统结构介绍}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Android中的Activity}{7}{section.2.2}
+\contentsline {section}{\numberline {2.3}Android中的多线程交互}{9}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}基于Java的多线程交互}{9}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}基于Handler的多线程消息调度}{10}{subsection.2.3.2}
+\contentsline {section}{\numberline {2.4}本文遇到的困难与挑战}{11}{section.2.4}
+\contentsline {section}{\numberline {2.5}本章小结}{12}{section.2.5}
+\contentsline {chapter}{\numberline {第三章\hspace {.3em}}RunDroid系统的设计与实现 }{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}系统功能介绍}{13}{section.3.1}
+\contentsline {section}{\numberline {3.2}概念定义}{13}{section.3.2}
+\contentsline {section}{\numberline {3.3}设计思路介绍}{15}{section.3.3}
+\contentsline {section}{\numberline {3.4}技术路线（偏工程性）}{16}{section.3.4}
+\contentsline {section}{\numberline {3.5}相关技术介绍}{16}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}Soot}{16}{subsection.3.5.1}
+\contentsline {subsection}{\numberline {3.5.2}srcML}{16}{subsection.3.5.2}
+\contentsline {subsection}{\numberline {3.5.3}Xposed框架}{16}{subsection.3.5.3}
+\contentsline {subsection}{\numberline {3.5.4}Neo4j}{18}{subsection.3.5.4}
+\contentsline {section}{\numberline {3.6}模块实现介绍}{18}{section.3.6}
+\contentsline {subsection}{\numberline {3.6.1}源代码预处理组件（Preprocessor）}{18}{subsection.3.6.1}
+\contentsline {subsection}{\numberline {3.6.2}运行时日志记录器（Runtime Logger）}{18}{subsection.3.6.2}
+\contentsline {subsection}{\numberline {3.6.3}调用图构建器（Call-graph Builder）}{18}{subsection.3.6.3}
+\contentsline {section}{\numberline {3.7}构建过程介绍}{18}{section.3.7}
+\contentsline {subsection}{\numberline {3.7.1}如何构建函数调用图}{18}{subsection.3.7.1}
+\contentsline {subsection}{\numberline {3.7.2}如何构建Activity的生命周期}{18}{subsection.3.7.2}
+\contentsline {subsection}{\numberline {3.7.3}如何构建多线程触发关系}{18}{subsection.3.7.3}
+\contentsline {section}{\numberline {3.8}本章小结}{18}{section.3.8}
+\contentsline {chapter}{\numberline {第四章\hspace {.3em}}X}{21}{chapter.4}
+\contentsline {chapter}{\numberline {第五章\hspace {.3em}}X}{23}{chapter.5}
+\contentsline {chapter}{\numberline {第六章\hspace {.3em}}X}{25}{chapter.6}
+\contentsline {chapter}{\numberline {第七章\hspace {.3em}}X}{27}{chapter.7}
+\contentsline {chapter}{参考文献}{29}{section*.12}
+\contentsline {chapter}{致谢}{31}{section*.14}
+\contentsline {chapter}{攻读硕士学位期间发表论文}{33}{section*.15}

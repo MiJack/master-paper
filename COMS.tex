@@ -27,6 +27,7 @@
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{algorithmic} 
+\usepackage{algpseudocode} 
 %\usepackage{subcaption}
 \usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
 \usepackage{leading}
@@ -172,13 +173,9 @@ escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\
 \renewcommand{\LARGE}{\fontsize{16pt}{\baselineskip}\selectfont}
 \newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
 \newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
-\titleformat{\chapter}[hang]{\centering\heiti\LARGE\bfseries}{第\chaptername章}{1em}{}{}
-\titleformat{\section}[hang]{\centering\heiti\sihao\bfseries}{第{\thesection}章}{1em}{}{}
-\titleformat{\subsection}[hang]{\xiaosihao\heiti\bfseries}{\thesubsection}{1em}{}{}
-\titleformat{\subsubsection}[hang]{\xiaosihao\heiti\bfseries}{\thesubsubsection}{1em}{}{}
 
-\renewcommand\thesection{\zhnum{section}}
-
+% \titleformat{\chapter}[hang]{\centering\heiti\LARGE\bfseries}{第\chaptername章}{1em}{}{}
+\CTEXsetup[titleformat+=\left]{section}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -235,3 +232,8 @@ escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\
 \end{comment}
 
 \newcommand{\eat}[1]{}
+
+
+% 数据定义
+\newcommand{\paperName}{}
+

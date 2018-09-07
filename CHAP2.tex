@@ -1,10 +1,10 @@
-\section{Android系统相关背景介绍 }  
+\chapter{Android系统相关背景介绍 }  
 \label{ch2}
 
 
 本章首先会简要介绍Android系统架构，其次会对Android中的Activity组件做基本介绍，接着会着重介绍Android中常见的两种多线程交互方式，最后将指出本文系统在实现上的难点。
 
-\subsection{Android系统结构介绍}
+\section{Android系统结构介绍}
 
 Android是基于Linux内核开发的的开源操作系统，隶属于Google公司，主要用于触屏移动设备如智能手机、平板电脑与其他便携式设备，是目前世界上最流行的移动终端操作系统之一。
 
@@ -29,23 +29,25 @@ Android程序中较为常见的是组件（Component，例如Activity、Service�
 由于Android应用程序采用的是基于单线程消息队列的事件驱动架构，因此，界面相关的操作只允许出现在主线程（UI Thread）中，耗时操作只能在工作线程（Worker Thread）中进行。通常的，开发人员往往会借助回调函数处理控件的响应事件，利用多线程交互串联界面相关操作和耗时操作，完成对应的业务。
 
 
-\subsection{Android中的Activity}
+\section{Android中的Activity}
 
 在Android应用程序运行过程中，Activity向用户展示图形界面，响应用户的反馈，和其他组件一同完成相关业务，扮演着最为重要的作用。由于Android应用程序在架构选型上采用了事件驱动模型，为了便于协调应用内部状态的管理，Android组件通常有生命周期的概念，Activity也不例外。
 
 Android系统根据Activity 在运行时和用户的反馈将其状态分为以下四种：
+\begin{enumerate}
 
-运行态：在该状态下， Activity处于页面最前端时，用户可以与Activity进行交互。一般的，我们看到Activity均处于这个状态。
+\item 运行态：在该状态下， Activity处于页面最前端时，用户可以与Activity进行交互。一般的，我们看到Activity均处于这个状态。
 
-暂停态：在该状态，Activity仍然可见，但是失去了窗口的焦点。当一个Activity之上出现一个透明的Activity、Toast或者对话框时，Activity就处于这个状态。处于暂停状态的Activity仍处于存活状态，保存着所有的内存数据，只有当系统内存极度紧张时，才有可能被系统杀死回收。
+\item 暂停态：在该状态，Activity仍然可见，但是失去了窗口的焦点。当一个Activity之上出现一个透明的Activity、Toast或者对话框时，Activity就处于这个状态。处于暂停状态的Activity仍处于存活状态，保存着所有的内存数据，只有当系统内存极度紧张时，才有可能被系统杀死回收。
 
-停止态：当一个Activity被其他的Activity遮挡时，处于这个状态。处于该状态的Activity仍然可以保留所有的状态，只是对用户不可见。系统在需要内存的情况下，可以采用相应的策略对Activity进行杀死回收操作。
+\item 停止态：当一个Activity被其他的Activity遮挡时，处于这个状态。处于该状态的Activity仍然可以保留所有的状态，只是对用户不可见。系统在需要内存的情况下，可以采用相应的策略对Activity进行杀死回收操作。
 
-终止态：当Activity处于暂停态或者停止态时，系统由于内存原因可能会将上述两种Activity杀死回收。处于该状态下的Activity将不能直接恢复。
+\item 终止态：当Activity处于暂停态或者停止态时，系统由于内存原因可能会将上述两种Activity杀死回收。处于该状态下的Activity将不能直接恢复。
+\end{enumerate}
 
-Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。Android系统为Activity提供了onCreate(), onStart(), onResume(), onPaused(), onRestart(), 
- 
- 
+Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
+Android系统为Activity提供了onCreate(), onStart(), onResume(), onPaused(), onRestart(),  onStoped()和onDestroy()等方法，方便开发人员在Activity的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。对应的Activity的生命周期具体如图 2所示：
+
  
 \begin{figure*}
 	\centering
@@ -54,7 +56,6 @@ Activity的生命周期就是以上状态之间的跳转，受到Activity在运�
 	\label{fig:Activity-lifecycle}
 \end{figure*}
 
-onStoped()和onDestroy()等方法，方便开发人员在Activity的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。对应的Activity的生命周期具体如图 2所示：
 
 当用户点击应用图标，系统启动应用程序后，系统会创建Activity、启动Activity并使之可以和用户进行交互，在这个过程中，onCreate()、onStart()、onResume()等方法被回调，Activity最终处于运行态；
 
@@ -64,18 +65,18 @@ onStoped()和onDestroy()等方法，方便开发人员在Activity的状态发生
 
 当一个Activity长期处于停止态，但由于内存原因被系统回收时，用户尝试启动它时，系统会像启动一个新的Activity一样启动它。
 
-\subsection{	Android中的多线程交互}
+\section{Android中的多线程交互}
  Android系统在架构设计上采用了事件驱动架构。在多线程并发访问时，若UI控件对于各线程均是可见的，并发对控件做读写操作会使控件处于不可预期的状态；若贸然对控件使用锁机制，这将会使阻塞部分线程业务逻辑的执行，使得应用变得复杂低效。上述情况对于应用程序都是不可接受的。为了避免多线程操作之间的竞争关系带来的低效率问题，Android系统在设计事件驱动架构时，采用了单线程的消息队列，即只允许在主线程（也称为主线程，Main Thread）进行界面更新操作，不允许在其他线程（也称为工作线程，Worker Thread）进行界面更新操作。
 
 当应用程序出现耗时操作（例如加载磁盘上的图片、网络请求等）时，应用程序往往需要在一个新的线程中执行上述逻辑。当应用程序界面中的某些控件需要根据耗时操作的结果（例如渲染得到的图片对象、网络请求得到的JSON字段）更新界面状态时，开发人员需要切换到主线程进行界面的更新。
 
 从整体上，开发者可以需要的交互方式分为基于Java的多线程交互和基于Handler的交互方式。
 
-\subsubsection{基于Java的多线程交互}
+\subsection{基于Java的多线程交互}
 
 由于Android系统提供的API接口兼容Java多线程相关的部分API，因此，在Android系统中，开发人员可以采用和Java应用相同的调用方式启动工作线程，并在对应的线程上完成业务逻辑。但是，Java API只能实现业务逻辑从原有线程转移到新的工作线程上，不能重新返回到主线程上。为此，Android系统在Java API的基础上还提供了void runOnUiThread (Runnable action) API。runOnUiThread API可以帮助开发人员将业务逻辑的执行从工作线程转移到主线程上，该API也符合Android只允许在主线程上更新界面这一基本设计原则。但是，该API也存在着一些弊端，例如runOnUiThread API的定义位于类android.app.Activity，这也就意味着在Android组件Service中进行耗时操作时，无法通过该API返回到主线程；同时基于接口的函数参数定义方式对于跨线程的参数传递也不是十分友好。为此，Android提供了基于Handler的多线程交互方式。
 
-\subsubsection{基于Handler的多线程消息调度}
+\subsection{基于Handler的多线程消息调度}
 
 为了满足开发人员多样化的业务在多线程间的切换，Android提供了基于Handler消息调度的多线程交互方式。当开发人员需要当前业务逻辑转移到其他线程时，通过方法Message.obtain()获取一个Message，将对应的业务逻辑封装成Runnable对象传递给Message中对应的字段，或者将对应的参数传递给Message中的参数字段，最后通过Handler对象发送给指定的消息队列。当目标线程的消息队列读取到这条消息时，便会在该线程中执行预定的业务逻辑。
 
@@ -117,7 +118,7 @@ onStoped()和onDestroy()等方法，方便开发人员在Activity的状态发生
 
 
 综上所述，基于Handler消息调度的多线程交互方式，不仅可以帮助开发人员实现业务逻辑在主线程和工作线程间的自由转移，而且其灵活的API设计还帮助开发人员降低应用的设计复杂程度，提升了系统架构的可拓展性。因此，在Android开发过程中，基于Handler消息调度的多线程交互十分常见。
-\subsection{本文遇到的困难与挑战}
+\section{本文遇到的困难与挑战}
 
 
  本文解决的关键问题有如下几点：
@@ -134,6 +135,6 @@ onStoped()和onDestroy()等方法，方便开发人员在Activity的状态发生
 
 正如上文所提的，Android系统中有很多常规应用中不具备的特性，例如Activity的生命周期、基于多线程调用的触发关系。若要在生成的函数调用图上体现上述特性，需要对Android系统源代码有一定的了解熟悉，并基于图中的相关信息创建与特性相对应的关系，这既是本文研究的重点，也是本文的创新点。
 
-\subsection{ 本章小结}
+\section{本章小结}
 
 本章主要介绍了Android系统的相关背景知识，较为详细的阐述了Android的系统结构，详细介绍了Android四大组件之一的Activity机器生命周期。同时，本章还介绍了基于Runnable/Thread、Handler消息调度两种不同的多线程交互方式，较为详细地分析了Handler的运行机制，为下文基于函数调用图的多线程触发关系生成做了铺垫。最后，本章还介绍了系统在实现上可能遇到的困难。

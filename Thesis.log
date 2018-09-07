@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  7 SEP 2018 03:55
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.6.8)  7 SEP 2018 17:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1520,27 +1520,57 @@ Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
 \ALC@tlm=\skip109
 \algorithmicindent=\skip110
 )
-(/usr/local/texlive/2018/texmf-dist/tex/latex/leading/leading.sty
+(/usr/local/texlive/2018/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count320
+\c@ALG@rem=\count321
+\c@ALG@nested=\count322
+\ALG@tlm=\skip111
+\ALG@thistlm=\skip112
+\c@ALG@Lnr=\count323
+\c@ALG@blocknr=\count324
+\c@ALG@storecount=\count325
+\c@ALG@tmpcounter=\count326
+\ALG@tmplength=\skip113
+
+! LaTeX Error: Command \algorithmic already defined.
+               Or name \end... illegal, see p.192 of the manual.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.112    }
+          %
+? 
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (/usr/local/texlive/2018/texmf-dist/tex/latex/leading/leading.sty
 Package: leading 2008/12/11 v0.3 Define leading length
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count320
-\calc@Bcount=\count321
+\calc@Acount=\count327
+\calc@Bcount=\count328
 \calc@Adimen=\dimen267
 \calc@Bdimen=\dimen268
-\calc@Askip=\skip111
-\calc@Bskip=\skip112
+\calc@Askip=\skip114
+\calc@Bskip=\skip115
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count322
-\calc@Cskip=\skip113
+\calc@Ccount=\count329
+\calc@Cskip=\skip116
 ))
 (/usr/local/texlive/2018/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
 \ttl@box=\box67
-\beforetitleunit=\skip114
-\aftertitleunit=\skip115
+\beforetitleunit=\skip117
+\aftertitleunit=\skip118
 \ttl@plus=\dimen269
 \ttl@minus=\dimen270
 \ttl@toksa=\toks33
@@ -1602,10 +1632,10 @@ ode.tex
 \pgf@yc=\dimen283
 \w@pgf@writea=\write4
 \r@pgf@reada=\read4
-\c@pgf@counta=\count323
-\c@pgf@countb=\count324
-\c@pgf@countc=\count325
-\c@pgf@countd=\count326
+\c@pgf@counta=\count330
+\c@pgf@countb=\count331
+\c@pgf@countc=\count332
+\c@pgf@countd=\count333
 \t@pgf@toka=\toks38
 \t@pgf@tokb=\toks39
 \t@pgf@tokc=\toks40
@@ -1627,13 +1657,13 @@ File: pgfsys-dvipdfmx.def 2014/07/09  (rcs-revision 1.14)
 df.def
 File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
 )
-\pgfsys@objnum=\count327
+\pgfsys@objnum=\count334
 )))
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.
 code.tex
 File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
-\pgfsyssoftpath@smallbuffer@items=\count328
-\pgfsyssoftpath@bigbuffer@items=\count329
+\pgfsyssoftpath@smallbuffer@items=\count335
+\pgfsyssoftpath@bigbuffer@items=\count336
 )
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.
 code.tex
@@ -1662,7 +1692,7 @@ Package: pgfcore 2010/04/11 v3.0.1a (rcs-revision 1.7)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen284
-\pgfmath@count=\count330
+\pgfmath@count=\count337
 \pgfmath@box=\box69
 \pgfmath@toks=\toks41
 \pgfmath@stack@operand=\toks42
@@ -1687,7 +1717,7 @@ code.tex)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integ
 erarithmetics.code.tex)))
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count331
+\c@pgfmathroundto@lastzeros=\count338
 ))
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.co
 de.tex
@@ -1725,7 +1755,7 @@ File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
 \pgfpic=\box70
 \pgf@hbox=\box71
 \pgf@layerbox@main=\box72
-\pgf@picture@serial@count=\count332
+\pgf@picture@serial@count=\count339
 )
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicst
 ate.code.tex
@@ -1760,7 +1790,7 @@ File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
 e.tex
 File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
 \pgf@max=\dimen308
-\pgf@sys@shading@range@num=\count333
+\pgf@sys@shading@range@num=\count340
 )
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.cod
 e.tex
@@ -1823,7 +1853,7 @@ Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothan
 dlers.code.tex
 File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
-\pgf@plot@mark@count=\count334
+\pgf@plot@mark@count=\count341
 \pgfplotmarksize=\dimen313
 )
 \tikz@lastx=\dimen314
@@ -1836,19 +1866,19 @@ File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
 \tikz@figbox@bg=\box76
 \tikz@tempbox=\box77
 \tikz@tempbox@bg=\box78
-\tikztreelevel=\count335
-\tikznumberofchildren=\count336
-\tikznumberofcurrentchild=\count337
-\tikz@fig@count=\count338
+\tikztreelevel=\count342
+\tikznumberofchildren=\count343
+\tikznumberofcurrentchild=\count344
+\tikz@fig@count=\count345
 
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.cod
 e.tex
 File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
-\pgfmatrixcurrentrow=\count339
-\pgfmatrixcurrentcolumn=\count340
-\pgf@matrix@numberofcolumns=\count341
+\pgfmatrixcurrentrow=\count346
+\pgfmatrixcurrentcolumn=\count347
+\pgf@matrix@numberofcolumns=\count348
 )
-\tikz@expandcount=\count342
+\tikz@expandcount=\count349
 
 (/usr/local/texlive/2018/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
 s/tikzlibrarytopaths.code.tex
@@ -1905,15 +1935,21 @@ File: pgflibraryshapes.multipart.code.tex 2010/01/07 v3.0.1a (rcs-revision 1.2)
 \pgfnodepartsixbox=\box97
 \pgfnodepartfivebox=\box98
 )))
-\c@example_type=\count343
-\c@define_type=\count344
-\c@theorem_type=\count345
-\c@proposition_type=\count346
-)
-(/usr/local/texlive/2018/texmf-dist/tex/xelatex/xecjk/xeCJK-listings.sty
+\c@example_type=\count350
+\c@define_type=\count351
+\c@theorem_type=\count352
+\c@proposition_type=\count353
+
+*************************************************
+* ctex warning: "deprecated-command"
+* 
+* Command \CTEXsetup is deprecated.
+* \ctexset { section = { titleformat+=\left  } } is set.
+*************************************************
+) (/usr/local/texlive/2018/texmf-dist/tex/xelatex/xecjk/xeCJK-listings.sty
 Package: xeCJK-listings 2018/04/07 v3.7.0 xeCJK patch file for listings
-\l__xeCJK_listings_max_char_int=\count347
-\l__xeCJK_listings_flag_int=\count348
+\l__xeCJK_listings_max_char_int=\count354
+\l__xeCJK_listings_flag_int=\count355
 )
 
 LaTeX Warning: Unused global option(s):
@@ -2010,7 +2046,7 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count349
+\c@section@level=\count356
 )
 LaTeX Info: Redefining \ref on input line 19.
 LaTeX Info: Redefining \pageref on input line 19.
@@ -2024,7 +2060,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count350
+\c@lstlisting=\count357
  ABD: EveryShipout initializing macros
 (./A1-COVER.tex
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
@@ -2145,7 +2181,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 * 
 * Font 'STHeiti' does not contain script 'CJK'.
 *************************************************
-\g__fontspec_family_STHeiti_int=\count351
+\g__fontspec_family_STHeiti_int=\count358
 .................................................
 . fontspec info: "no-font-shape"
 . 
@@ -2202,22 +2238,11 @@ LaTeX Font Warning: Font shape `TU/STHeiti(0)/bx/n' undefined
  [9] [10
 
 ] (./CHAP1.tex
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 14.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
+第一章
 [1
 
+
 ]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2241,16 +2266,12 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 [4
 
 ] (./CHAP2.tex
+第二章
 File: ./Figures/Android-Framework.png Graphic file (type bmp)
 <./Figures/Android-Framework.png>
+[5
 
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[5]
+]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2262,7 +2283,7 @@ File: ./Figures/Activity-lifecycle.png Graphic file (type bmp)
 <./Figures/Activity-lifecycle.png>
 
 
-LaTeX Warning: Float too large for page by 0.18858pt on input line 55.
+LaTeX Warning: Float too large for page by 0.18858pt on input line 57.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -2278,10 +2299,6 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [8]
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 74.
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2304,9 +2321,6 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 File: ./Figures/Handler-framework.png Graphic file (type bmp)
 <./Figures/Handler-framework.png>
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2321,21 +2335,23 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [12] (./CHAP3.tex
+第三章
 Missing character: There is no ， in font [lmroman12-regular]:mapping=tex-text;!
-
 
 LaTeX Font Warning: Font shape `TU/STSong(0)/bx/it' undefined
 (Font)              using `TU/STSong(0)/bx/n' instead on input line 33.
 
+[13
+
+
+]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[13
-
-]
+[14]
 File: ./Figures/code-sample.png Graphic file (type bmp)
 <./Figures/code-sample.png>
 
@@ -2345,25 +2361,10 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[14]
+[15]
 File: ./Figures/rundroid-overview.png Graphic file (type bmp)
 <./Figures/rundroid-overview.png>
 
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 137.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[15]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2371,18 +2372,6 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [16]
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 147.
-
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 156.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2396,16 +2385,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[18] (./CHAP4.tex)
+[18]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[19
-
-]
+[19]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2414,14 +2401,11 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [20
 
-] (./CHAP5.tex)
+] (./CHAP4.tex
+第四章
+) [21
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[21]
+]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2430,14 +2414,11 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [22
 
-] (./CHAP6.tex)
+] (./CHAP5.tex
+第五章
+) [23
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[23]
+]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2446,14 +2427,11 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [24
 
-] (./CHAP7.tex)
+] (./CHAP6.tex
+第六章
+) [25
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[25]
+]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2462,10 +2440,8 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [26
 
-] (./Thesis.bbl
-
-Package natbib Warning: Empty `thebibliography' environment on input line 9.
-
+] (./CHAP7.tex
+第七章
 ) [27
 
 ]
@@ -2477,14 +2453,9 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [28
 
-] (./D2-ACHNOWLEDGEMENT.tex)
+] (./Thesis.bbl) [29
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 14.49998pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[29]
+]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -2492,6 +2463,22 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [30
+
+] (./D2-ACHNOWLEDGEMENT.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[31]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[32
 
 ] (./D3-MYACHIEVEMENTS.tex
 Overfull \hbox (31.7625pt too wide) in paragraph at lines 9--10
@@ -2506,14 +2493,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[31]
+[33]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 110.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 110.
  (./Thesis.aux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 110.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 110.
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: A86F2249B52B8DF03B061706381314F3.
+(rerunfilecheck)             Checksum: 403FA2D508109B1E4C0270EF94DFCC5D.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -2525,12 +2512,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 110.
  ) 
 Here is how much of TeX's memory you used:
- 40431 strings out of 492970
- 844756 string characters out of 6133939
- 889216 words of memory out of 5000000
- 43747 multiletter control sequences out of 15000+600000
- 632390 words of font info for 192 fonts, out of 8000000 for 9000
+ 40904 strings out of 492970
+ 853241 string characters out of 6133939
+ 891792 words of memory out of 5000000
+ 44210 multiletter control sequences out of 15000+600000
+ 638417 words of font info for 196 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 57i,12n,81p,10408b,428s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,19n,82p,10408b,561s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Thesis.pdf (49 pages).
+Output written on Thesis.pdf (51 pages).
