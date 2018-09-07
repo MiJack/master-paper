@@ -22,7 +22,7 @@
 m_0 \to m_1 \to \dots m_{n - 1} \to m_n  \label{equ:extend_invoke}
 \end{equation}
 
-    在此基础上，对于方法$m_0$和方法$m_n$，若存在方法$m_i$（$i=1,\dots,n-1，n>1$），使得~\ref{equ:extend_invoke}成立，，则记作$m_0 \stackrel{\ast}{\to} m_n$，称为方法$m_0$扩展调用方法$m_n$。
+    在此基础上，对于方法$m_0$和方法$m_n$，若存在方法$m_i$（$i=1,\dots,n-1，n>1$），使得~\autoref{equ:extend_invoke}成立，，则记作$m_0 \stackrel{\ast}{\to} m_n$，称为方法$m_0$扩展调用方法$m_n$。
 
 
     补充的，对于方法$m_1$和方法$m_2$，若$m_1 \to m_2$，也可以记为$m_1  \stackrel{\ast}{\to}  m_2$。
@@ -42,8 +42,8 @@ m_0 \to m_1 \to \dots m_{n - 1} \to m_n  \label{equ:extend_invoke}
 前者分析的整体是方法实体，是静态分析的结果，每次产生的结果是一样的；
 后台则为方法执行，是对动态行为的描述，每次产生的结果和具体的执行过程相关，不一定是一样的。
 
-例如，方法A调用了方法B，函数调用图$CG$如~\ref{equ:cg_sample}所示。
-但若，在实际执行过程中，方法A被调用了两次，这对应的动态函数调用图$DCG$如~\ref{equ:dcg_sample}所示。
+例如，方法A调用了方法B，函数调用图$CG$如~\autoref{equ:cg_sample}所示。
+但若，在实际执行过程中，方法A被调用了两次，这对应的动态函数调用图$DCG$如~\autoref{equ:dcg_sample}所示。
 可以看出，$DCG$中，$method_a$ 和 $method_b$ 各有两个，分别对应的两次\textbf{函数执行}。
 \begin{equation}
 CG = ({method_a,method_b},{(method_a \to method_b )} ) \label{equ:cg_sample}
@@ -83,11 +83,12 @@ G = & \{
 \end{enumerate}
 }
 
+
 \define{
     拓展动态函数调用图（Extended Dynamic CallGraph，EDCG）：在动态函数调用图（DCG）的基础上，添加了方法对象和函数间的触发关系。
     拓展动态函数调用图中的节点包括方法执行节点和方法对象节点。图中的边包括描述方法间关系的边和描述方法和对象间的边：
     前者的方法间关系包括调用关系和触发关系；而后者的关系包括和方法对象相关的三个关系。
-    具体定义如~\ref{equ:def_edcg}所示：
+    具体定义如~\autoref{equ:def_edcg}所示：
 
 \begin{equation}
 \begin{aligned}
@@ -105,8 +106,8 @@ G_{method} = & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
 
 \section{设计思路介绍}
 以下面一段代码里为例，我们将简要介绍一下RunDroid还原Android应用程序动态函数调用图的基本思路：
-~\ref{fig:code_sample}-左为一段面向过程编程的示例代码，当main函数执行时，会一次调用A、B两个函数，而B函数有调用了C、D两个函数，
-对应动态函数调用图如~\ref{fig:code_sample}-右所示。
+~\autoref{fig:code_sample}-左为一段面向过程编程的示例代码，当main函数执行时，会一次调用A、B两个函数，而B函数有调用了C、D两个函数，
+对应动态函数调用图如~\autoref{fig:code_sample}-右所示。
  
  
  \begin{figure*}
@@ -126,7 +127,7 @@ G_{method} = & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
  
 \begin{figure*}
 \centering
-\includegraphics[width=\textwidth]{./Figures/rundroid-overview.png}
+\includegraphics[height=0.5\textheight]{./Figures/rundroid-overview.png}
 \caption{ RunDroid基本架构图}
 \label{fig:rundroid_overview}
 \end{figure*}
@@ -163,37 +164,39 @@ Neo4j是基于Java语言开发的图数据库。与传统的基于关系模型�
 
 \subsection{如何构建函数调用图}
 
+\begin{algorithm}[H]
+ 
+% global change
+\caption{动态函数调用图（DCG）的生成}
+    \label{alg:cg}
+    \SetAlgoLined
 
-\begin{algorithm}[htbp]
-	\caption{Call graph construction}
-	\label{alg:cg}
-	\KwIn {$logs$, the log entries for an app execution}
-	\KwOut {$cg$, the call graph} 
-	
-	$cg$ $\gets$ new CallGraph()
-	
-	\For {thread $\in$ $logs.threads$}{
-		$stack$ $\gets$ new Stack()
-		
-		\For  {$log$ $\in$ $logs.get(thread)$}{
-			\uIf {isMethodEntry($log$)} {
-				
-				$n \gets $ $cg$.addMethodNode($log$)
-				
-				\If { $stack$ is not empty }{
-					$top$ = $stack$.peek()                 
-					
-					$cg$.addInvokeRel($top$, $n$) 
-				}
-				$stack$.push($n$)
-			}
-			\Else { 
-				$stack$.pop()\Comment{method exit}
-				
-			}
-		}
-	}
-	\KwRet $cg$
+    \KwIn {$logs$, the log entries for an app execution}
+    \KwOut {$cg$, the call graph} 
+
+    $cg$ $\gets$ new CallGraph()
+
+    \For {thread $\in$ $logs.threads$}{
+        $stack$ $\gets$ new Stack()
+
+        \For  {$log$ $\in$ $logs.get(thread)$}{
+            \uIf {isMethodEntry($log$)} {
+
+                $n \gets $ $cg$.addMethodNode($log$)
+
+                \If { $stack$ is not empty }{
+                    $top$ = $stack$.peek()                 
+
+                    $cg$.addInvokeRel($top$, $n$) 
+                }
+                $stack$.push($n$)
+            }  \Else { 
+                $stack$.pop() 
+
+            }
+        }
+    }
+\KwRet $cg$
 \end{algorithm}
 
 
