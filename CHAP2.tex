@@ -89,7 +89,7 @@ Android系统为Activity提供了onCreate(), onStart(), onResume(), onPaused(), 
 ~\autoref{fig:handler-code}为Handler的简单示例：用户在工作线程执行一项耗时任务（生成一个字符串），将生成的字符串传递给Message对象，并通过Handler对象通知主线程进行界面更新。
  
  
-\begin{figure*}
+\begin{figure*}[h]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/handler-code.png}
 	\caption{Handler的使用实例}
@@ -100,7 +100,7 @@ Android系统为Activity提供了onCreate(), onStart(), onResume(), onPaused(), 
 从Android SDK提供的API来看，开发人员可以通过post(Runnable)，postAtTime(Runnable，long)，sendMessage(Message)，postDelayed(Runnable, Object, long), sendMessageDelayed(Message，long)，sendMessageAtTime(Message，long)和sendEmptyMessage(int)等多种API形式实现消息调度。通过查阅和分析Android系统相关源代码，我们发现上述Handler相关的API关系如~\autoref{fig:handler-apis}所示。
 
  
- \begin{figure*}
+ \begin{figure*}[h]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/Handler-apis.png}
 	\caption{ Handler 各API之间的调用关系}
@@ -115,7 +115,7 @@ Android系统为Activity提供了onCreate(), onStart(), onResume(), onPaused(), 
 从原理上看，基于Handler的多线程消息调度，充分利用了Android的事件驱动架构，将业务逻辑抽象出Message对象。该消息对象通过Handler的对应接口发送至在目标线程所对应的消息队列MessageQueue中，再由Looper对象在目标线程运行时从消息队列中取出，分发给对应的Handler执行，达到了Android跨线程交互的目的。具体地，Handler的工作原理如~\autoref{fig:handler-framework}所示：
  
 
- \begin{figure*}
+ \begin{figure*}[h]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/Handler-framework.png}
 	\caption{ Handler的工作原理}

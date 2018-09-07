@@ -1,4 +1,4 @@
-\chapter{RunDroid系统的设计与实现 }
+\chapter{设计与实现 }
 \label{ch3}
 
 \section{系统功能介绍}
@@ -110,7 +110,7 @@ G_{method} = & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
 对应动态函数调用图如~\autoref{fig:code_sample}-右所示。
  
  
- \begin{figure*}
+ \begin{figure*}[h]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/code-sample.png}
 	\caption{ 面向过程编程语言的函数调用的示例}
@@ -125,7 +125,7 @@ G_{method} = & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
 本技术路线拟利用语法分析工具，对Android应用程序进行了应用源代码层面的执行日志插桩工作，利用非侵入式系统行为修改插件获取系统层面的函数执行信息。结合以上日志信息，方案对日志进行初步处理，在图数据库上构建原始的Android应用程序的动态函数调用图。通过阅读分析Android系统中多线程相关的源代码，制定具体的多线程分析插件，进而在函数调用图中标识出多线程相关的方法间触发关系，全面地展现Android应用的执行过程。
  
  
-\begin{figure*}
+\begin{figure*}[h]
 \centering
 \includegraphics[height=0.5\textheight]{./Figures/rundroid-overview.png}
 \caption{ RunDroid基本架构图}

@@ -30,6 +30,9 @@
 \usepackage{caption}
 \usepackage{algorithmic} 
 %\usepackage{subcaption}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\pgfplotsset{scaled y ticks=false}
 \usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
 \usepackage{leading}
 \usepackage{titlesec}
@@ -254,3 +257,22 @@ escapeinside={||},mathescape=true,frame=tlrb,xleftmargin=\fboxsep,xrightmargin=\
 
 \SetKwInput{KwIn}{输入}
 \SetKwInput{KwOut}{输出}
+
+\raggedbottom
+
+
+
+\makeatletter
+\def\@makechapterhead#1{%
+  %%%%\vspace*{50\p@}% %%% removed!
+  {\parindent \z@ \raggedright \normalfont
+       \centering{ \huge\bfseries 第 \thechapter 章  \quad
+    \interlinepenalty\@M
+    \Huge \bfseries #1
+    }
+    
+    \par\nobreak
+    \vskip 40\p@
+  }
+} 
+\makeatother
