@@ -61,7 +61,7 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
-\newtheorem{myDef}{Definition}
+\newtheorem{myDef}{定义}
 \newtheorem{myTheo}{Theorem}
 %\newcommand{\stitle}[1]{\vspace{0ex} \noindent{\bf #1}}
 %% alg
@@ -145,6 +145,15 @@
 \bbb \bbb \bbb \bbb \bbb }
 \newcommand{\abc}{abcdefg1234567890}
 \newcommand{\upabc}{ABCDEFGHIJK}
+
+% 交叉引用格式
+\renewcommand\figureautorefname{图}
+\renewcommand\equationautorefname{公式}
+
+
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+
 %%% ----------------------------------------------------------------------
 
 
@@ -231,11 +240,17 @@
 \setlength{\baselineskip}{25pt}  %%正文设为25磅行间距
 
 \input C1-CHAP1.tex
+
 \input C2-CHAP2.tex
+
 \input C3-CHAP3.tex
+
 \input C4-CHAP4.tex
+
 \input C5-CHAP5.tex
+
 \input C6-CHAP6.tex
+
 \input C7-CHAP7.tex
 
 \clearpage
