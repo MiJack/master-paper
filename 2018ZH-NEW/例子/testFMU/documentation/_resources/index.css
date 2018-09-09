@@ -1,0 +1,26 @@
+body {
+  padding: 4 6 4 6;
+  font-family: Arial;
+  font-size: 0.75em;
+}
+
+div.item  {
+  padding: 0 0 0 0;
+}
+
+a:link {
+  text-decoration: none;
+  color: #000
+}
+
+a:visited {
+  text-decoration: none; color: #000000;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#disabled {
+  color: #777777;
+}

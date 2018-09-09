@@ -1,0 +1,262 @@
+%!Mode:: "TeX:System
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                           %
+%          LaTeX File for Doctor (Master) Thesis of ECNU                    %
+%            华东师范大学博士（硕士）论文模板 ____lizb                      %
+%                                                                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\documentclass[12pt,openany,a4paper,fancyhdr,oneside]{ctexbook}
+
+%draft 选项可以使插入的图形只显示外框，以加快预览速度。
+%\documentclass[11pt,a4paper,openany,draft]{book}
+\usepackage{amsmath} 
+\usepackage{amssymb}               % AMSLaTeX宏包 用来排出更加漂亮的公式
+%\usepackage[CJKbookmarks]{hyperref}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{shortvrb,indentfirst,ulem,makeidx}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{indentfirst,latexsym,amsthm,colortbl,subfigure,clrscode}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+%\usepackage{algorithm2e}
+%\usepackage{algorithmic}
+\usepackage{amsthm}
+\usepackage{bm}                     % 处理数学公式中的黑斜体的宏包
+\usepackage{amssymb}                % AMSLaTeX宏包 用来排出更加漂亮的公式
+\usepackage{mathrsfs}
+\usepackage[subnum]{cases}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{hypernat}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{fontspec}
+%\usepackage{libertine}
+\usepackage{libertineotf}
+\usepackage{caption}
+\usepackage{titletoc}
+
+
+%\usepackage{cite}
+\usepackage{longtable,booktabs}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{balance}
+\usepackage {paralist}
+\usepackage{bbding}
+%\usepackage{biblatex}
+\makeindex
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[CO,CE]{\thepage}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newtheorem{myDef}{Definition}
+\newtheorem{myTheo}{Theorem}
+%\newcommand{\stitle}[1]{\vspace{0ex} \noindent{\bf #1}}
+%% alg
+%\newcommand{\State}[1]{#1;\\}
+%\newcommand{\Break}{\textbf{break};\\}
+%\newcommand{\Continue}{\textbf{continue};\\}
+%\newcommand{\fn}[1]{\mathsf{#1}}
+%\newcommand{\var}[1]{\mathit{#1}}
+%\newcommand{\FALSE}{\text{\textbf{\textup{false}}}}
+%\newcommand{\TRUE}{\text{\textbf{\textup{true}}}}
+%\newcommand{\AND}{\text{\textbf{\textup{and}}}\xspace}
+%\newcommand{\OR}{\text{\textbf{\textup{or}}}\xspace}
+\newcommand{\POPM}{\textsf{POPM}}
+\newcommand{\rdis}{\textsf{rdis}}
+\newcommand{\edis}{\textsf{edis}}
+\newcommand{\maxT}{\textsf{maxT}}
+\newcommand{\minT}{\textsf{minT}}
+\newcommand{\maxD}{\textsf{maxD}}
+\newcommand{\minD}{\textsf{minD}}
+\newcommand{\wtime}{\textsf{wtime}}
+\newcommand{\MaxMin}{{\textsf{MaxMin}}}
+\newcommand{\MaxSum}{{\textsf{MaxSum}}}
+\newcommand{\WPFTRF}{{\textsf{WPF+TRF}}}
+%                    根据自己正文需要做的一些定义                 %
+%==================================================================
+\def\diag{{\rm diag}}
+\def\rank{{\rm rank}}
+\def\RR{{\cal R}}
+\def\NN{{\cal N}}
+\def\R{{\mathbb R}}
+\def\C{{\mathbb C}}
+\let\dis=\displaystyle
+
+\def\p{\partial}
+\def\f{\frac}
+\def\mr{\mathrm}
+\def\mb{\mathbf}
+\def\mc{\mathcal}
+\def\b{\begin}
+\def\e{\end}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newtheorem{thm1}{Theorem}[part]
+\newtheorem{thm2}{Theorem}[section]
+\newtheorem{thm3}{Theorem}[subsection]
+\newtheorem{them}[thm2]{定理}
+\newtheorem{theorem}[thm2]{定理}
+\newtheorem{defn}[thm2]{定义}
+\newtheorem{define}[thm2]{定义}
+\newtheorem{ex}[thm2]{例}
+\newtheorem{exs}[thm2]{例}
+\newtheorem{example}[thm2]{例}
+\newtheorem{prop}[thm2]{命题}
+\newtheorem{lemma}[thm2]{引理}
+\newtheorem{cor}[thm2]{推论}
+\newtheorem{remark}[thm2]{注释}
+\newtheorem{notation}[thm2]{记号}
+\newtheorem{abbre}[thm2]{缩写}
+% \newtheorem{algorithm}[thm2]{算法}
+\newtheorem{problem}[thm2]{问题}
+\newtheorem{pruningrule}{剪枝规则}
+
+
+\newcommand{\yihao}{\fontsize{26pt}{36pt}\selectfont}           % 一号, 1.4 倍行距
+\newcommand{\erhao}{\fontsize{22pt}{28pt}\selectfont}          % 二号, 1.25 倍行距
+\newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}          % 小二, 单倍行距
+\newcommand{\sanhao}{\fontsize{16pt}{24pt}\selectfont}        % 三号, 1.5 倍行距
+\newcommand{\xiaosan}{\fontsize{15pt}{22pt}\selectfont}        % 小三, 1.5 倍行距
+\newcommand{\sihao}{\fontsize{14pt}{21pt}\selectfont}            % 四号, 1.5 倍行距
+\newcommand{\banxiaosi}{\fontsize{13pt}{19.5pt}\selectfont}    % 半小四, 1.5 倍行距
+\newcommand{\xiaosi}{\fontsize{12pt}{18pt}\selectfont}            % 小四, 1.5 倍行距
+\newcommand{\dawuhao}{\fontsize{11pt}{11pt}\selectfont}       % 大五号, 单倍行距
+\newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}    % 五号, 单倍行距
+
+%============================ 可以自定义文字块 ================================%
+
+\newcommand{\aaa}{Example}
+\newcommand{\bbb}{\aaa \aaa \aaa}
+\newcommand{\ccc}{\bbb \bbb \bbb \bbb \bbb
+
+\bbb \bbb \bbb \bbb \bbb }
+\newcommand{\abc}{abcdefg1234567890}
+\newcommand{\upabc}{ABCDEFGHIJK}
+%%% ----------------------------------------------------------------------
+
+
+
+%============================= 版芯控制 ================================%
+\setlength{\oddsidemargin}{0.57cm}
+\setlength{\evensidemargin}{\oddsidemargin}
+\voffset-6mm \textwidth=150mm \textheight=230mm \headwidth=150mm
+%\rightmargin=35mm
+%                                                                       %
+
+
+%============================= 页面设置 ================================%
+%-------------------- 定义页眉和页脚 使用fancyhdr 宏包 -----------------%
+% 定义页眉与正文间双隔线
+\newcommand{\makeheadrule}{%
+\makebox[0pt][l]{\rule[.7\baselineskip]{\headwidth}{0.4pt}}%
+\rule[0.85\baselineskip]{\headwidth}{0.4pt} \vskip-.8\baselineskip}
+\makeatletter
+\renewcommand{\headrule}{%
+{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+\makeheadrule}} \makeatother
+
+\newcommand{\adots}{\mathinner{\mkern 2mu%
+\raisebox{0.1em}{.}\mkern 2mu\raisebox{0.4em}{.}%
+\mkern2mu\raisebox{0.7em}{.}\mkern 1mu}}
+
+\setmainfont{Times New Roman}
+\dottedcontents{chapter}[1.5cm]{\xiaosi\heiti}{3.8em}{9.5pt}
+\dottedcontents{section}[1.5cm]{\xiaosi\heiti}{2.8em}{9.5pt}
+\lhead{华东师范大学硕士专业学位论文}
+
+
+%=============================== 正文部分 ================================%
+\include{A1-COVER-1.tex}
+\include{A2-COVER-E.tex}
+\include{A3-COPYRIGHT.tex}
+\include{A4-MEMBERLIST.tex}
+\include{B1-ABSTRACT.tex}
+\include{B2-ABSTRACT-E.tex}
+\include{C1-CHAP1.tex}
+\include{C2-CHAP2.tex}
+\include{C3-CHAP3.tex}
+\include{C4-CHAP4.tex}
+\include{C5-CHAP5.tex}
+\include{C6-CHAP6.tex}
+\include{C7-CHAP7.tex}
+\include{CC-APPENDIX.tex}
+\include{D2-ACHNOWLEDGEMENT.tex}
+\include{D3-MYACHIEVEMENTS.tex}
+
+\begin{document}
+\input A1-COVER-1.tex
+
+\input A2-COVER-E.tex
+
+\input A3-COPYRIGHT.tex
+
+\input A4-MEMBERLIST.tex
+
+
+\newpage
+\pagenumbering{roman}
+\pagestyle{plain}
+\input B1-ABSTRACT.tex
+\input B2-ABSTRACT-E.tex
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\input{B3-FIGURES.tex}
+\input{B5-TABLES.tex}
+%\input{B4-SYMBOLS.tex}
+
+\newpage
+\pagenumbering{arabic}
+\pagestyle{fancy}
+
+\CTEXsetup[format+={\zihao{3}\heiti}]{chapter}
+\CTEXsetup[format+={\raggedright\zihao{4}\heiti}]{section}
+\CTEXsetup[format+={\zihao{-4}\heiti}]{subsection}
+
+
+\setlength{\baselineskip}{25pt}  %%正文设为25磅行间距
+
+\input C1-CHAP1.tex
+\input C2-CHAP2.tex
+\input C3-CHAP3.tex
+\input C4-CHAP4.tex
+\input C5-CHAP5.tex
+\input C6-CHAP6.tex
+\input C7-CHAP7.tex
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{参考文献}
+\bibliographystyle{GBT7714-2005}
+\bibliography{bib/tex}
+
+
+\pagestyle{plain}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{致谢}
+\input D2-ACHNOWLEDGEMENT.tex
+\pagestyle{plain}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{发表论文和科研情况}
+\input D3-MYACHIEVEMENTS.tex
+
+
+\printindex
+\end{document}
+

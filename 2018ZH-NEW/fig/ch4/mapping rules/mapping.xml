@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+clock t;</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="374" y="136">
+			<name x="364" y="102">Final</name>
+		</location>
+		<location id="id1" x="272" y="136">
+			<name x="262" y="102">A</name>
+		</location>
+		<location id="id2" x="374" y="51">
+			<name x="364" y="17">A</name>
+		</location>
+		<location id="id3" x="272" y="51">
+		</location>
+		<location id="id4" x="493" y="51">
+			<name x="483" y="17">A</name>
+			<label kind="invariant" x="483" y="68">x+y&lt;a</label>
+		</location>
+		<location id="id5" x="595" y="51">
+			<name x="585" y="17">B</name>
+		</location>
+		<location id="id6" x="493" y="136">
+			<name x="483" y="102">A</name>
+			<label kind="invariant" x="483" y="153">t&lt;=b</label>
+		</location>
+		<location id="id7" x="595" y="136">
+			<name x="585" y="102">B</name>
+		</location>
+		<location id="id8" x="272" y="212">
+			<name x="262" y="178">A</name>
+		</location>
+		<location id="id9" x="425" y="212">
+			<name x="415" y="178">B</name>
+		</location>
+		<location id="id10" x="493" y="212">
+			<name x="483" y="178">A</name>
+		</location>
+		<location id="id11" x="646" y="212">
+			<name x="636" y="178">B</name>
+		</location>
+		<location id="id12" x="670" y="51">
+			<name x="660" y="17">A</name>
+		</location>
+		<location id="id13" x="823" y="85">
+			<name x="816" y="51">B</name>
+		</location>
+		<branchpoint id="id14" x="756" y="51">
+		</branchpoint>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id14"/>
+			<label kind="guard" x="688" y="25">guard</label>
+			<label kind="synchronisation" x="688" y="51">event</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="assignment" x="756" y="68">action()</label>
+			<label kind="probability" x="765" y="42">prob*10</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="510" y="119">t&gt;=a</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="assignment" x="289" y="195">action()
+actioneconsump+=a</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="511" y="195">event</label>
+			<label kind="assignment" x="510" y="212">eventeconsump+=a</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+	</queries>
+</nta>

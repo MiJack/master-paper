@@ -1,0 +1,72 @@
+%% Creator: Inkscape 0.48.3.1, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'arch.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{596.58242188bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.69923862)%
+    \put(0,0){\includegraphics[width=\unitlength]{fig/arch.pdf}}%
+    \put(0.0662913,0.02682819){\color[rgb]{0.08627451,0.31372549,0.08627451}\makebox(0,0)[lb]{\smash{Ground Layer}}}%
+    \put(0.07778534,0.26667056){\color[rgb]{0.26666667,0.12941176,0.47058824}\makebox(0,0)[lb]{\smash{Air Layer}}}%
+    \put(0.08353236,0.486973){\color[rgb]{0,0,1}\makebox(0,0)[lb]{\smash{Space Layer}}}%
+    \put(0.74635545,0.54865769){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Relay}}}%
+    \put(0.37663041,0.64712329){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Romote sensing}}}%
+    \put(0.84137282,0.6551691){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Deep space}}}%
+    \put(0.5904196,0.65631853){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Imaging}}}%
+    \put(0.17740037,0.59654949){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Communication}}}%
+    \put(0.44942603,0.49118748){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Surveillance}}}%
+    \put(0.41685955,0.40574838){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Plane}}}%
+    \put(0.63333068,0.42030755){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Airship}}}%
+    \put(0.25287789,0.32337448){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Helicopter}}}%
+    \put(0.48505754,0.27280069){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Warplane}}}%
+    \put(0.84711983,0.18889421){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Ship}}}%
+    \put(0.62030409,0.02951013){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Ground Station}}}%
+    \put(0.43601632,0.06782358){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Internet}}}%
+    \put(0.27433344,0.17050374){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Internet of Things}}}%
+    \put(0.52030596,0.117248){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Target}}}%
+  \end{picture}%
+\endgroup%

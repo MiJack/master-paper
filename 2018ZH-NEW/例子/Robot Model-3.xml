@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const int N = 2;         // # obstacle
+typedef int[0,N-1] id_t; //# 障碍物id
+broadcast chan  NOISE; //# 噪声信号
+bool DANGER[N]; // # 障碍物处于危险区域
+bool COLLISION[N]; //# 障碍物处于碰撞区域
+id_t currentOb; // 当前障碍物id
+</declaration>
+	<template>
+		<name x="5" y="5">robot</name>
+		<declaration>// Place local declarations here.
+clock T;//# robot时钟
+clock c;//# robot能耗时钟
+double e;//# robot能耗变量
+double v; //# 机器人运动速度
+const double m = 1.0; //# 机器人质量
+const double g = 10.0; //# 重力加速度
+const double a = 0.3; //# 机器人加速度 
+//加速对碰撞的影响？
+const double u = 0.8; //# 摩擦系数 </declaration>
+		<location id="id0" x="-3289" y="-2635">
+			<name x="-3323" y="-2669">Collide</name>
+		</location>
+		<location id="id1" x="-2652" y="-2975">
+			<name x="-2652" y="-3009">Dsafe1a</name>
+			<label kind="invariant" x="-2704" y="-2958">T&lt;=4 &amp;&amp; c'==e/100</label>
+		</location>
+		<location id="id2" x="-3068" y="-2635">
+			<name x="-3078" y="-2669">final</name>
+		</location>
+		<location id="id3" x="-3226" y="-2720">
+			<name x="-3306" y="-2745">CrossPoint</name>
+			<committed/>
+		</location>
+		<location id="id4" x="-2822" y="-2754">
+			<name x="-2813" y="-2770">Dsafe1u2</name>
+			<label kind="invariant" x="-2830" y="-2745">T&lt;=3&amp;&amp;c'==e/100</label>
+		</location>
+		<location id="id5" x="-3102" y="-2881">
+			<name x="-3162" y="-2906">Dsafe1u</name>
+			<label kind="invariant" x="-3179" y="-2873">T&lt;=7&amp;&amp;c'==e/100</label>
+		</location>
+		<location id="id6" x="-3025" y="-3017">
+			<name x="-3076" y="-3051">Dsafe1st</name>
+			<label kind="invariant" x="-3076" y="-3068">T&lt;=6&amp;&amp;c'==e/100</label>
+		</location>
+		<location id="id7" x="-3238" y="-3060">
+			<name x="-3248" y="-3094">S1</name>
+			<label kind="invariant" x="-3280" y="-3111">T&lt;=30&amp;&amp;c'==e/100</label>
+		</location>
+		<location id="id8" x="-3527" y="-3060">
+			<name x="-3552" y="-3094">Start</name>
+			<urgent/>
+		</location>
+		<init ref="id8"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-3391" y="-2694">COLLISION[currentOb]==true</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-3467" y="-2949">currentOb&lt;(N-1) &amp;&amp; COLLISION[currentOb]==false</label>
+			<label kind="assignment" x="-3425" y="-2932">currentOb++</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-2754" y="-2881">NOISE?</label>
+			<label kind="assignment" x="-2771" y="-2839">T:=0,e:=m*g*3*v*u</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-3009" y="-2839">T&gt;=4</label>
+			<label kind="assignment" x="-2966" y="-2856">T:=0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-3009" y="-2992">T&gt;=6 &amp;&amp; DANGER[currentOb]==true</label>
+			<label kind="assignment" x="-2966" y="-3034">T:=0,e:=1/2*m*(v+a*4)*(v+a*4)-1/2*m*v*v+m*g*u*((v+a*4)*(v+a*4)-v*v)/2*a,
+v:=v+a*4</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-3025" y="-2762">T&gt;=3</label>
+			<label kind="assignment" x="-3017" y="-2745">T:=0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-3187" y="-2839">T&gt;=7</label>
+			<label kind="assignment" x="-3187" y="-2822">T:=0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-3170" y="-2966">T&gt;=6&amp;&amp;DANGER[currentOb]==false</label>
+			<label kind="assignment" x="-3111" y="-2941">T:=0,e:=m*g*7*v*u</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-3178" y="-2686">currentOb==N-1</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-3170" y="-3060">T&gt;=2</label>
+			<label kind="assignment" x="-3196" y="-3043">T:=0,e:=m*g*6*v*u</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="assignment" x="-3519" y="-3043">currentOb:=0,v:=10.0,e:=m*g*u*2*v+1/2*m*v*v</label>
+		</transition>
+	</template>
+	<template>
+		<name>obstacle</name>
+		<parameter>const id_t id</parameter>
+		<declaration>// Place local declarations here.
+clock t; //# 障碍物运动时钟</declaration>
+		<location id="id9" x="-4556" y="-4097">
+			<name x="-4573" y="-4131">final</name>
+		</location>
+		<location id="id10" x="-4437" y="-4097">
+			<name x="-4447" y="-4131">After</name>
+			<label kind="invariant" x="-4447" y="-4080">t&lt;=14</label>
+		</location>
+		<location id="id11" x="-4190" y="-4207">
+			<name x="-4199" y="-4190">Dout</name>
+			<label kind="invariant" x="-4198" y="-4173">t&lt;=3</label>
+		</location>
+		<location id="id12" x="-4394" y="-4275">
+			<name x="-4404" y="-4309">Din</name>
+			<label kind="invariant" x="-4404" y="-4266">t&lt;=10</label>
+		</location>
+		<location id="id13" x="-4556" y="-4275">
+			<name x="-4581" y="-4309">Before</name>
+			<label kind="invariant" x="-4566" y="-4258">t&lt;=30</label>
+		</location>
+		<location id="id14" x="-4692" y="-4191">
+			<name x="-4726" y="-4217">start</name>
+			<urgent/>
+		</location>
+		<init ref="id14"/>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-4377" y="-4292">t&gt;=10</label>
+			<label kind="assignment" x="-4335" y="-4258">t:=0,COLLISION[id]:=true</label>
+			<nail x="-4275" y="-4258"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-4513" y="-4131">t&gt;=14</label>
+			<label kind="assignment" x="-4505" y="-4114">t:=0</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-4182" y="-4122">t&gt;=3</label>
+			<label kind="assignment" x="-4377" y="-4097">t:=0,DANGER[id]:=false,COLLISION[id]:=false</label>
+			<nail x="-4190" y="-4097"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-4539" y="-4301">t&gt;=2</label>
+			<label kind="assignment" x="-4488" y="-4275">t:=0</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="assignment" x="-4674" y="-4229">DANGER[id]:=true</label>
+		</transition>
+	</template>
+	<template>
+		<name>noise</name>
+		<declaration>// Place local declarations here.
+clock n; //# 噪声信号时钟
+//无执行的不确定性，仅有信号干扰？</declaration>
+		<location id="id15" x="-6893" y="-6723">
+			<name x="-6919" y="-6758">idle</name>
+			<label kind="invariant" x="-6944" y="-6732">n&lt;=2</label>
+			<label kind="exponentialrate" x="-6919" y="-6715">0.3</label>
+		</location>
+		<init ref="id15"/>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-6851" y="-6748">NOISE!</label>
+			<label kind="assignment" x="-6842" y="-6731">n:=0</label>
+			<nail x="-6766" y="-6740"/>
+			<nail x="-6766" y="-6740"/>
+			<nail x="-6766" y="-6663"/>
+			<nail x="-6825" y="-6689"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+// List one or more processes to be composed into a system.
+system robot,obstacle,noise;
+    </system>
+	<queries>
+		<query>
+			<formula>Pr[&lt;=100] (&lt;&gt; robot.Collide)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 10 [&lt;=100]{robot.c}
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>

@@ -1,0 +1,56 @@
+ 
+Compiling and linking the model for DDE (Visual C++). 
+ 
+dsmodel.c
+d:\programfiles\dymola 7.0\source\dsutil.h(144) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(162) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(163) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(166) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(167) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(168) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(170) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(221) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(222) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(223) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(229) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(232) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(237) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(238) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(240) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(242) : warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\programfiles\dymola 7.0\source\dsutil.h(318) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(333) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(390) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(419) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(434) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(488) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(570) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(754) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+d:\programfiles\dymola 7.0\source\dsutil.h(1644) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+D:\ProgramFiles\Dymola 7.0\source\matrixop.h(226) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+D:\ProgramFiles\Dymola 7.0\source\matrixop.h(228) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+D:\ProgramFiles\Dymola 7.0\source\matrixop.h(392) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+D:\ProgramFiles\Dymola 7.0\source\matrixop.h(400) : warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(357) : 参见“sprintf”的声明
+D:\ProgramFiles\Dymola 7.0\source\matrixop.h(679) : warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+        D:\ProgramFiles\VS2012\VC\INCLUDE\stdio.h(218) : 参见“fopen”的声明
+dsmodel.c(8) : fatal error C1083: 无法打开包括文件:“Random.c”: No such file or directory
+LINK : fatal error LNK1181: 无法打开输入文件“dsmodel.obj”
+ 
+Error generating Dymosim. 
+ 

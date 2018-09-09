@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>104</x>
+      <y>216</y>
+      <w>128</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;TimeDelay&gt;&gt;
+idle
+--
+timedelay=
+t~[Exp,100,0]
+
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>224</x>
+      <y>240</y>
+      <w>208</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+[need[i]&amp;&amp;h[i]==0&amp;&amp;h[j]&gt;0
+&amp;&amp;rtemp[j]-rtemp[i]&gt;=diff[i]]/</panel_attributes>
+    <additional_attributes>10.0;20.0;240.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>416</x>
+      <y>240</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>choose</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>576</x>
+      <y>112</y>
+      <w>136</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;TimeDelay&gt;&gt;
+judge1
+--
+timedelay=
+t~[Exp,100,0]
+
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>576</x>
+      <y>312</y>
+      <w>136</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;TimeDelay&gt;&gt;
+judgex
+--
+timedelay=
+t~[Exp,100,0]
+
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>152</y>
+      <w>248</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+&lt;&lt;Gastep&gt;&gt;
+{prob=importance[1]*(h[1]==0)*need[1]}
+/target:=1
+</panel_attributes>
+    <additional_attributes>10.0;130.0;50.0;130.0;50.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>512</x>
+      <y>248</y>
+      <w>216</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+&lt;&lt;Gastep&gt;&gt;
+{prob=importance[x]*(h[x]==0)*need[x]}
+/target:=x</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0;80.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>144</x>
+      <y>24</y>
+      <w>528</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+[!need[target]||h[target]&gt;0]/</panel_attributes>
+    <additional_attributes>640.0;110.0;640.0;20.0;10.0;20.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>168</x>
+      <y>56</y>
+      <w>472</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+&lt;&lt;EventEConsump&gt;&gt;
+move[j]!
+[need[target]&amp;&amp;h[target]==0&amp;&amp;h[j]&gt;0&amp;&amp;rtemp[j]-rtemp[target]&gt;=diff[target]]
+/h[targe]:=1,h[j]:=0,eventeconsump:=a</panel_attributes>
+    <additional_attributes>570.0;70.0;570.0;20.0;10.0;20.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>144</x>
+      <y>288</y>
+      <w>536</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+
+[!need[target]||h[target]&gt;0]/</panel_attributes>
+    <additional_attributes>650.0;130.0;650.0;230.0;10.0;230.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>168</x>
+      <y>288</y>
+      <w>464</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+&lt;&lt;EventEConsump&gt;&gt;
+move[j]!
+[need[target]&amp;&amp;h[target]==0&amp;&amp;h[j]&gt;0&amp;&amp;rtemp[j]-rtemp[target]&gt;=diff[target]]
+/h[targe]:=1,h[j]:=0,eventeconsump:=a</panel_attributes>
+    <additional_attributes>560.0;130.0;560.0;170.0;10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>24</x>
+      <y>256</y>
+      <w>16</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>type=initial</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>32</x>
+      <y>256</y>
+      <w>88</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+</diagram>
