@@ -19,7 +19,7 @@
 \contentsline {chapter}{\numberline {第三章\hspace {.3em}}设计与实现 }{15}{chapter.3}
 \contentsline {section}{\numberline {3.1}系统功能介绍}{15}{section.3.1}
 \contentsline {section}{\numberline {3.2}概念定义}{15}{section.3.2}
-\contentsline {section}{\numberline {3.3}设计思路介绍}{17}{section.3.3}
+\contentsline {section}{\numberline {3.3}基本思想}{17}{section.3.3}
 \contentsline {section}{\numberline {3.4}技术路线（偏工程性）}{17}{section.3.4}
 \contentsline {section}{\numberline {3.5}相关技术介绍}{18}{section.3.5}
 \contentsline {subsection}{\numberline {3.5.1}Soot}{18}{subsection.3.5.1}
@@ -32,22 +32,22 @@
 \contentsline {subsection}{\numberline {3.6.3}调用图构建器（Call-graph Builder）}{20}{subsection.3.6.3}
 \contentsline {section}{\numberline {3.7}构建过程介绍}{20}{section.3.7}
 \contentsline {subsection}{\numberline {3.7.1}如何构建函数调用图}{20}{subsection.3.7.1}
-\contentsline {subsection}{\numberline {3.7.2}如何构建Activity的生命周期}{20}{subsection.3.7.2}
-\contentsline {subsection}{\numberline {3.7.3}如何构建多线程触发关系}{20}{subsection.3.7.3}
-\contentsline {section}{\numberline {3.8}本章小结}{20}{section.3.8}
-\contentsline {chapter}{\numberline {第四章\hspace {.3em}}系统测试}{21}{chapter.4}
-\contentsline {section}{\numberline {4.1}实验简介}{21}{section.4.1}
-\contentsline {section}{\numberline {4.2}构建效率对比实验}{21}{section.4.2}
-\contentsline {section}{\numberline {4.3}日志效率对比实验}{21}{section.4.3}
-\contentsline {section}{\numberline {4.4}运行效率对比实验}{21}{section.4.4}
-\contentsline {chapter}{\numberline {第五章\hspace {.3em}}应用结果展示}{23}{chapter.5}
-\contentsline {section}{\numberline {5.1}函数调用图的构建结果展示}{23}{section.5.1}
-\contentsline {section}{\numberline {5.2}Activity的生命周期效果展示}{23}{section.5.2}
-\contentsline {section}{\numberline {5.3}多线程触发关系效果展示}{23}{section.5.3}
-\contentsline {section}{\numberline {5.4}应用程序的状态效果展示}{23}{section.5.4}
-\contentsline {chapter}{\numberline {第六章\hspace {.3em}}总结与展望}{25}{chapter.6}
-\contentsline {section}{\numberline {6.1}总结}{25}{section.6.1}
-\contentsline {section}{\numberline {6.2}展望}{25}{section.6.2}
-\contentsline {chapter}{参考文献}{27}{section*.14}
-\contentsline {chapter}{致谢}{31}{section*.16}
-\contentsline {chapter}{攻读硕士学位期间发表论文}{33}{section*.17}
+\contentsline {subsection}{\numberline {3.7.2}如何构建Activity的生命周期}{21}{subsection.3.7.2}
+\contentsline {subsection}{\numberline {3.7.3}如何构建多线程触发关系}{21}{subsection.3.7.3}
+\contentsline {section}{\numberline {3.8}本章小结}{21}{section.3.8}
+\contentsline {chapter}{\numberline {第四章\hspace {.3em}}系统测试}{23}{chapter.4}
+\contentsline {section}{\numberline {4.1}实验简介}{23}{section.4.1}
+\contentsline {section}{\numberline {4.2}构建效率对比实验}{23}{section.4.2}
+\contentsline {section}{\numberline {4.3}日志效率对比实验}{23}{section.4.3}
+\contentsline {section}{\numberline {4.4}运行效率对比实验}{23}{section.4.4}
+\contentsline {chapter}{\numberline {第五章\hspace {.3em}}应用结果展示}{25}{chapter.5}
+\contentsline {section}{\numberline {5.1}函数调用图的构建结果展示}{25}{section.5.1}
+\contentsline {section}{\numberline {5.2}Activity的生命周期效果展示}{25}{section.5.2}
+\contentsline {section}{\numberline {5.3}多线程触发关系效果展示}{25}{section.5.3}
+\contentsline {section}{\numberline {5.4}应用程序的状态效果展示}{25}{section.5.4}
+\contentsline {chapter}{\numberline {第六章\hspace {.3em}}总结与展望}{27}{chapter.6}
+\contentsline {section}{\numberline {6.1}总结}{27}{section.6.1}
+\contentsline {section}{\numberline {6.2}展望}{27}{section.6.2}
+\contentsline {chapter}{参考文献}{29}{section*.14}
+\contentsline {chapter}{致谢}{33}{section*.16}
+\contentsline {chapter}{攻读硕士学位期间发表论文}{35}{section*.17}

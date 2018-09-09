@@ -5,56 +5,84 @@
 本文以帮助研究人员和开发人员了解Android应用程序的执行过程作为基本出发点，通过设计与实现Android动态函数调用图构建系统RunDroid，生成Android应用程序运行时对应的动态函数调用图，从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地展现Android应用的执行过程，为应用程序分析提供更为多样、准确的信息。另外，系统具备一定的可拓展性，可以方便相关人员根据自身的业务需求对系统进行扩展，完成相应的需求。
 
 \section{概念定义}
-\eat{
+
+在本节，我们将给出拓展动态函数调用图构建过程中的相关概念：方法执行、方法对象、调用关系、触发关系、函数调用图、拓展函数调用图等。
+
+方法执行是一个方法执行相关信息的描述，方法对象对应是和方法执行相关的对象；
+调用关系和触发关系描述了方法执行之间的关系。
+函数调用图为所有调用关系的集合，在函数调用图上添加方法对象以及触发关系得到拓展函数调用图。相关定义如下：
+
 \define{
-    图：图是是对节点和边的描述，通常使用二元组$G(V,E)$表示。对于图中的节点$v$， $v \in V$；对于图中的边 $e$， $e \in E$。
-}
-\define{
-    有向图：按照图中的边是否区分方向，我们可以将图分为有向图和无向图。
-}
+    方法执行
+    
+    方法执行是对方法执行过程中的相关信息的描述，完整的信息包括对应方法的完整签名、执行时所处的线程以及相关的方法对象。
+    在本文中，方法执行通常用符号$m$表示。
 }
 
 
 \define{
-    调用关系（Invoke）：对于程序$P$的两个方法$m_1$和$m_2$，如果在方法$m_1$中调用了方法$m_2$，则记作$m_1 \to m_2$，称为方法$m_1$调用方法$m_2$。
+    方法对象（Method Object，MO）
+
+和方法执行相关的对象称为方法对象，可以体现对象和执行方法的相互关系。
+在本文中，方法对象通常用符号$o$表示。
+
+
+对于一个方法执行$m$，
+\begin{itemize}
+\item 若对象$o_p$是这个方法$m$的参数，记为$o_p \stackrel{parameter}{\longrightarrow} m$，或者 $ rel(m,o_p) = parameter$；
+\item 若对象$o_r$是这个方法$m$的返回值，记为$o_r \stackrel{return}{\longrightarrow} m$，或者 $ rel(m,o_r) = return$；
+\item 若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$o_i \stackrel{instance}{\longrightarrow} m$，或者 $ rel(m,o_i) = instance$。
+\end{itemize}
+}
+
+
+\define{
+    调用关系（Invoke）
+    
+    对于程序$P$的两个方法$m_1$和$m_2$，方法$m_1$调用了方法$m_2$，则记作$m_1 \to m_2$，称为方法$m_1$调用方法$m_2$。
 }
 \begin{equation}
-m_0 \to m_1 \to \dots m_{n - 1} \to m_n  \label{equ:extend_invoke}
+m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 \end{equation}
 
-    在此基础上，对于方法$m_0$和方法$m_n$，若存在方法$m_i$（$i=1,\dots,n-1，n>1$），使得~\autoref{equ:extend_invoke}成立，，则记作$m_0 \stackrel{\ast}{\to} m_n$，称为方法$m_0$扩展调用方法$m_n$。
-
-
-    补充的，对于方法$m_1$和方法$m_2$，若$m_1 \to m_2$，也可以记为$m_1  \stackrel{\ast}{\to}  m_2$。
+    在此基础上，对于方法$m$，若存在方法$m_i$（$i=0,\dots,n , n \geqslant 0$），使得~\autoref{equ:extend_invoke}成立，则记作$m_0 \stackrel{\ast}{\to} m$，称为方法$m_0$扩展调用方法$m_n$。
+    特殊的，对于方法$m_1$和方法$m_2$，若$m_1 \to m_2$，则$m_1  \stackrel{\ast}{\to}  m_2$也成立。
 
 \define{
-    函数调用图（CallGraph，CG）：函数调用图$CG = ( V , E)$是一个有向图（DAG）， 图中的点$ v \in V $表示一个\textbf{方法实体} $m$；
+    触发关系（Trigger）
+
+    %如果对于动态函数调用图$DCG$中两个方法（不妨记为$m_a$和$m_b$，$m_a \in DCG$，$m_b \in DCG $），
+    若方法$m_a$和方法$m_b$之间同时需要满足以下三个条件，
+    则两个方法存在触发关系，记为$m_a \hookrightarrow m_b$，称为$m_a$触发调用$m_b$：
+    
+\begin{itemize}
+  \item 方法$m_a$的执行时间总是在方法$m_b$的执行时间之前；
+  \item $m_a \stackrel{\ast}{\to} m_b $不成立；
+  \item $m_a$、$m_b$之间存在着一定的因果关系，包括但不限于生命周期事件，UI交互事件或多线程通信等。
+\end{itemize}
+}
+
+
+
+\define{
+    函数调用图（CallGraph，CG）
+
+    函数调用图是对程序运行时行为的描述，用有向图$CG = ( V , E)$表示。 图中的点$ v \in V $表示一个\textbf{方法执行} $m$；
     如果方法$m_1$调用方法$m_2$（即$m_1 \to m_2$），则有向边 $e = (m_1 ,m_2)$属于集合 $E$。 
 }
 
-\define{
-    动态函数调用图（Dynamic CallGraph，DCG）：动态函数调用图是在调用图的基础上演化而来，是对程序运行时行为的描述。
-    同样的，动态函数调用图也是一个有向图（$DCG = ( V , E)$）。 图中的点$ v \in V $表示一个\textbf{方法执行} $m$；
-    如果方法$m_1$调用方法$m_2$（即$m_1 \to m_2$），则有向边 $e = (m_1 ,m_2)$属于集合 $E$。 
-}
-
-\textbf{注意：}函数调用图和动态函数调用图是分别从静态分析角度和动态分析角度对程序运行过程的描述。
-前者分析的整体是方法实体，是静态分析的结果，每次产生的结果是一样的；
-后台则为方法执行，是对动态行为的描述，每次产生的结果和具体的执行过程相关，不一定是一样的。
-
-例如，方法A调用了方法B，函数调用图$CG$如~\autoref{equ:cg_sample}所示。
-但若，在实际执行过程中，方法A被调用了两次，这对应的动态函数调用图$DCG$如~\autoref{equ:dcg_sample}所示。
-可以看出，$DCG$中，$method_a$ 和 $method_b$ 各有两个，分别对应的两次\textbf{函数执行}。
-\begin{equation}
-CG = ({method_a,method_b},{(method_a \to method_b )} ) \label{equ:cg_sample}
-\end{equation}
+\textbf{注意：}
+在应用执行过程中，方法A被调用了两次，方法A的每次调用都调用了方法B，则对应的函数调用图$CG$如~\autoref{equ:dcg_sample}所示。
+在调用图$CG$中，$m_a$ 和 $m_b$ 各有两个，分别对应的两次\textbf{方法执行}。
+$(m_{a_{(1)}} \to m_{b_{(1)}})$对应的是第一次函数A调用函数B，
+$(m_{a_{(2)}} \to m_{b_{(2)})}$对应的是第二次函数A调用函数B，
 
 \begin{equation}
 \begin{aligned}
-DCG = &(V,G) ,\\ 
-V = & \{method_{a_{(1)}},method_{b_{(1)}},method_{a_{(2)}},method_{b_{(2)}}\}, \\ 
-G = & \{  
-    (  method_{a_{(1)}} \to method_{b_{(1)}}) ,( method_{a_{(2)}} \to method_{b_{(2)}})
+CG = &(V,E) ,\\ 
+V = & \{m_{a_{(1)}},m_{b_{(1)}},m_{a_{(2)}},m_{b_{(2)}}\}, \\ 
+E = & \{  
+    (  m_{a_{(1)}} \to m_{b_{(1)}}) ,( m_{a_{(2)}} \to m_{b_{(2)}})
  \} 
 \end{aligned}
 \label{equ:dcg_sample} 
@@ -62,31 +90,10 @@ G = & \{
 
 
 \define{
-    方法对象（Method Object，MO）：
-和方法执行相关的对象称为方法对象，可以体现对象和执行方法的相互关系。
-具体的，在一次具体的方法执行过程中，
-如果对象$p$是这个方法$m$的参数，记为$p \stackrel{parameter}{\longrightarrow} m$；
-如果对象$r$是这个方法$m$的返回值，记为$r \stackrel{return}{\longrightarrow} m$；
-若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$i$，记为$i \stackrel{instance}{\longrightarrow} m$；
-}
-
-
-\define{
-    触发关系（Trigger）：
-    如果对于动态函数调用图$DCG$中两个方法（不妨记为$m_a$和$m_b$，$m_a \in DCG$，$m_b \in DCG $），若方法$m_a$和方法$m_b$之间同时需要满足以下三个条件，
-    则两个方法存在触发关系，记为$m_a \hookrightarrow m_b$，称为$m_a$触发了$m_b$：
+    拓展函数调用图（Extended Dynamic CallGraph，EDCG）
     
-\begin{enumerate}
-  \item 方法$m_a$的执行时间总是在方法$m_b$的执行时间之前；
-  \item $m_a \stackrel{\ast}{\to} m_b $不成立；
-  \item $m_a$、$m_b$之间存在着一定的因果关系，包括但不限于生命周期事件，UI交互事件或多线程通信等。
-\end{enumerate}
-}
-
-
-\define{
-    拓展动态函数调用图（Extended Dynamic CallGraph，EDCG）：在动态函数调用图（DCG）的基础上，添加了方法对象和函数间的触发关系。
-    拓展动态函数调用图中的节点包括方法执行节点和方法对象节点。图中的边包括描述方法间关系的边和描述方法和对象间的边：
+    在函数调用图（DCG）的基础上，添加了方法对象和函数间的触发关系。
+    拓展函数调用图中的节点包括方法执行节点和方法对象节点。图中的边包括描述方法间关系的边和描述方法和对象间的边：
     前者的方法间关系包括调用关系和触发关系；而后者的关系包括和方法对象相关的三个关系。
     具体定义如~\autoref{equ:def_edcg}所示：
 
@@ -104,16 +111,16 @@ G_{method} = & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
     
 }
 
-\section{设计思路介绍}
-以下面一段代码里为例，我们将简要介绍一下RunDroid还原Android应用程序动态函数调用图的基本思路：
+\section{基本思想}
+以下面一段代码里为例，我们将简要介绍一下RunDroid还原Android应用程序函数调用图的基本思路：
 ~\autoref{fig:code_sample}-左为一段面向过程编程的示例代码，当main函数执行时，会一次调用A、B两个函数，而B函数有调用了C、D两个函数，
-对应动态函数调用图如~\autoref{fig:code_sample}-右所示。
+对应函数调用图如~\autoref{fig:code_sample}-右所示。
  
  
  \begin{figure*}[h]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/code-sample.png}
-	\caption{ 面向过程编程语言的函数调用的示例}
+	\caption{RunDroid的基本思路}
 	\label{fig:code_sample}
 \end{figure*}
 
