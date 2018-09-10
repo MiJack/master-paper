@@ -4,9 +4,9 @@
 \section{系统功能介绍}
 本文以帮助研究人员和开发人员了解Android应用程序的执行过程作为基本出发点，通过设计与实现Android动态函数调用图构建系统RunDroid，生成Android应用程序运行时对应的动态函数调用图，从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地展现Android应用的执行过程，为应用程序分析提供更为多样、准确的信息。另外，系统具备一定的可拓展性，可以方便相关人员根据自身的业务需求对系统进行扩展，完成相应的需求。
 
-\section{概念定义}
+\section{基本术语}
 
-在本节，我们将给出拓展动态函数调用图构建过程中的相关概念：方法执行、方法对象、调用关系、触发关系、函数调用图、拓展函数调用图等。
+在本节，我们将给出拓展动态函数调用图构建过程中的基本术语：方法执行、方法对象、调用关系、触发关系、函数调用图、拓展函数调用图等。
 
 方法执行是一个方法执行相关信息的描述，方法对象对应是和方法执行相关的对象；
 调用关系和触发关系描述了方法执行之间的关系。
@@ -97,21 +97,24 @@ E = & \{
 	
 	\begin{equation}
 	\begin{aligned}
-	EDCG = & (V_{EDCG},E_{EDCG}) ,\\ 
-	DCG = & (V_{DCG},E_{DCG}) ,\\ 
-	V_{EDCG} = & V_{method} \bigcup V_{object} ,\\
-	V_{method} = & V_{DCG}, \\ 
-	G_{EDCG} = & G_{method} \bigcup G_{object} , \\
-	G_{method} = & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
+	EDCG =              & (V_{EDCG},E_{EDCG}) ,\\ 
+	DCG =                & (V_{DCG},E_{DCG}) ,\\ 
+	V_{EDCG} =      & V_{method} \bigcup V_{object} ,\\
+	V_{method} =   & V_{DCG}, \\ 
+	G_{EDCG} =      & G_{method} \bigcup G_{object} , \\
+	G_{method} =  & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
 	\end{aligned}
 	\label{equ:def_edcg} 
 	\end{equation}
 	
 
 \section{基本思想}
-以下面一段代码里为例，我们将简要介绍一下RunDroid还原Android应用程序函数调用图的基本思路：
-~\autoref{fig:code_sample}-左为一段面向过程编程的示例代码，当main函数执行时，会一次调用A、B两个函数，而B函数有调用了C、D两个函数，
-对应函数调用图如~\autoref{fig:code_sample}-右所示。
+
+%在本节，
+以~\autoref{fig:code_sample}为例，%简要介绍一下RunDroid还原Android应用程序的函数调用图的基本思路：
+~\autoref{fig:code_sample}-左上为一段示例代码：在main函数执行时，程序会依次调用A、B两个函数，而B函数则会调用了C、D两个函数。
+~\autoref{fig:code_sample}-左下则是期望输出——函数调用图。
+在本质上，函数调用图属于树。程序执行过程可以看做树的深度优先遍历过程。
 
 
 \begin{figure*}[h]
@@ -122,10 +125,25 @@ E = & \{
 \end{figure*}
 
 
-从函数调用图的构建过程可以看出，程序的执行过程就是对函数调用图自上而下的深度优先遍历过程。由此可见，若要还原出图 6-右中的函数调用图，本文采用的基本思路是以日志方式输出对右图中的函数调用图的深度优先遍历序列，并基于得到的遍历序列还原出函数调用图。
-由于Android是由面向对象编程语言Java开发的系统，系统还需要考虑面向对象编程的特性——多态性（即同一个行为在不同的对象下的表现可以不同）。为此，RunDroid还会在函数调用图将函数执行和对应的对象进行关联，更好地体现面向对象编程的函数调用关系。基于上述的函数调用关系的信息，RunDroid根据函数调用之间的关系进一步挖掘，进一步挖掘Android系统中的特性（例如组件Activity的生命周期、多线程的交互方式）。
+函数调用图还原的关键点，在于如何在程序执行过程中输出树的遍历序列，并根据遍历序列进行还原。
+通常的，树的遍历分为中序遍历、前序遍历以及后序遍历三种。
+不幸的，两颗结构完全不同的树对应的遍历序列可能是一样的，
+这也就意味着上述三种遍历方法均不能直接还原出函数调用图。
+% 而且，函数执行过程中出现的错误异常可能使得序列输出中断，阻碍调用图的构建。
 
-\section{技术路线（偏工程性）}
+为此，我们采用的基本思路如下：
+通过对源程序（~\autoref{fig:code_sample}-左上）进行预处理得到包含日志记录功能的代码（~\autoref{fig:code_sample}-右上）；
+程序在函数执行前后可以输出和方法执行相关的日志信息，如~\autoref{fig:code_sample}-右下所示；
+最后，我们根据这些日志信息构建出函数调用图（~\autoref{fig:code_sample}-左下）。
+
+在函数调用图的基础上，RunDroid利用日志中包括的方法对象信息，挖掘和方法对象相关联的方法，结合具体触发规则，进而建立方法触发关系。
+
+% 从函数调用图的构建过程可以看出，程序的执行过程就是对函数调用图自上而下的深度优先遍历过程。由此可见，若要还原出图 6-右中的函数调用图，本文采用的基本思路是以日志方式输出对右图中的函数调用图的深度优先遍历序列，并基于得到的遍历序列还原出函数调用图。
+% 由于Android是由面向对象编程语言Java开发的系统，系统还需要考虑面向对象编程的特性——多态性（即同一个行为在不同的对象下的表现可以不同）。为此，RunDroid还会在函数调用图将函数执行和对应的对象进行关联，更好地体现面向对象编程的函数调用关系。基于上述的函数调用关系的信息，RunDroid根据函数调用之间的关系进一步挖掘，进一步挖掘Android系统中的特性（例如组件Activity的生命周期、多线程的交互方式）。
+
+\section{技术路线}
+
+
 本技术路线拟利用语法分析工具，对Android应用程序进行了应用源代码层面的执行日志插桩工作，利用非侵入式系统行为修改插件获取系统层面的函数执行信息。结合以上日志信息，方案对日志进行初步处理，在图数据库上构建原始的Android应用程序的动态函数调用图。通过阅读分析Android系统中多线程相关的源代码，制定具体的多线程分析插件，进而在函数调用图中标识出多线程相关的方法间触发关系，全面地展现Android应用的执行过程。
 
 
@@ -150,9 +168,20 @@ srcML~\cite{collard2013srcml}是基于
 
 
 \subsection{Xposed框架}
-Xposed~\cite{Xposed}是由rovo89主导开发的第三方框架。基于Xposed开发的第三方插件，可以在不修改系统和应用程序源代码的情况下，改变他们的运行行为。Xposed框架可以运行在不同版本的Android系统上，开发过程十分便利，而且易于撤销。Xposed的实现原理具体如下：由于Android系统的所有的应用程序进程都是由Zygote进程孵化而来，Xposed通过替换/system/bin/app\_process程序，使得系统在启动过程中加载Xposed的相关文件，将所有的目标方法指向Native方法xposedCallHandler，维护目标方法和对应的钩子方法（Hook Function）的映射关系，从而实现对Zygote进程及Dalvik虚拟机的劫持；当程序执行到目标方法时，xposedCallHandler会完成目标方法的原有代码和对应钩子方法的调度，达到对目标方法劫持的目的。使用Xposed，可以帮助我们实现类似面向切面编程（Aspect-Oriented Programming, AOP）的功能，完成系统层面的方法执行情况的记录。
+Xposed~\cite{Xposed}是由rovo89主导开发的第三方框架。
+基于Xposed开发的第三方插件，可以在不修改系统和应用程序源代码的情况下，改变他们的运行行为。
+Xposed框架可以运行在不同版本的Android系统上，开发过程十分便利，而且易于撤销。
+Xposed的实现原理具体如下：由于Android系统的所有的应用程序进程都是由Zygote进程孵化而来，Xposed通过替换\textit{/system/bin/app\_process}程序，使得系统在启动过程中加载Xposed的相关文件，将所有的目标方法指向Native方法xposedCallHandler，维护目标方法和对应的钩子方法（Hook Function）的映射关系，从而实现对Zygote进程及Dalvik虚拟机的劫持；
+当程序执行到目标方法时，xposedCallHandler会完成目标方法的原有代码和对应钩子方法的调度，达到对目标方法劫持的目的。
+使用Xposed，可以帮助我们实现类似面向切面编程（Aspect-Oriented Programming, AOP）的功能，完成系统层面的方法执行情况的记录。
 \subsection{Neo4j}
-Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库。与传统的基于关系模型的存储结构不同，Neo4j的存储模型是基于图论开发的，遵循属性图数据模型。Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，另外，Neo4j还可以在关系和节点上添加key-value形式的属性，为节点指定一个或者多个标签，为关系指定类型等等。Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性，隔离性和持久性）事务规则，提供了基于Cypher脚本、Native Java API和REST Http API等多种方式帮助开发人员进行数据开发工作。同时，Neo4j还提供了友好的浏览器界面，具有十分友好的交互体验。由于基于属性图数据模型，Neo4j通常适用于和图关系有着密切关系的应用场景：例如社交网络分析，公共交通网络研究以及地图网络拓扑等场景。在RunDroid，Neo4j主要承担着函数调用图的数据存储和查询的主要职责。
+Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库。
+与传统的基于关系模型的存储结构不同，Neo4j的存储模型是基于图论开发的，遵循属性图数据模型。
+Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，另外，Neo4j还可以在关系和节点上添加key-value形式的属性，为节点指定一个或者多个标签，为关系指定类型等等。
+Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性，隔离性和持久性）事务规则，提供了基于Cypher脚本、Native Java API和REST Http API等多种方式帮助开发人员进行数据开发工作。
+同时，Neo4j还提供了友好的浏览器界面，具有十分友好的交互体验。
+由于基于属性图数据模型，Neo4j通常适用于和图关系有着密切关系的应用场景：例如社交网络分析，公共交通网络研究以及地图网络拓扑等场景。
+在RunDroid，Neo4j主要承担着函数调用图的数据存储和查询的主要职责。
 
 \section{模块实现介绍}
 
@@ -175,12 +204,14 @@ Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库。与传统的�
 	%	\caption{动态函数调用图（DCG）的生成}
 		
 	\algsetup{linenosize=\small} \small
-	\REQUIRE  $logs$, the log entries for an app execution
-	\ENSURE $cg$, the call graph
+	\REQUIRE  $logs$，应用程序在运行过程中的日志输出
+	\ENSURE $cg$，函数调用图
+	
+	
+	
+	
 	\STATE 	$cg$ $\gets$ new CallGraph()
-	
-	
-
+\Comment Insert $A[j]$ into the sorted sequence $A[1 \twodots j-1]$.
 	
 	\FOR {thread $\in$ $logs.threads$}
 		\STATE 	$stack$ $\gets$ new Stack()
