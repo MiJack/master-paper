@@ -8,7 +8,7 @@
 
 
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/code-sample.png}
 	\caption{RunDroid的基本思路}
@@ -55,7 +55,7 @@
 %全面地展现Android应用的执行过程。
 
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
 	\centering
 	\includegraphics[height=0.5\textheight]{./Figures/rundroid-overview.png}
 	\caption{ RunDroid的工作流程}
@@ -70,7 +70,7 @@
 srcML~\cite{collard2013srcml}是轻量级源代码分析工具，它可以将程序的抽象语法树以XML的形式展现给用户，支持C、C++、C\#以及Java等多个语言的语法解析。
 srcML的语法解析器采用的是基于LL(*)算法实现的语法解析器 ANTLR 2.7.7，解析得到的XML内容保留了源代码中完整的语法树信息。
 同时，srcML还提供了一个强大工具集，支持对生成内容的查询、分析以及修改，可以用于架构设计、语言研究、软件重构等场景，应用于软件工程、编程语言、并行和分布式处理等多个领域。
-在RunDroid，srcML承担的主要职责为源代码的语法解析。
+在RunDroid，srcML承担的主要职责为源代码的语法解析，辅助完成用户方法层面的日志代码的编织（weaving）。
 
 
 
@@ -80,32 +80,106 @@ Xposed~\cite{Xposed}是由rovo89主导开发的第三方框架。
 Xposed框架可以运行在不同版本的Android系统上，开发过程十分便利，而且易于撤销。
 Xposed的实现原理具体如下：由于Android系统的所有的应用程序进程都是由Zygote进程孵化而来，Xposed通过替换程序\textit{/system/bin/app\_process}，使得系统在启动过程中加载Xposed的相关文件，将所有的目标方法指向Native方法xposedCallHandler，维护目标方法和对应的钩子方法（Hook Function）的映射关系，从而实现对Zygote进程及Dalvik虚拟机的劫持；
 当程序执行到目标方法时，xposedCallHandler会完成目标方法的原有代码和对应钩子方法的调度，达到对目标方法劫持的目的。
-使用Xposed，可以帮助我们实现类似面向切面编程（Aspect-Oriented Programming, AOP）的功能，完成系统层面的方法执行情况的记录。
+在RunDroid中，Xposed可以帮助我们实现类似面向切面编程（Aspect-Oriented Programming, AOP）的功能，辅助完成系统方法的执行情况的日志记录。
 \subsection{Neo4j}
 Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库。
 与传统的基于关系模型的存储结构不同，Neo4j的存储模型是基于图论开发的，遵循属性图数据模型。
-Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，分别对应图论中的节点与边。
+Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，分别对应图论中的点与边。
 另外，Neo4j还可以在关系和节点上添加key-value形式的属性，为节点指定一个或者多个标签，为关系指定类型等等。
 Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性，隔离性和持久性）事务规则，提供了基于Cypher脚本、Native Java API和REST Http API等多种方式帮助开发人员进行数据开发工作。
 同时，Neo4j还提供了友好的浏览器界面，具有十分友好的交互体验。
 由于基于属性图数据模型，Neo4j通常适用于和图关系有着密切关系的应用场景：例如社交网络分析，公共交通网络研究以及地图网络拓扑等场景。
-在RunD\begin{figure}
-	\centering
-	\includegraphics[width=0.7\linewidth]{../../../../Downloads/8730_117_1}
-	\caption{}
-	\label{fig:87301171}
-\end{figure}
-roid，Neo4j主要承担着拓展函数调用图的数据存储和查询的主要职责。
+在RunDroid，Neo4j主要承担着拓展函数调用图的数据存储和查询的主要职责。
 
-\section{模块实现介绍}
+\section{模块实现}
 
 
 \subsection{预处理器}
 
+为了捕获用户方法的运行时执行信息，RunDroid的预处理器组件会对应用程序进行插桩工作。
+为了避免传统字节码插桩技术在生成过多的方法数而导致的方法数65K限制问题，预处理器采用的方案是源代码层面的插桩方案。
+该方案通过源程序修改，将日志记录代码直接作用在方法体内部，最大限度地减少了APK构建过程中方法数的增加，避免了方法数65K限制问题。
+日志记录代码在方法执行前后会调用日志记录器输出方法执行日志。
 
-\subsection{运行时拦截器}
 
-\subsection{日志记录器}
+预处理器以Android项目源代码作为输入，输出预处理后的APK文件。
+预处理器会遍历项目源代码中的每一个Java文件，利用srcML转化成对应的抽象语法树。
+%  利用获取的语法结构，预处理器会提取出所有的方法体，
+对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名，并将这些信息以日志记录代码的形式写回到方法体中。
+另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
+%全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
+另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建。
+最后，预处理器会将插桩后的源代码构建成APK文件。
+
+
+% 为了捕获应用层中的方法调用，我们使用程序测试来记录运行时执行跟踪。在Java程序的源代码或字节码上有许多自动化的仪器工具（1）。
+% 由于使用RunDood的上下文是在调试阶段，所以在源级对程序进行测试是很自然的。
+% 此外，我们观察到字节码检测技术，如一个艾玛（3）使用，遭受64K参考限制[2 ]。
+% 因此，预处理器组件建立在SRCML（9）上，它将Java源代码转换成XML格式，以便在执行过程中监视这些方法。
+
+
+ \subsection{运行时拦截器}
+ 运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
+ 运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，进而帮助我们还原出方法间的触发关系。
+
+在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法，具体如~\autoref{tbl:hookMethodList} 所示。
+
+\begin{table}
+\caption{运行时拦截器拦截的系统方法列表}
+
+\label{tbl:hookMethodList}
+
+\begin{tabular}{|l|c|}
+	\hline
+	方法签名&说明\\
+	\hline
+	android.app.Activity onCreate android.os.Bundle   &\multicolumn{1}{c}{和Android Activity生命周期相关的方法}\\
+%	\cline{1-1}
+	android.app.Activity onStart    &\\
+	android.app.Activity onResume    &\\
+	android.app.Activity onPause    &\\
+	android.app.Activity onDestroy    &\\
+	\hline
+	
+	java.lang.Thread start   & 和Java 线程启动相关的方法\\
+	\hline
+	android.os.Message obtain & 和Android Hanlder机制相关的方法\\
+	android.os.Handler enqueueMessage android.os.MessageQueue android.os.Message long&\\
+	android.os.Handler dispatchMessage android.os.Message&\\
+	android.os.Handler post java.lang.Runnable&\\
+	android.os.Handler postAtTime java.lang.Runnable long&\\
+	android.os.Handler postAtTime java.lang.Runnable java.lang.Object long&\\
+	android.os.Handler postDelayed java.lang.Runnable long&\\
+	android.os.Handler postAtFrontOfQueue java.lang.Runnable&\\
+	android.os.Handler sendMessage android.os.Message&\\
+	android.os.Handler sendEmptyMessage int&\\
+	android.os.Handler sendEmptyMessageDelayed int long&\\
+	android.os.Handler sendEmptyMessageAtTime int long&\\
+	android.os.Handler sendMessageAtFrontOfQueue android.os.Message&\\
+	android.os.Handler sendMessageDelayed android.os.Message long&\\
+	android.os.Handler sendMessageAtTime android.os.Message long&\\
+	
+	\hline
+	
+	android.os.AsyncTask execute [java.lang.Object& 和Android AsyncTask相关的方法\\
+	android.os.AsyncTask publishProgress [java.lang.Object&\\
+	android.os.AsyncTask executeOnExecutor java.util.concurrent.Executor [java.lang.Object &\\
+	\hline
+	
+\end{tabular}
+
+\end{table}
+
+% 拦截器组件基于Xposed框架[5]，它拦截在应用程序层和Android框架之间传递的消息。
+ % 拦截器记录在两个层之间进行的每个方法调用，并将它们与应用程序层中对应的方法调用相关联，以产生完整的方法调用跟踪。
+ % RunDroid维护感兴趣的方法列表，如生命周期方法和隐式回调，以便日志文件包含每次执行期间调用的方法调用
+
+
+% xxxxxxxxxxxx
+
+
+% \subsection{日志记录器}
+% xxxxxxxxxxxx
 
 \subsection{调用图构建器}
 
@@ -148,17 +222,25 @@ roid，Neo4j主要承担着拓展函数调用图的数据存储和查询的主�
 					
 					
 					\Comment 在调用图中提交方法节点 
+									
+					\STATE 	$cg$.addMethodObject($ o_p $,$o_i $) 								
+					
+					\STATE 	$cg$.addMethodObjectRel($ (  o_p \stackrel{parameter}{\longrightarrow}   m )  $,$ (  o_i \stackrel{instance}{\longrightarrow}   m ) $) 
+					
+					\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
 					
 					\IF {  $top \neq null $ }
-						\STATE 	$cg$.addInvokeRel($ ( top \to  m ) $) 						
-						\STATE 	$cg$.addMethodObjectRel($ (  m_p \stackrel{parameter}{\longrightarrow}   m )  $,$ (  m_i \stackrel{instance}{\longrightarrow}   m ) $) 
-				
-				
-						\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
+
+							\STATE 	$cg$.addInvokeRel($ ( top \to  m ) $) 
+							
 							\STATE 	$stack$.push($m$)
 					\ENDIF
+	
 			\ELSE 
-					\STATE 	$cg$.addMethodObject($ (  m_r \stackrel{return}{\longrightarrow}   m )  $) 
+	
+					\STATE 	$cg$.addMethodObject($  o_r  $) 
+					
+					\STATE 	$cg$.addMethodObjectRel($ (  o_r \stackrel{return}{\longrightarrow}   m )  $) 
 					
 					
 					\Comment 在调用图中提交方法对象节点 （此处只涉及返回值关系）
@@ -179,8 +261,9 @@ roid，Neo4j主要承担着拓展函数调用图的数据存储和查询的主�
 
 
 
-\subsection{如何构建Activity的生命周期}
+% \subsection{如何构建Activity的生命周期}
 
-\subsection{如何构建多线程触发关系}
 
-\section{本章小结}
+% \subsection{如何构建多线程触发关系}
+
+% \section{本章小结}

@@ -86,7 +86,7 @@ TaintDroid提供了较为完备的数据流分析技术，但是不支持控制�
 DroidBox在TaintDroid基础上，对Android Framework的部分API做了修改，可以记录一些开发人员感兴趣的API（例如文件读写、网络请求、SMS服务等）的调用，并提供分析结果的可视化。
 同时，DroidBox还实现了应用程序的自动安装和执行，弥补了TaintDroid在软件测试自动化方面的不足。
 和TaintDroid不同，TraceDroid采用的是另一种思路，利用字节码插装技术AspectJ，使得方法在执行时输出相应的日志信息。根据这些信息TraceDroid可以还原函数调用图，得到分析结果。
-由于Aspect在进行字节码编织时引入的新的方法会导致生成源APK文件中的方法总数超过65536~\cite{Configur27}，进而使得APK文件无法成功构建，因此该方案存在不稳定的情况。
+由于Aspect在进行字节码编织时引入的新的方法会导致方法数65K限制问题（即构建APK文件的过程中，方法总数超过65536，进而使得APK文件无法成功构建~\cite{Configur27}），因此该方案存在不稳定的情况。
 
 另外，研究人员还用动态分析技术查找Android应用程序在运行时性能瓶颈。Android官方性能检测工具SimplePref~\cite{simpleperf:online}就是其中的一个代表。
 SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时获取到性能监视单元的相关信息（例如cpu周期数、执行的指令数、缓存失效次数等）。
@@ -129,8 +129,8 @@ Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为
 
 AppIntent~\cite{yang2013appintent}
 
-也有一部分研究聚焦移动应用在网络传输上的安全问题。
-Socket~\cite{bu2017program}
+也有一部分研究Socket~\cite{Shao2016The,Jia2017Open,bu2017program}聚焦移动应用在网络传输上的安全问题。
+
 
 
 \textbf{质量保障：}
@@ -142,7 +142,7 @@ machado2013mzoltar~\cite{machado2013mzoltar}
 
 Suting~\cite{androidtest2}
 
-Fan~\cite{fan2018efficiently,fan2018large}
+Fan~\cite{fan2018efficiently, fan2018large}
 
 现有的性能测试的工作中，Mario Linares-Vasquez[25]等提出通过对开源社区 App 的分析，详细归纳了 App 性能中由线程问题、GUI 渲染问题、内存问题导致 App 运行 异常的原因。
 

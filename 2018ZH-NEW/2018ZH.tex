@@ -148,11 +148,21 @@
 
 % 交叉引用格式
 \renewcommand\figureautorefname{图}
+\renewcommand\tableautorefname{表}
 \renewcommand\equationautorefname{公式}
 
 
 \renewcommand{\algorithmicrequire}{\textbf{输入:}}
 \renewcommand{\algorithmicensure}{\textbf{输出:}}
+
+%===============================概念定义===============================% 
+
+
+\newcommand{\invoke}[2]{  $ (  #1 \to   #2)  $ }
+\newcommand{\trigger}[2]{  $ (  #1 \hookrightarrow   #2)  $ }
+
+
+\newcommand{\methodObjectRel}[3]{  $ (  #1 \stackrel{#2}{\longrightarrow}   #3)  $ }
 
 %%% ----------------------------------------------------------------------
 
@@ -225,9 +235,12 @@
 
 \input {chapter-intro.tex}
 
+
+
 \input {chapter-background.tex}
 
 \input{chapter-defination.tex}
+
 
 \input {chapter-implement.tex}
 
