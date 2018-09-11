@@ -1,7 +1,7 @@
 \chapter{设计与实现 }
 \label{ch3}
 
-\section{系统功能介绍}
+\section{系统功能}
 本文以帮助研究人员和开发人员了解Android应用程序的执行过程作为基本出发点，通过设计与实现Android动态函数调用图构建系统RunDroid，生成Android应用程序运行时对应的动态函数调用图，从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地展现Android应用的执行过程，为应用程序分析提供更为多样、准确的信息。另外，系统具备一定的可拓展性，可以方便相关人员根据自身的业务需求对系统进行扩展，完成相应的需求。
 
 \section{基本思想}
@@ -17,9 +17,9 @@
 
 
 %在本节，
-以~\autoref{fig:code_sample}为例，%简要介绍一下RunDroid还原Android应用程序的函数调用图的基本思路：
-~\autoref{fig:code_sample}-左上为一段示例代码：在main函数执行时，程序会依次调用A、B两个函数，而B函数则会调用了C、D两个函数。
-~\autoref{fig:code_sample}-左下则是期望输出——函数调用图。
+以\autoref{fig:code_sample}为例，%简要介绍一下RunDroid还原Android应用程序的函数调用图的基本思路：
+\autoref{fig:code_sample}-左上为一段示例代码：在main函数执行时，程序会依次调用A、B两个函数，而B函数则会调用了C、D两个函数。
+\autoref{fig:code_sample}-左下则是期望输出——函数调用图。
 在本质上，函数调用图属于树。程序执行过程可以看做树的深度优先遍历过程。
 函数调用图还原的关键点，在于如何在程序执行过程中输出树的遍历序列，并根据遍历序列进行还原。
 通常的，树的遍历分为中序遍历、前序遍历以及后序遍历三种。
@@ -31,9 +31,9 @@
 % 而且，函数执行过程中出现的错误异常可能使得序列输出中断，阻碍调用图的构建。
 
 为此，我们采用的基本思路如下：
-通过对源程序（~\autoref{fig:code_sample}-左上）进行预处理，得到包含日志记录功能的运行代码（~\autoref{fig:code_sample}-右上）；
-程序在函数执行前后可以输出和方法执行相关的日志信息，（~\autoref{fig:code_sample}-右下）；
-最后，我们根据这些日志信息构建出函数调用图（~\autoref{fig:code_sample}-左下）。
+通过对源程序（\autoref{fig:code_sample}-左上）进行预处理，得到包含日志记录功能的运行代码（\autoref{fig:code_sample}-右上）；
+程序在函数执行前后可以输出和方法执行相关的日志信息，（\autoref{fig:code_sample}-右下）；
+最后，我们根据这些日志信息构建出函数调用图（\autoref{fig:code_sample}-左下）。
 在函数调用图的基础上，RunDroid利用日志中包括的方法对象信息，挖掘和方法对象相关联的方法，结合具体触发规则，进而建立方法触发关系。
 
 % 从函数调用图的构建过程可以看出，程序的执行过程就是对函数调用图自上而下的深度优先遍历过程。由此可见，若要还原出图 6-右中的函数调用图，本文采用的基本思路是以日志方式输出对右图中的函数调用图的深度优先遍历序列，并基于得到的遍历序列还原出函数调用图。
@@ -46,7 +46,7 @@
 预处理器通过源代码插桩技术实现用户方法层面的信息记录，而运行时拦截器则负责拦截系统方法的执行。
 在应用运行时，日志记录器会记录用户方法和系统方法对应的执行信息，以日志的形式记录下来。
 最后，调用图构建器会根据应用程序运行时输出的日志，构建拓展函数调用图。
-对应的工作流程如~\autoref{fig:rundroid_overview}所示。
+对应的工作流程如\autoref{fig:rundroid_overview}所示。
 
 
 % 本技术路线拟利用语法分析工具，对Android应用程序进行了应用源代码层面的执行日志插桩工作，利用非侵入式系统行为修改插件获取系统层面的函数执行信息。
@@ -107,98 +107,122 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 %  利用获取的语法结构，预处理器会提取出所有的方法体，
 对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名，并将这些信息以日志记录代码的形式写回到方法体中。
 另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
-%全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
+全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，可以看做方法体的唯一标识，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
 另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建。
 最后，预处理器会将插桩后的源代码构建成APK文件。
 
 
-% 为了捕获应用层中的方法调用，我们使用程序测试来记录运行时执行跟踪。在Java程序的源代码或字节码上有许多自动化的仪器工具（1）。
-% 由于使用RunDood的上下文是在调试阶段，所以在源级对程序进行测试是很自然的。
-% 此外，我们观察到字节码检测技术，如一个艾玛（3）使用，遭受64K参考限制[2 ]。
-% 因此，预处理器组件建立在SRCML（9）上，它将Java源代码转换成XML格式，以便在执行过程中监视这些方法。
+\subsection{运行时拦截器}
+运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
+运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，产生完整的方法调用，进而帮助我们还原出方法间的触发关系。
+
+在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法），如\autoref{tbl:hookMethodList} 所示。
+每当应用程序启动时，运行时拦截器通过Xposed提供的API\textit{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即Xposed提供的XC\_MethodHook的子类 ，HookCallBack）上。
+在程序运行过程中，HookCallBack对象的\textit{beforeHookedMethod(MethodHookParam)}会在目标方法执行前调用，
+\textit{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
+最终，HookCallBack对应会将方法执行的相关信息传递给日志记录器。
 
 
- \subsection{运行时拦截器}
- 运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
- 运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，进而帮助我们还原出方法间的触发关系。
 
-在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法，具体如~\autoref{tbl:hookMethodList} 所示。
+\begin{table*}[!ht]
+%	\centering
+	%\tiny
+	
+	\caption{运行时拦截器拦截的系统方法列表}
+	
+	\label{tbl:hookMethodList}
+	
 
-\begin{table}
-\caption{运行时拦截器拦截的系统方法列表}
-
-\label{tbl:hookMethodList}
-
-\begin{tabular}{|l|c|}
-	\hline
-	方法签名&说明\\
-	\hline
-	android.app.Activity onCreate android.os.Bundle   &\multicolumn{1}{c}{和Android Activity生命周期相关的方法}\\
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}[b]
+			
+			\begin{tabular}{|l|c|}
+				\hline
+				方法签名&说明\\
+				\hline
+	Activity onCreate Bundle   &\multirow{6}{0.4\linewidth}{和Activity生命周期相关的方法}\\
 %	\cline{1-1}
-	android.app.Activity onStart    &\\
-	android.app.Activity onResume    &\\
-	android.app.Activity onPause    &\\
-	android.app.Activity onDestroy    &\\
-	\hline
-	
-	java.lang.Thread start   & 和Java 线程启动相关的方法\\
-	\hline
-	android.os.Message obtain & 和Android Hanlder机制相关的方法\\
-	android.os.Handler enqueueMessage android.os.MessageQueue android.os.Message long&\\
-	android.os.Handler dispatchMessage android.os.Message&\\
-	android.os.Handler post java.lang.Runnable&\\
-	android.os.Handler postAtTime java.lang.Runnable long&\\
-	android.os.Handler postAtTime java.lang.Runnable java.lang.Object long&\\
-	android.os.Handler postDelayed java.lang.Runnable long&\\
-	android.os.Handler postAtFrontOfQueue java.lang.Runnable&\\
-	android.os.Handler sendMessage android.os.Message&\\
-	android.os.Handler sendEmptyMessage int&\\
-	android.os.Handler sendEmptyMessageDelayed int long&\\
-	android.os.Handler sendEmptyMessageAtTime int long&\\
-	android.os.Handler sendMessageAtFrontOfQueue android.os.Message&\\
-	android.os.Handler sendMessageDelayed android.os.Message long&\\
-	android.os.Handler sendMessageAtTime android.os.Message long&\\
-	
-	\hline
-	
-	android.os.AsyncTask execute [java.lang.Object& 和Android AsyncTask相关的方法\\
-	android.os.AsyncTask publishProgress [java.lang.Object&\\
-	android.os.AsyncTask executeOnExecutor java.util.concurrent.Executor [java.lang.Object &\\
-	\hline
-	
-\end{tabular}
+	Activity onStart    &\\
+	Activity onResume    &\\
+	Activity onPause    &\\	
+	Activity onStop    &\\
+	Activity onDestroy    &\\
+				\hline
+				
+				Thread start   & 和Java 线程启动相关的方法\\
+				\hline
+				Message obtain & \multirow{15}{0.4\linewidth}{和 Hanlder机制相关的方法}\\
+				Handler enqueueMessage MessageQueue Message long&\\
+				Handler dispatchMessage Message&\\
+				Handler post Runnable&\\
+				Handler postAtTime Runnable long&\\
+				Handler postAtTime Runnable Object long&\\
+				Handler postDelayed Runnable long&\\
+				Handler postAtFrontOfQueue Runnable&\\
+				Handler sendMessage Message&\\
+				Handler sendEmptyMessage int&\\
+				Handler sendEmptyMessageDelayed int long&\\
+				Handler sendEmptyMessageAtTime int long&\\
+				Handler sendMessageAtFrontOfQueue Message&\\
+				Handler sendMessageDelayed Message long&\\
+				Handler sendMessageAtTime Message long&\\
+				
+				\hline
+				
+				AsyncTask execute [Object& \multirow{3}{0.4\linewidth}{和 AsyncTask相关的方法}\\
+				AsyncTask publishProgress [Object&\\
+				AsyncTask executeOnExecutor Executor [Object &\\
+				\hline
+				
+				
+			\end{tabular}
+%		\begin{tablenote}
+	%		\end{tablenote}
+			
+		\end{threeparttable}
+	}
+\end{table*}
 
-\end{table}
+
+
+
+%   进而通过日志记录器输出相应的日志。
+
 
 % 拦截器组件基于Xposed框架[5]，它拦截在应用程序层和Android框架之间传递的消息。
  % 拦截器记录在两个层之间进行的每个方法调用，并将它们与应用程序层中对应的方法调用相关联，以产生完整的方法调用跟踪。
  % RunDroid维护感兴趣的方法列表，如生命周期方法和隐式回调，以便日志文件包含每次执行期间调用的方法调用
 
 
-% xxxxxxxxxxxx
 
 
-% \subsection{日志记录器}
-% xxxxxxxxxxxx
+\subsection{日志记录器}
 
-\subsection{调用图构建器}
+日志记录器的职责是将方法执行的消息以日志的形式就持久化下来。
+针对不同的方法类型（静态方法与非静态方法、用户方法与系统方法等），日志记录器提供了不同的API，帮助我们记录相应方法执行的日志信息。
+在日志内容上，日志记录器还会记录每个方法执行的所处线程、方法签名标识、所处阶段（开始执行该方法/方法执行完毕）以及相关的方法对象信息（包括对象的类型、基本属性以及内存地址等）。
+% 在底层实现上，考虑日志读入文件对程序执行效率的影响，我们评估了多种日志写入方式，最终我们发现基于mmap的日志记录方式效率最高，对程序运行的影响最小。
+
+
+ \subsection{调用图构建器}
+
+
 
 \section{扩展函数调用图的构建过程}
 
 拓展函数调用图的构建分为两个阶段：根据程序运行时的日志提取函数间的调用关系，创建函数调用图；
-在函数调用图的基础上，利用方法执行与方法对象的关联关系创建拓展函数调用图。具体过程如下：
+在函数调用图的基础上，利用方法执行与方法对象的关联关系创建拓展函数调用图。
 
 \subsection{函数调用图的构建过程}
+具体过程如\autoref{alg:buildCG}所示：
 
-\begin{algorithm}[h] 
+\begin{algorithm*}[!ht]
 	\caption{函数调用图的构建过程} 
-
+	\label{alg:buildCG}
 \begin{algorithmic}[1]
-	\label{trans}
-	%	\caption{动态函数调用图（DCG）的生成}
 		
 	\algsetup{linenosize=\small} \small
-	\REQUIRE  $logs$，应用程序在运行过程中的日志输出
+	\REQUIRE  $logs$，应用程序的运行时日志
 	\ENSURE $cg$，函数调用图
 	
 	
@@ -257,13 +281,16 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 	
 
 \end{algorithmic}
-\end{algorithm}
+\end{algorithm*}
+
+\foreach \n in {1,...,20}{凑几行吧  
 
 
+}
 
-% \subsection{如何构建Activity的生命周期}
+\subsection{如何构建Activity的生命周期}
 
 
-% \subsection{如何构建多线程触发关系}
+ \subsection{如何构建多线程触发关系}
 
-% \section{本章小结}
+ \section{本章小结}

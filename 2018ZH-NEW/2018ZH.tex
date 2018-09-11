@@ -51,6 +51,11 @@
 \usepackage{balance}
 \usepackage {paralist}
 \usepackage{bbding}
+\usepackage{pgffor}
+
+\usepackage{threeparttable}
+
+
 %\usepackage{biblatex}
 \makeindex
 \pagestyle{fancy}
@@ -150,6 +155,12 @@
 \renewcommand\figureautorefname{图}
 \renewcommand\tableautorefname{表}
 \renewcommand\equationautorefname{公式}
+\newcommand{\algorithmautorefname}{算法}
+
+
+\makeatletter
+\renewcommand*{\ALG@name}{算法}
+\makeatother
 
 
 \renewcommand{\algorithmicrequire}{\textbf{输入:}}
