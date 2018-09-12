@@ -8,12 +8,7 @@
 调用关系和触发关系描述了方法执行之间的关系。
 函数调用图为所有调用关系的集合，在函数调用图上添加方法对象以及触发关系得到拓展函数调用图。相关定义如下：
 
-\begin{myDef}方法执行\end{myDef}
-	
-	
-	方法执行是对方法执行过程中的相关信息的描述，完整的信息包括对应方法的完整签名、执行时所处的线程$m_t$以及相关的方法对象。
-	在本文中，方法执行通常用符号$m$表示。
-
+\subsection{关于方法和对象的定义}
 
 \begin{myDef}
 	方法对象（Method Object，MO）
@@ -29,7 +24,12 @@
 		\item 若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$o_i \stackrel{instance}{\longrightarrow} m$，或者 $ rel(m,o_i) = instance$。
 	\end{itemize}
 
+\begin{myDef}方法执行\end{myDef}
 
+方法执行是对方法执行过程中的相关信息的描述，完整的信息包括对应方法的完整签名、执行时所处的线程$m_t$以及相关的方法对象。
+在本文中，方法执行通常用符号$m$表示。
+
+\subsection{关于方法间关系的定义}
 \begin{myDef}
 	调用关系（Invoke）
 \end{myDef}
@@ -41,6 +41,9 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 
 在此基础上，对于方法$m$，若存在方法$m_i$（$i=0,\dots,n , n \geqslant 0$），使得~\autoref{equ:extend_invoke}成立，则记作$m_0 \stackrel{\ast}{\to} m$，称为方法$m_0$扩展调用方法$m_n$。
 特殊的，对于方法$m_1$和方法$m_2$，若$m_1 \to m_2$，则$m_1  \stackrel{\ast}{\to}  m_2$也成立。
+
+在源代码层面上，如果对于方法$m$和$m'$，$m \to m'$总是成立，可以记为 $m \Rightarrow m'$；
+如果对于方法$m$和$m'$，$m  \stackrel{\ast}{\to}  m'$总是成立，可以记为 $m  \stackrel{\ast}{ \Rightarrow } m'$。
 
 \begin{myDef}
 	触发关系（Trigger）
@@ -56,6 +59,11 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 		\item $m_a$、$m_b$之间存在着一定的因果关系，包括但不限于生命周期事件，UI交互事件或多线程通信等。
 	\end{itemize}
 
+在源代码层面上，对于方法$m_a$ ,$m_b$ ,$m_c$ ，
+若$m_a  \stackrel{\ast}{ \Rightarrow } m_b$ 和 $m_b \hookrightarrow m_c$同时成立，则$m_a \hookrightarrow m_c$也成立；
+若$m_a  \hookrightarrow m_b$ 和 $m_b \stackrel{\ast}{ \Rightarrow }  m_c$同时成立，则$m_a \hookrightarrow m_c$也成立。
+
+\subsection{关于调用图的定义}
 
 \begin{myDef}
 	函数调用图（CallGraph，CG）
@@ -104,8 +112,11 @@ E = & \{
 	\end{equation}
 	
 	
-\section{补点内容}
-\foreach \n in {1,...,9}{补点内容吧，大佬 \n \newline}
+\section{举例}
+\foreach \n in {1,...,9}{举个栗子吧，大佬 
+
+
+}
 
 
 \section{本章小结}
