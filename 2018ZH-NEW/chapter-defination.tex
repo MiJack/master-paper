@@ -16,12 +16,12 @@
 	和方法执行相关的对象称为方法对象，可以体现对象和执行方法的相互关系。
 	在本文中，方法对象通常用符号$o$表示。
 	
-	
+
 	对于一个方法执行$m$，对象和方法执行的关系有如下几种：
 	\begin{itemize}
-		\item 若对象$o_p$是这个方法$m$的参数，记为$o_p \stackrel{parameter}{\longrightarrow} m$，或者 $ rel(m,o_p) = parameter$；
-		\item 若对象$o_r$是这个方法$m$的返回值，记为$o_r \stackrel{return}{\longrightarrow} m$，或者 $ rel(m,o_r) = return$；
-		\item 若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$o_i \stackrel{instance}{\longrightarrow} m$，或者 $ rel(m,o_i) = instance$。
+		\item 若对象$o_p$是这个方法$m$的参数，记为$o_p \stackrel{parameter}{\longrightarrow} m$，或者 $ rel(m,o_p) = parameter$，或者三元组$\left\langle m, o_p, parameter\right\rangle $；
+		\item 若对象$o_r$是这个方法$m$的返回值，记为$o_r \stackrel{return}{\longrightarrow} m$，或者 $ rel(m,o_r) = return$，或者三元组$\left\langle m, o_p, return\right\rangle $；
+		\item 若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$o_i \stackrel{instance}{\longrightarrow} m$，或者 $ rel(m,o_i) = instance$，或者三元组$\left\langle m, o_p, instance\right\rangle $；
 	\end{itemize}
 
 \begin{myDef}方法执行\end{myDef}
@@ -69,21 +69,21 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 	函数调用图（CallGraph，CG）
 \end{myDef}	
 	函数调用图是对程序运行时行为的描述，用有向图$CG = ( V , E)$表示。 图中的点$ v \in V $表示一个\textbf{方法执行} $m$；
-	如果方法$m_1$调用方法$m_2$（即$m_1 \to m_2$），则有向边 $e = (m_1 ,m_2)$属于集合 $E$。 
+	如果方法$m_1$调用方法$m_2$（即$m_1 \to m_2$），则有向边 $e = \left\langle m_1 ,m_2 \right\rangle $属于集合 $E$。 
 
 
 \textbf{注意：}
 在应用执行过程中，方法A被调用了两次，方法A的每次调用都调用了方法B，则对应的函数调用图$CG$如~\autoref{equ:dcg_sample}所示。
 在调用图$CG$中，$m_a$ 和 $m_b$ 各有两个，分别对应的两次\textbf{方法执行}。
-$(m_{a_{(1)}} \to m_{b_{(1)}})$对应的是第一次函数A调用函数B，
-$(m_{a_{(2)}} \to m_{b_{(2)})}$对应的是第二次函数A调用函数B，
+$\left\langle m_{a_{1}} \to m_{b_{1}}\right\rangle $对应的是第一次函数A调用函数B，
+$\left\langle m_{a_{2}} \to m_{b_{2}} \right\rangle    $对应的是第二次函数A调用函数B，
 
 \begin{equation}
 \begin{aligned}
 CG = &(V,E) ,\\ 
-V = & \{m_{a_{(1)}},m_{b_{(1)}},m_{a_{(2)}},m_{b_{(2)}}\}, \\ 
+V = & \{m_{a_{1}},m_{b_{1}},m_{a_{2}},m_{b_{2}}\}, \\ 
 E = & \{  
-(  m_{a_{(1)}} \to m_{b_{(1)}}) ,( m_{a_{(2)}} \to m_{b_{(2)}})
+\left\langle  m_{a_{1}} \to m_{b_{1}} \right\rangle  ,\left\langle  m_{a_{2}} \to m_{b_{2}}\right\rangle 
 \} 
 \end{aligned}
 \label{equ:dcg_sample} 
@@ -106,7 +106,7 @@ E = & \{
 	V_{EDCG} =      & V_{method} \bigcup V_{object} ,\\
 	V_{method} =   & V_{DCG}, \\ 
 	G_{EDCG} =      & G_{method} \bigcup G_{object} , \\
-	G_{method} =  & E_{DCG} \bigcup \{ (m_1 , m_2) \mid m_1 \hookrightarrow m_2 \}
+	G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_1 \hookrightarrow m_2 \}
 	\end{aligned}
 	\label{equ:def_edcg} 
 	\end{equation}

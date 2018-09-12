@@ -238,8 +238,8 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 
 对于每个线程，RunDroid顺序遍历对应的日志，使用栈$stack$的入栈、出栈操作来模拟对应线程的函数执行的过程，还原调用关系（第3$\sim$ 20行）：
 当读取到方法执行的开始日志时，系统会在调用图创建一个节点表示该方法的执行（第7$\sim$8行），
-同时也在调用图中添加方法参数、方法实例对应的对象节点$o_p$、$o_i$以及方法对象和方法的关系$ (  o_p \stackrel{parameter}{\longrightarrow}   m )  $、$ (  o_i \stackrel{instance}{\longrightarrow}   m ) $（第9$\sim$10行）。
-如果此时当前线程栈$stack$的栈顶元方法素$top$存在，系统会创建从方法$top$到当前方法$m$的调用关系，$\left(top \to m \right) $，并将当前方法$m$压入栈$stack$中（第11$\sim$ 14行）。
+同时也在调用图中添加方法参数、方法实例对应的对象节点$o_p$、$o_i$以及方法对象和方法的关系$ \left\langle  o_p \stackrel{parameter}{\longrightarrow}   m \right\rangle   $、$ \left\langle   o_i \stackrel{instance}{\longrightarrow}   m \right\rangle  $（第9$\sim$10行）。
+如果此时当前线程栈$stack$的栈顶元方法素$top$存在，系统会创建从方法$top$到当前方法$m$的调用关系，$\left\langle top \to m \right \rangle  $，并将当前方法$m$压入栈$stack$中（第11$\sim$ 14行）。
 当读取到方法执行的结束日志时，该日志对应的方法必然是栈顶方法$top$，若栈顶方法$top$存在返回对象$o_r$，则只需要将$o_r$和$top$的关系添加到调用图中即可，最后弹出栈顶的$top$即可（第 16$\sim$ 18行）。
 在上述过程中，如果待添加的方法对象在调用图中已经存在时，该对象则无须重新添加，只需添加方法与对象间的关系即可。
 
@@ -288,13 +288,13 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 									
 					\STATE 	$cg$.addMethodObjects($ o_p $,$o_i $) 								
 					
-					\STATE 	$cg$.addMethodObjectRels($ (  o_p \stackrel{parameter}{\longrightarrow}   m )  $,$ (  o_i \stackrel{instance}{\longrightarrow}   m ) $) 
+					\STATE 	$cg$.addMethodObjectRels($ \left\langle  o_p \stackrel{parameter}{\longrightarrow}   m \right\rangle   $,$ \left\langle  o_i \stackrel{instance}{\longrightarrow}   m \right\rangle  $) 
 					
 					\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
 					
 					\IF {  $top \neq null $ }
 
-							\STATE 	$cg$.addInvokeRel($ ( top \to  m ) $) 
+							\STATE 	$cg$.addInvokeRel($ \left\langle  top \to  m \right\rangle  $) 
 							
 							\STATE 	$stack$.push($m$)
 					\ENDIF
@@ -303,7 +303,7 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 	
 					\STATE 	$cg$.addMethodObject($  o_r  $) 
 					
-					\STATE 	$cg$.addMethodObjectRel($ (  o_r \stackrel{return}{\longrightarrow}   m )  $) 
+					\STATE 	$cg$.addMethodObjectRel($ \left\langle   o_r \stackrel{return}{\longrightarrow}   m \right\rangle  $) 
 					
 					
 					\Comment 在调用图中提交方法对象节点 （此处只涉及返回值关系）
