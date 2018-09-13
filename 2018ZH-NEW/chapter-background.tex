@@ -1,5 +1,5 @@
 \chapter{Android系统相关背景介绍 }  
-\label{ch2}
+\label{chp:background}
 
 
 本章首先会简要介绍Android系统架构，其次会对Android中的Activity组件做基本介绍，接着会着重介绍Android中常见的两种多线程交互方式，最后将指出本文系统在实现上的难点。
@@ -122,6 +122,7 @@ runOnUiThread API可以帮助开发人员将业务逻辑的执行从工作线程
 	\label{fig:handler-code}
 \end{figure*}
 
+\todo{未完整介绍分发过程！！！}
 
 从Android SDK提供的API来看，开发人员可以通过post(Runnable)，postAtTime(Runnable，long)，sendMessage(Message)，postDelayed(Runnable, Object, long),
  sendMessageDelayed(Message，long)，sendMessageAtTime(Message，long)和sendEmptyMessage(int)等多种API形式实现消息调度。
