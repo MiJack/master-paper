@@ -63,7 +63,8 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 \end{enumerate}
 
 Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
-Android系统为Activity提供了onCreate(), onStart(), onResume(), onPaused(), onRestart(),  onStoped()和onDestroy()等方法，方便开发人员在Activity的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。对应的Activity的生命周期具体如~\autoref{fig:Activity-lifecycle}所示：
+Android系统为\code{Activity}提供了\code{onCreate()}, \code{onStart()},\code{ onResume()}, \code{onPaused()},\code{ onRestart()}, \code{ onStoped()}和\code{onDestroy()}等方法，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
+对应的\code{Activity}的生命周期具体如~\autoref{fig:Activity-lifecycle}所示：
 
 
 \begin{figure*}
@@ -75,13 +76,13 @@ Android系统为Activity提供了onCreate(), onStart(), onResume(), onPaused(), 
 
 
 当用户点击应用图标，系统启动应用程序后，系统会创建Activity、启动Activity并使之可以和用户进行交互。
-在这个过程中，onCreate()、onStart()、onResume()等方法被回调，Activity最终处于运行态；
+在这个过程中，\code{onCreate()}、\code{onStart()}、\code{onResume()}等方法被回调，Activity最终处于运行态；
 
 当用户点击“返回键”返回到桌面时，Activity会失去焦点，在用户的视野中消失，直至被系统回收，
-对应的状态也从运行态经暂停态、停止态，变为终止态变，期间onPause()、onStop()、onDestroy等方法被回调；
+对应的状态也从运行态经暂停态、停止态，变为终止态变，期间\code{onPause()}、\code{onStop()}、\code{onDestroy()}等方法被回调；
 
 当用户从一个界面回到原来的界面时，原有的Activity从停止态重启，先后出现在设备界面上，获得和用户交互的焦点，
-期间onRestart()、onStart()、onResume()等方法被回调；
+期间\code{onRestart()}、\code{onStart()}、\code{onResume()}等方法被回调；
 
 当一个Activity长期处于停止态，但由于内存原因被系统回收时，用户尝试启动它时，系统会像启动一个新的Activity一样启动它。
 
@@ -100,9 +101,9 @@ Android系统在架构设计上采用了事件驱动架构。在多线程并发�
 
 由于Android系统提供的API接口兼容Java多线程相关的部分API，因此，在Android系统中，开发人员可以采用和Java应用相同的调用方式启动工作线程，并在对应的线程上完成业务逻辑。
 但是，Java API只能实现业务逻辑从原有线程转移到新的工作线程上，不能重新返回到主线程上。
-为此，Android系统在Java API的基础上还提供了void runOnUiThread (Runnable action) API。
-runOnUiThread API可以帮助开发人员将业务逻辑的执行从工作线程转移到主线程上，该API也符合Android只允许在主线程上更新界面这一基本设计原则。
-但是，该API也存在着一些弊端，例如runOnUiThread API的定义位于类android.app.Activity，这也就意味着在Android组件Service中进行耗时操作时，无法通过该API返回到主线程；同时基于接口的函数参数定义方式对于跨线程的参数传递也不是十分友好。
+为此，Android系统在Java API的基础上还提供了\code{void runOnUiThread (Runnable action) }API。
+\code{runOnUiThread} API可以帮助开发人员将业务逻辑的执行从工作线程转移到主线程上，该API也符合Android只允许在主线程上更新界面这一基本设计原则。
+但是，该API也存在着一些弊端，例如runOnUiThread API的定义位于类\code{android.app.Activity}，这也就意味着在Android组件Service中进行耗时操作时，无法通过该API返回到主线程；同时基于接口的函数参数定义方式对于跨线程的参数传递也不是十分友好。
 为此，Android提供了基于Handler的多线程交互方式。
 
 \subsection{基于Handler的多线程消息调度}
