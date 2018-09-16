@@ -371,74 +371,32 @@ rel(m_{run}, o_r) = instance \\
 		
 		\algsetup{linenosize=\small} \small
 	%	\REQUIRE  $apk$，应用程序的对应的APK文件
-		\Require $cg$，函数调用图		
-		\Ensure $ecg$，拓展函数调用图
+		\REQUIRE $cg$，函数调用图		
+		\ENSURE  $ecg$，拓展函数调用图
 		
+		\STATE  $cg \to ecg$
 		
-		
-		\State $cg \to ecg$
-		
-		
-		\State  \textbf{return} 	$ecg$ 
+		\STATE  \textbf{return} 	$ecg$ 
 		
 		
 	\end{algorithmic}
 \end{algorithm*}
 
 
-  \begin{algorithm}
-	\caption{用归并排序求逆序数}
-	\begin{algorithmic}[1] %每行显示行号
-		\Require $Array$数组，$n$数组大小
-		\Ensure 逆序数
-		\Function {MergerSort}{$Array, left, right$}
-		\State $result \gets 0$
-		\If {$left < right$}
-			\State $middle \gets (left + right) / 2$
-			\State $result \gets result +$ \Call{MergerSort}{$Array, left, middle$}
-			\State $result \gets result +$ \Call{MergerSort}{$Array, middle, right$}
-			\State $result \gets result +$ \Call{Merger}{$Array,left,middle,right$}
-		\EndIf
-		\State \Return{$result$}
-		\EndFunction
-		\State
-		\Function{Merger}{$Array, left, middle, right$}
-		\State $i\gets left$
-		\State $j\gets middle$
-		\State $k\gets 0$
-		\State $result \gets 0$
-		\While{$i<middle$ \textbf{and} $j<right$}
-		\If{$Array[i]<Array[j]$}
-		\State $B[k++]\gets Array[i++]$
-		\Else
-		\State $B[k++] \gets Array[j++]$
-		\State $result \gets result + (middle - i)$
-		\EndIf
-		\EndWhile
-		\While{$i<middle$}
-		\State $B[k++] \gets Array[i++]$
-		\EndWhile
-		\While{$j<right$}
-		\State $B[k++] \gets Array[j++]$
-		\EndWhile
-		\For{$i = 0 \to k-1$}
-		\State $Array[left + i] \gets B[i]$
-		\EndFor
-		\State \Return{$result$}
-		\EndFunction
-	\end{algorithmic}
-\end{algorithm}
-
 
 
 \textbf{基于\code{Handler} 的多线程消息调度}
 
-根据\autoref{chp:background}和\autoref{chp:definition}的介绍，我们已经知晓用户通过调用Handler提供的API，
+根据第\ref{chp:background}章和第\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
 在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
-首先，利用handler的方法\code{enqueue(Message)}和\code{handleMessage(Message)}公用同一个Message对象的特点，找到所有的Handler底层函数触发关系
-
-
+首先，利用handler的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$；
+对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
+从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法）$m_{send}$，
+从$m_{dispatch}$ 顺着调用关系往下找到用户定义的方法Handler.handleMessage(Message)$m_{handle}$，
+最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \hookrightarrow m_{handle}$。
+%如果$m_{send}$和$m_{handle}$中有一个方法未找到，表示
 具体的过程如\autoref{alg:buildHandlerTrigger}所示。
 
 \eat{
