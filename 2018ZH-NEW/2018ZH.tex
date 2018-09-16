@@ -23,11 +23,25 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{indentfirst,latexsym,colortbl,subfigure,clrscode}
-\usepackage{algorithm}
-\usepackage{algorithmic}
-%\usepackage{algorithm2e}
-%\usepackage{algorithmic}
-\usepackage{amsthm}
+
+
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}%[ruled,vlined]{  
+\usepackage{algorithmicx}
+\usepackage{listings}
+\usepackage{algcompatible}
+\usepackage{algpseudocode}
+
+
+\renewcommand*{\algorithmcfname}{算法}
+
+
+
+
+\SetKwInput{KwIn}{\textbf{输入}}
+\SetKwInput{KwOut}{\textbf{输出}}
+
+
+
 \usepackage{bm}                     % 处理数学公式中的黑斜体的宏包
 \usepackage{amssymb}                % AMSLaTeX宏包 用来排出更加漂亮的公式
 \usepackage{mathrsfs}
@@ -143,32 +157,27 @@
 
 %============================ 可以自定义文字块 ================================%
 
-\newcommand{\aaa}{Example}
-\newcommand{\bbb}{\aaa \aaa \aaa}
-\newcommand{\ccc}{\bbb \bbb \bbb \bbb \bbb
 
-\bbb \bbb \bbb \bbb \bbb }
-\newcommand{\abc}{abcdefg1234567890}
-\newcommand{\upabc}{ABCDEFGHIJK}
 
-% 交叉引用格式
+%交叉引用格式
 \renewcommand\figureautorefname{图}
 \renewcommand\tableautorefname{表}
 \renewcommand\equationautorefname{公式}
-\newcommand{\algorithmautorefname}{算法}
+\renewcommand{\algorithmautorefname}{算法}
 
 
-\makeatletter
-\renewcommand*{\ALG@name}{算法}
-\makeatother
 
 
-\renewcommand{\algorithmicrequire}{\textbf{输入:}}
-\renewcommand{\algorithmicensure}{\textbf{输出:}}
+
 
 %===============================概念定义===============================% 
 
 \newcommand{\eat}[1]{}
+
+\newcommand{\TheisName}[0]{构建Android 动态函数调用图：RunDroid 的设计与实现}
+\newcommand{\TheisNamePartOne}[0]{构建Android 动态函数调用图：}
+\newcommand{\TheisNamePartTwo}[0]{RunDroid 的设计与实现}
+\newcommand{\TheisNameEn}[0]{The Building of Android Dynamic Function Call Graph: The Design and Implement of RunDroid}
 
 \newcommand{\code}[1]{\textit{ #1 }}
 

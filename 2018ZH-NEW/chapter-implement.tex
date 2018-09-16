@@ -39,6 +39,8 @@
 % 从函数调用图的构建过程可以看出，程序的执行过程就是对函数调用图自上而下的深度优先遍历过程。由此可见，若要还原出图 6-右中的函数调用图，本文采用的基本思路是以日志方式输出对右图中的函数调用图的深度优先遍历序列，并基于得到的遍历序列还原出函数调用图。
 % 由于Android是由面向对象编程语言Java开发的系统，系统还需要考虑面向对象编程的特性——多态性（即同一个行为在不同的对象下的表现可以不同）。为此，RunDroid还会在函数调用图将函数执行和对应的对象进行关联，更好地体现面向对象编程的函数调用关系。基于上述的函数调用关系的信息，RunDroid根据函数调用之间的关系进一步挖掘，进一步挖掘Android系统中的特性（例如组件Activity的生命周期、多线程的交互方式）。
 
+
+
 \section{技术路线}
 
 在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分。
@@ -55,9 +57,9 @@
 %全面地展现Android应用的执行过程。
 
 
-\begin{figure*}[ht]
+\begin{figure*}[!ht]
 	\centering
-	\includegraphics[height=0.5\textheight]{./Figures/rundroid-overview.png}
+	\includegraphics[height=0.7\textheight]{./Figures/rundroid-overview.png}
 	\caption{ RunDroid的工作流程}
 	\label{fig:rundroid_overview}
 \end{figure*}
@@ -256,70 +258,64 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 
 
 
-\begin{algorithm*}[!ht]
+\begin{algorithm}[!ht]
 	\caption{函数调用图的构建过程} 
 	\label{alg:buildCG}
-\begin{algorithmic}[1]
-		
-	\algsetup{linenosize=\small} \small
-	\REQUIRE  $logs$，应用程序的运行时日志
-	\ENSURE $cg$，函数调用图
-	
-	
-	\STATE 	$cg$ $\gets$ new CallGraph()
-	% \Comment Insert $A[j]$ into the sorted sequence $A[1 \twodots j-1]$.
-	
-	\FOR {thread $\in$ $logs.threads$}
-		\STATE 	$stack$ $\gets$ new Stack()
-		
-		\FOR  {$log$ $\in$ $logs.get(thread)$}
-				\STATE 	$top$ = $stack$.peek()                 
-			
-			
-				\IF {isMethodStartLog($log$)} 
-			
-					\STATE 	$m \gets $ generateMethodInfo($log$)
-					
-					\STATE  $cg$.addMethodNode($m$)
-					
-					
-					\Comment 在调用图中提交方法节点 
-									
-					\STATE 	$cg$.addMethodObjects($ o_p $,$o_i $) 								
-					
-					\STATE 	$cg$.addMethodObjectRels($ \left\langle  o_p \stackrel{parameter}{\longrightarrow}   m \right\rangle   $,$ \left\langle  o_i \stackrel{instance}{\longrightarrow}   m \right\rangle  $) 
-					
-					\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
-					
-					\IF {  $top \neq null $ }
+\KwIn{ $logs$，应用程序的运行时日志}
+\KwOut{ $cg$，函数调用图}
+	\SetKwProg{Fn}{Function}{:}{}
 
-							\STATE 	$cg$.addInvokeRel($ \left\langle  top \to  m \right\rangle  $) 
-							
-							\STATE 	$stack$.push($m$)
-					\ENDIF
-					
-			\ELSE 
+			\Fn{buildCallGraph($log$)}{
 			
-					\STATE 	$cg$.addMethodObject($  o_r  $) 
-					
-					\STATE 	$cg$.addMethodObjectRel($ \left\langle   o_r \stackrel{return}{\longrightarrow}   m \right\rangle  $) 
-					
-					
-					\Comment 在调用图中提交方法对象节点 （此处只涉及返回值关系）
-					\STATE 		$stack$.pop() 
-
-			\ENDIF
+			$cg$ $\gets$ new CallGraph();
 			
-		\ENDFOR
+			\For{thread $\in$ $logs.threads$}{
+			
+				$stack$ $\gets$ new Stack();
+			
+				\For  {$log$ $\in$ $logs.get(thread)$}{
+						
+						$top$ = $stack$.peek() ;  
+				
+				\eIf{isMethodStartLog($log$)} {
+				
+				  	$m \gets $ generateMethodInfo($log$);
+				
+				   $cg$.addMethodNode($m$);
+				   %\Comment 在调用图中提交方法节点 
+				
+				  	$cg$.addMethodObjects($ o_p $,$o_i $) 	;							
+				
+				  	$cg$.addMethodObjectRels($ \left\langle  o_p \stackrel{parameter}{\longrightarrow}   m \right\rangle   $,$ \left\langle  o_i \stackrel{instance}{\longrightarrow}   m \right\rangle  $) ;
 		
-	
-	\ENDFOR
-	
- \STATE \textbf{return}   $cg$
-	
+			%	\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
+				
+				\If {  $top \neq null $ }{
+				
+				$cg$.addInvokeRel($ \left\langle  top \to  m \right\rangle  $) ;
+				
+				$stack$.push($m$);
+			}
+				
+			}{ 
+				
+				 	$cg$.addMethodObject($  o_r  $) ;
+				
+					 $cg$.addMethodObjectRel($ \left\langle   o_r \stackrel{return}{\longrightarrow}   m \right\rangle  $) ;
+		
+			%		  \Comment 在调用图中提交方法对象节点 （此处只涉及返回值关系）
+				 		
+			 		$stack$.pop() ;
+				
+			}
+				
+			 
+					
+				}
+			}
+	}
 
-\end{algorithmic}
-\end{algorithm*}
+\end{algorithm}
 
 \subsection{构建Activity的生命周期}
 
@@ -329,26 +325,26 @@ Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相
 将上述方法按照时间顺序连接起来，即可得到\code{Activity}的生命周期。
 
  \subsection{构建多线程触发关系}
-%在构建多线程触发关系时，我们只要分为两个方面：基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度。
+在构建多线程触发关系时，我们只要分为两个方面：基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度。具体的过程如\autoref{alg:buildTrigger}所示。
 
 \textbf{基于Java 的多线程交互}
 
 基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
-因此，对于方法\code{Thread.start()}，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$，如\autoref{equ:rule_1}所示。
+因此，对于方法\code{Thread.start()}，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$（第8 $\sim$10行）。
 同样的，对于方法\code{Activity.runOnUiThread(Runnable)}，也存在类似的关系：
-如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{runOnUiThread} \hookrightarrow m_{run}$，如\autoref{equ:rule_2}所示。
+如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{runOnUiThread} \hookrightarrow m_{run}$（第11 $\sim$13行）。
 
-\begin{equation}
-\label{equ:rule_1}
-\left. \begin{gathered}
-o_r    \        is           \      Runnable  \      Class \\
-rel(m_{start}, o_r) = instance \\
-rel(m_{run}, o_r) = instance \\
-\end{gathered} \right\}
-\Rightarrow  m_{start} \hookrightarrow m_{run}. 
-\end{equation}
-
-
+\eat{\begin{equation}
+	\label{equ:rule_1}
+	\left. \begin{gathered}
+	o_r    \        is           \      Runnable  \      Class \\
+	rel(m_{start}, o_r) = instance \\
+	rel(m_{run}, o_r) = instance \\
+	\end{gathered} \right\}
+	\Rightarrow  m_{start} \hookrightarrow m_{run}. 
+	\end{equation}
+}
+\eat{
 \begin{equation}
 \label{equ:rule_2}
 \left. \begin{gathered}
@@ -358,46 +354,77 @@ rel(m_{run}, o_r) = instance \\
 \end{gathered} \right\}
 \Rightarrow  m_{runOnUiThread} \hookrightarrow m_{run}. 
 \end{equation}
+}
 
 
 
 
 
+\begin{algorithm}[!ht]
+	\caption{扩展函数调用图的构建过程}
+	\label{alg:buildTrigger}
+	\KwIn {	$cg$， 函数调用图} 
+	\KwOut {	$ecg$，拓展函数调用图}
 
-\begin{algorithm*}[!ht]
-	\caption{构建Handler相关的触发关系} 
-	\label{alg:buildHandlerTrigger}
-	\begin{algorithmic}[1]
+	
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{buildExtendedCallGraph($cg$)}{
 		
-		\algsetup{linenosize=\small} \small
-	%	\REQUIRE  $apk$，应用程序的对应的APK文件
-		\REQUIRE $cg$，函数调用图		
-		\ENSURE  $ecg$，拓展函数调用图
+		$ecg \gets cg$;
 		
-		\STATE  $cg \to ecg$
+		addThreadTrigger($ecg$);
 		
-		\STATE  \textbf{return} 	$ecg$ 
+		addHandlerTrigger($ecg$);
 		
-		
-	\end{algorithmic}
-\end{algorithm*}
+		\KwRet $ecg$;
+	}
+
+% $o_p \stackrel{parameter}{\longrightarrow} m$
+	\Fn{addThreadTrigger($ecg$)} {
+		\For{\emph{$o_r \in \{ o \mid o$  is the $Runnable$ object node $\in$ $ecg \}$} }{
+			\If{ $ \left\langle m_{start}\stackrel{instance}{\longrightarrow} o_r \right\rangle \in ecg$  \\\qquad 
+					and   $\left\langle m_{run} \stackrel{instance}{\longrightarrow}   o_r\right\rangle  \in ecg$ }{
+				$ecg$.addThreadTriggerRel($m_{start} \hookrightarrow m_{run} $)	
+			}
+			\If{ $ \left\langle m_{runOnUiThread} \stackrel{parameter}{\longrightarrow}   o_r \right\rangle \in ecg$  \\\qquad   
+				and   $\left\langle m_{run} \stackrel{instance}{\longrightarrow}   o_r\right\rangle  \in ecg$  }{
+				$ecg$.addThreadTriggerRel($m_{runOnUiThread} \hookrightarrow m_{run} $)	
+			}	
+		}
+	}	
+	\Fn{addHandlerTrigger($ecg$)} {
+		\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node $\in$ $ecg \}$} }{
+				\If{ $ \left\langle m_{enqueue}\stackrel{parameter}{\longrightarrow} o_m\right\rangle \in ecg$  \\\qquad   
+					and   $\left\langle m_{dispatch}\stackrel{parameter}{\longrightarrow} o_m\right\rangle  \in ecg$ }{
+						$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
+						
+						$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
+						
+						$ecg$.addHandleTriggerRel($m_{send} \hookrightarrow m_{handle} $)	
+				}	
+		}
+	}
+	
+\end{algorithm}
+
 
 
 
 
 \textbf{基于\code{Handler} 的多线程消息调度}
 
-根据第\ref{chp:background}章和第\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
+根据第\ref{chp:background}、\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
-在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
-首先，利用handler的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
-找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$；
+%在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
+
+首先，我们利用handler的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第16$\sim$17 行）；
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
-从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法）$m_{send}$，
-从$m_{dispatch}$ 顺着调用关系往下找到用户定义的方法Handler.handleMessage(Message)$m_{handle}$，
-最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \hookrightarrow m_{handle}$。
+从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第18行），
+从$m_{dispatch}$ 顺着调用关系往下找到用户定义的方法\code{Handler.handleMessage(Message)}$m_{handle}$（第19行），
+最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \hookrightarrow m_{handle}$（第20行）。
 %如果$m_{send}$和$m_{handle}$中有一个方法未找到，表示
-具体的过程如\autoref{alg:buildHandlerTrigger}所示。
+
 
 \eat{
 MATCH (SEND:METHOD)-[:PARAM]->(MSG:OBJECT),
@@ -467,3 +494,8 @@ RETURN p,method,enqueue,dispatch
 因此，DROIDSTITCHER维护一个方法列表，这些方法是触发器关系的潜在目标，并比较这些方法中消息对象的内存地址以推断关系。
 }
  \section{本章小结}
+
+本章详细介绍了RunDroid的设计与实现。
+首先，本章简要介绍了RunDroid实现的基本功能，并通过一个简单的例子介绍了RunDroid运行的基本思路。
+由此，我们提出了RunDroid具体的技术路线：RunDroid利用源代码插桩和运行时拦截器相结合的方式，将运行时的方法执行信息以日志的形式保存下来，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并利用调用图中方法和方法对象之间的关系结合具体的触发关系补全方法间的触发关系，形成最终的拓展函数调用图。
+此外，我们还介绍了RunDroid在实现上使用到的技术以及各模块的具体实现。
