@@ -2,8 +2,83 @@
 \label{chp:testing}
 
 
-\section{实验简介}
+\section{实验设置}
+
+本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统测试和评估。
+
+实验相关配置的环境如下：
+PC端对应的型号是ThinkPad E430，对应的CPU型号为Intel 酷睿i5 3210M（双核），内存为12GB。
+手机型号为小米 MI 5，对应处理器型号为骁龙820（四核心，最高主频 1.8GHz），RAM为3GB，对应的系统版本为Android 6.0，内置Xposed运行环境。
+
+
 \section{构建效率对比实验}
+为了验证源代码插桩前后对应用程序的影响，我们从开源社区F-Droid中随机选取了\todo{十余}个Android App，比较源代码插桩前后应用构建的耗时时间，
+以评估源代码插桩对应用构建的影响。
+
+对于每个应用，我们采用Gradle进行APK构建，通过源代码插桩前后的APK大小变化、方法数变化以及APK构建整体耗时等指标。最终我们得到的结果如 \autoref{tbl:buildResult} 所示。
+从\autoref{tbl:buildResult}中，我们发现，源代码插桩前后得到的APK文件方法数变化幅度不大，基本对应的数量变化在10个左右，APK大小变化在\todo{一个百分比范围}，构建时间的变化大都在\todo{一个百分比范围}上下。
+
+由于RunDroid采用的源代码插桩方案，通过分析应用程序源代码中各个方法的语法结构，辨识出方法执行过程的方法入口和所有的方法出口，并在这些位置上提交日志代码插桩。
+整个过程中，RunDroid引入了有限数量的方法，使得应用的构建耗时无明显的增加。
+而文献\cite{van2013dynamic}基于AspectJ的字节码插桩方案，对于每一个方法均会在APK中声明多个新的方法（即AOP中的before通知、after通知等），以保证方法执行前后可以输出相应的信息。
+该方法最大的劣势在于对于一些大型的Android应用，该方案引入的大量方法，很容易突破Android系统的方法数限制（即65536），使得应用整体的构建不可进行，APK无法构建成功。
+而本方案在这个方面并没有太大的限制。
+
+
+\begin{table*}[!ht]
+		\centering
+
+	\caption{构建效率对比实验}
+	
+	\label{tbl:buildResult}
+	
+	
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}[b]
+			
+			\begin{tabular}{|c|c|c|c|c|c|c|c|}
+				\hline
+			
+			\multirow{2}{0.03\linewidth}{序号}	&\multirow{2}{0.2\linewidth}{\centering{应用名}}& \multicolumn{3}{c}{未采用插桩方案}&  \multicolumn{3}{|c|}{采用插桩方案 }\\
+					\cline{3-8}
+			
+		&	& 方法数 & APK大小 &	构建时间 &方法数 & APK大小 & 构建时间\\
+			\hline
+			
+			1&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline
+			2&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline
+			3&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline
+			4&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline
+			5&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline		
+			6&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline			
+			7&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline		
+			8&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline	
+			9&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline	
+			10&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+			\hline
+
+			
+				
+			\end{tabular}
+			
+			%		\begin{tablenote}
+			%		\end{tablenote}
+			
+		\end{threeparttable}
+	}
+\end{table*}
+
 \section{日志效率对比实验}
+
+由于
 \section{运行效率对比实验}
  \section{本章小结}
