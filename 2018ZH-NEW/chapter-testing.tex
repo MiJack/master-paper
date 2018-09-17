@@ -79,6 +79,70 @@ PC端对应的型号是ThinkPad E430，对应的CPU型号为Intel 酷睿i5 3210M
 
 \section{日志效率对比实验}
 
-由于
+由于RunDroid需要将应用程序运行时的方法执行信息以日志的形式记录下来，而日志记录行为是磁盘读写（I/O）操作，在一定程度上属于耗时操作。
+经过技术调研，我们发现Android平台上可行的日志记录方案分为以下几种：
+基于Android Log机制的原生日志系统、基于Java File API的文件读写方案以及基于mmap机制实现的内存映射日志读写方案。
+
+为了评估以上几种日志的执行效率，本节进行了如下实验：
+
+
+
+实验的相关结果如 \autoref{tbl:logResult} 所示。
+
+\begin{figure*}[!ht]
+	\centering
+	
+	
+	
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}[b]
+			
+			\begin{tabular}{|c|c|c|c|c|c|c|c|}
+				\hline
+				
+				\multirow{2}{0.03\linewidth}{序号}	&\multirow{2}{0.2\linewidth}{\centering{应用名}}& \multicolumn{3}{c}{未采用插桩方案}&  \multicolumn{3}{|c|}{采用插桩方案 }\\
+				\cline{3-8}
+				
+				&	& 方法数 & APK大小 &	构建时间 &方法数 & APK大小 & 构建时间\\
+				\hline
+				
+				1&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline
+				2&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline
+				3&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline
+				4&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline
+				5&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline		
+				6&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline			
+				7&	2    &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline		
+				8&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline	
+				9&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline	
+				10&	2   &方法数 & APK大小 &	构建时间 & 方法数 & APK大小 & 构建时间\\
+				\hline
+				
+				
+				
+			\end{tabular}
+			
+			%		\begin{tablenote}
+			%		\end{tablenote}
+			
+		\end{threeparttable}
+	}
+
+
+\caption{构建效率对比实验}
+
+\label{tbl:logResult}
+\end{figure*}
+
+
 \section{运行效率对比实验}
  \section{本章小结}
