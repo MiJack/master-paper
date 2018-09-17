@@ -223,10 +223,90 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 在技术选型上，调用图存储器采用Neo4j作为调用图的底层存储引擎，触发关系生成器中的规则定义由Cypher脚本和Soot共同实现。
 
 
+\section{基于源代码的日志代码插桩过程}
+\todo{xxxx\autoref{alg:instrument}}
+
+
+\begin{algorithm}[!ht]
+	\caption{函数调用图的构建过程} 
+	\label{alg:instrument}
+	\KwIn{ $logs$，应用程序的运行时日志}
+	\KwOut{ $cg$，函数调用图}
+	\SetKwProg{Fn}{Function}{:}{}
+	
+	\Fn{buildCallGraph($log$)}{
+		
+		$cg$ $\gets$ new CallGraph();
+		
+		\KwResult{new Java File }
+	}
+	
+\end{algorithm}
+
 \section{扩展函数调用图的构建过程}
 
 调用图构建器构建拓展函数调用图的过程分为两个阶段：RunDroid根据程序运行时的日志提取函数间的调用关系，创建函数调用图；
 在函数调用图的基础上，RunDroid利用方法执行与方法对象的关联关系，结合具体的触发关系规则，创建方法间的触发关系，形成最终的拓展函数调用图。
+
+
+\begin{algorithm}[!ht]
+	\caption{函数调用图的构建过程} 
+	\label{alg:buildCG}
+	\KwIn{ $logs$，应用程序的运行时日志}
+	\KwOut{ $cg$，函数调用图}
+	\SetKwProg{Fn}{Function}{:}{}
+	
+	\Fn{buildCallGraph($log$)}{
+		
+		$cg$ $\gets$ new CallGraph();
+		
+		\For{thread $\in$ $logs.threads$}{
+			
+			$stack$ $\gets$ new Stack();
+			
+			\For  {$log$ $\in$ $logs.get(thread)$}{
+				
+				$top$ = $stack$.peek() ;  
+				
+				\eIf{isMethodStartLog($log$)} {
+					
+					$m \gets $ generateMethodInfo($log$);
+					
+					$cg$.addMethodNode($m$);
+					%\Comment 在调用图中提交方法节点 
+					
+					$cg$.addMethodObjects($ o_p $,$o_i $) 	;							
+					
+					$cg$.addMethodObjectRels($ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $,$ \left\langle  o_i \joinrel\xrightarrow{instance}   m \right\rangle  $) ;
+					
+					%	\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
+					
+					\If {  $top \neq null $ }{
+						
+						$cg$.addInvokeRel($ \left\langle  top \to  m \right\rangle  $) ;
+						
+						$stack$.push($m$);
+					}
+					
+				}{ 
+					
+					$cg$.addMethodObject($  o_r  $) ;
+					
+					$cg$.addMethodObjectRel($ \left\langle   o_r \joinrel\xrightarrow{return}   m \right\rangle  $) ;
+					
+					%		  \Comment 在调用图中提交方法对象节点 （此处只涉及返回值关系）
+					
+					$stack$.pop() ;
+					
+				}
+				
+				
+				
+			}
+		}
+	}
+	
+\end{algorithm}
 
 \subsection{构建函数调用图}
 
@@ -239,7 +319,7 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 函数调用图的构建过程如\autoref{alg:buildCG}所示。
 对于每个线程，RunDroid顺序遍历对应的日志，使用栈$stack$的入栈、出栈操作来模拟对应线程的函数执行的过程，还原调用关系（第3$\sim$ 20行）：
 当读取到方法执行的开始日志时，系统会在调用图创建一个节点表示该方法的执行（第7$\sim$8行），
-同时也在调用图中添加方法参数、方法实例对应的对象节点$o_p$、$o_i$以及方法对象和方法的关系$ \left\langle  o_p \stackrel{parameter}{\longrightarrow}   m \right\rangle   $、$ \left\langle   o_i \stackrel{instance}{\longrightarrow}   m \right\rangle  $（第9$\sim$10行）。
+同时也在调用图中添加方法参数、方法实例对应的对象节点$o_p$、$o_i$以及方法对象和方法的关系$ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $、$ \left\langle   o_i \joinrel\xrightarrow{instance}   m \right\rangle  $（第9$\sim$10行）。
 如果此时当前线程栈$stack$的栈顶方法元素$top$存在，系统会创建从方法$top$到当前方法$m$的调用关系，$\left\langle top \to m \right \rangle  $，并将当前方法$m$压入栈$stack$中（第11$\sim$ 14行）。
 当读取到方法执行的结束日志时，该日志对应的方法必然是栈顶方法$top$，若栈顶方法$top$存在返回对象$o_r$，则只需要将$o_r$和$top$的关系添加到调用图中即可，最后弹出栈顶的$top$即可（第 16$\sim$ 18行）。
 在上述过程中，如果待添加的方法对象在调用图中已经存在时，该对象则无须重新添加，只需添加方法与对象间的关系即可。
@@ -256,66 +336,6 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 %因此，通过将触发关系添加为边，将所有调用图拼接成一个调用图作为输出。
 
 
-
-
-\begin{algorithm}[!ht]
-	\caption{函数调用图的构建过程} 
-	\label{alg:buildCG}
-\KwIn{ $logs$，应用程序的运行时日志}
-\KwOut{ $cg$，函数调用图}
-	\SetKwProg{Fn}{Function}{:}{}
-
-			\Fn{buildCallGraph($log$)}{
-			
-			$cg$ $\gets$ new CallGraph();
-			
-			\For{thread $\in$ $logs.threads$}{
-			
-				$stack$ $\gets$ new Stack();
-			
-				\For  {$log$ $\in$ $logs.get(thread)$}{
-						
-						$top$ = $stack$.peek() ;  
-				
-				\eIf{isMethodStartLog($log$)} {
-				
-				  	$m \gets $ generateMethodInfo($log$);
-				
-				   $cg$.addMethodNode($m$);
-				   %\Comment 在调用图中提交方法节点 
-				
-				  	$cg$.addMethodObjects($ o_p $,$o_i $) 	;							
-				
-				  	$cg$.addMethodObjectRels($ \left\langle  o_p \stackrel{parameter}{\longrightarrow}   m \right\rangle   $,$ \left\langle  o_i \stackrel{instance}{\longrightarrow}   m \right\rangle  $) ;
-		
-			%	\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
-				
-				\If {  $top \neq null $ }{
-				
-				$cg$.addInvokeRel($ \left\langle  top \to  m \right\rangle  $) ;
-				
-				$stack$.push($m$);
-			}
-				
-			}{ 
-				
-				 	$cg$.addMethodObject($  o_r  $) ;
-				
-					 $cg$.addMethodObjectRel($ \left\langle   o_r \stackrel{return}{\longrightarrow}   m \right\rangle  $) ;
-		
-			%		  \Comment 在调用图中提交方法对象节点 （此处只涉及返回值关系）
-				 		
-			 		$stack$.pop() ;
-				
-			}
-				
-			 
-					
-				}
-			}
-	}
-
-\end{algorithm}
 
 \subsection{构建Activity的生命周期}
 
@@ -382,20 +402,21 @@ rel(m_{run}, o_r) = instance \\
 % $o_p \stackrel{parameter}{\longrightarrow} m$
 	\Fn{addThreadTrigger($ecg$)} {
 		\For{\emph{$o_r \in \{ o \mid o$  is the $Runnable$ object node $\in$ $ecg \}$} }{
-			\If{ $ \left\langle m_{start}\stackrel{instance}{\longrightarrow} o_r \right\rangle \in ecg$  \\\qquad 
-					and   $\left\langle m_{run} \stackrel{instance}{\longrightarrow}   o_r\right\rangle  \in ecg$ }{
+			\If{ $ \left\langle m_{start}\joinrel\xrightarrow{instance} o_r \right\rangle \in ecg$  \\\qquad 
+					and   $\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$ }{
 				$ecg$.addThreadTriggerRel($m_{start} \hookrightarrow m_{run} $)	
 			}
-			\If{ $ \left\langle m_{runOnUiThread} \stackrel{parameter}{\longrightarrow}   o_r \right\rangle \in ecg$  \\\qquad   
-				and   $\left\langle m_{run} \stackrel{instance}{\longrightarrow}   o_r\right\rangle  \in ecg$  }{
+			\If{ $ \left\langle m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \right\rangle \in ecg$  \\\qquad   
+				and   $\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$  }{
 				$ecg$.addThreadTriggerRel($m_{runOnUiThread} \hookrightarrow m_{run} $)	
 			}	
 		}
 	}	
 	\Fn{addHandlerTrigger($ecg$)} {
+		
 		\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node $\in$ $ecg \}$} }{
-				\If{ $ \left\langle m_{enqueue}\stackrel{parameter}{\longrightarrow} o_m\right\rangle \in ecg$  \\\qquad   
-					and   $\left\langle m_{dispatch}\stackrel{parameter}{\longrightarrow} o_m\right\rangle  \in ecg$ }{
+				\If{ $ \left\langle m_{enqueue}\joinrel\xrightarrow{parameter} o_m\right\rangle \in ecg$  \\\qquad   
+					and   $\left\langle m_{dispatch}\joinrel\xrightarrow{parameter} o_m\right\rangle  \in ecg$ }{
 						$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
 						
 						$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);

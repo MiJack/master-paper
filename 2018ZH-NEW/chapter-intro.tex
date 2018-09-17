@@ -87,7 +87,7 @@ DroidBox\cite{droidbox:online}在TaintDroid基础上，对Android Framework的�
 同时，DroidBox还实现了应用程序的自动安装和执行，弥补了TaintDroid在软件测试自动化方面的不足。
 和TaintDroid不同，TraceDroid\cite{van2013dynamic}采用的是另一种思路，利用字节码插装技术AspectJ，使得方法在执行时输出相应的日志信息。根据这些信息TraceDroid可以还原函数调用图，得到分析结果。
 由于Aspect在进行字节码编织时引入的新的方法会导致方法数65K限制问题（即构建APK文件的过程中，方法总数超过65536，进而使得APK文件无法成功构建~\cite{Configur27}），因此该方案存在不稳定的情况。
-
+\newline
 另外，研究人员还用动态分析技术查找Android应用程序在运行时性能瓶颈。Android官方性能检测工具SimplePref~\cite{simpleperf:online}就是其中的一个代表。
 SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时获取到性能监视单元的相关信息（例如cpu周期数、执行的指令数、缓存失效次数等）。
 利用这些信息，SimplePref可以得到对应时刻的CPU状态，还原出各个方法的执行时间和对应的执行路径。

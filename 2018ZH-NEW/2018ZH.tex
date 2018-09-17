@@ -10,7 +10,7 @@
 
 
 
-\documentclass[12pt,openany,a4paper,fancyhdr,oneside]{ctexbook}
+\documentclass[12pt,openany,a4paper,fancyhdr,twoside]{ctexbook}
 
 %draft 选项可以使插入的图形只显示外框，以加快预览速度。
 %\documentclass[11pt,a4paper,openany,draft]{book}
@@ -81,68 +81,6 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \newtheorem{myDef}{定义}
-\newtheorem{myTheo}{Theorem}
-%\newcommand{\stitle}[1]{\vspace{0ex} \noindent{\bf #1}}
-%% alg
-%\newcommand{\State}[1]{#1;\\}
-%\newcommand{\Break}{\textbf{break};\\}
-%\newcommand{\Continue}{\textbf{continue};\\}
-%\newcommand{\fn}[1]{\mathsf{#1}}
-%\newcommand{\var}[1]{\mathit{#1}}
-%\newcommand{\FALSE}{\text{\textbf{\textup{false}}}}
-%\newcommand{\TRUE}{\text{\textbf{\textup{true}}}}
-%\newcommand{\AND}{\text{\textbf{\textup{and}}}\xspace}
-%\newcommand{\OR}{\text{\textbf{\textup{or}}}\xspace}
-\newcommand{\POPM}{\textsf{POPM}}
-\newcommand{\rdis}{\textsf{rdis}}
-\newcommand{\edis}{\textsf{edis}}
-\newcommand{\maxT}{\textsf{maxT}}
-\newcommand{\minT}{\textsf{minT}}
-\newcommand{\maxD}{\textsf{maxD}}
-\newcommand{\minD}{\textsf{minD}}
-\newcommand{\wtime}{\textsf{wtime}}
-\newcommand{\MaxMin}{{\textsf{MaxMin}}}
-\newcommand{\MaxSum}{{\textsf{MaxSum}}}
-\newcommand{\WPFTRF}{{\textsf{WPF+TRF}}}
-%                    根据自己正文需要做的一些定义                 %
-%==================================================================
-\def\diag{{\rm diag}}
-\def\rank{{\rm rank}}
-\def\RR{{\cal R}}
-\def\NN{{\cal N}}
-\def\R{{\mathbb R}}
-\def\C{{\mathbb C}}
-\let\dis=\displaystyle
-
-\def\p{\partial}
-\def\f{\frac}
-\def\mr{\mathrm}
-\def\mb{\mathbf}
-\def\mc{\mathcal}
-\def\b{\begin}
-\def\e{\end}
-\DeclareMathOperator*{\argmin}{arg\,min}
-
-\newtheorem{thm1}{Theorem}[part]
-\newtheorem{thm2}{Theorem}[section]
-\newtheorem{thm3}{Theorem}[subsection]
-\newtheorem{them}[thm2]{定理}
-\newtheorem{theorem}[thm2]{定理}
-\newtheorem{defn}[thm2]{定义}
-\newtheorem{define}[thm2]{定义}
-\newtheorem{ex}[thm2]{例}
-\newtheorem{exs}[thm2]{例}
-\newtheorem{example}[thm2]{例}
-\newtheorem{prop}[thm2]{命题}
-\newtheorem{lemma}[thm2]{引理}
-\newtheorem{cor}[thm2]{推论}
-\newtheorem{remark}[thm2]{注释}
-\newtheorem{notation}[thm2]{记号}
-\newtheorem{abbre}[thm2]{缩写}
-% \newtheorem{algorithm}[thm2]{算法}
-\newtheorem{problem}[thm2]{问题}
-\newtheorem{pruningrule}{剪枝规则}
-
 
 \newcommand{\yihao}{\fontsize{26pt}{36pt}\selectfont}           % 一号, 1.4 倍行距
 \newcommand{\erhao}{\fontsize{22pt}{28pt}\selectfont}          % 二号, 1.25 倍行距
@@ -179,7 +117,7 @@
 
 \newcommand{\TheisNamePartOne}[0]{构建Android 动态函数调用图：}
 \newcommand{\TheisNamePartTwo}[0]{RunDroid 的设计与实现}
-\newcommand{\TheisNameEn}[0]{The Building of Android Dynamic Function Call Graph: The Design and Implement of RunDroid}
+\newcommand{\TheisNameEn}[0]{{\Large The Building of Android Dynamic Function Call Graph: }\\ The Design and Implement of RunDroid}
 
 \newcommand{\code}[1]{\textit{ #1 }}
 
@@ -206,17 +144,6 @@
 %============================= 页面设置 ================================%
 %-------------------- 定义页眉和页脚 使用fancyhdr 宏包 -----------------%
 % 定义页眉与正文间双隔线
-\newcommand{\makeheadrule}{%
-\makebox[0pt][l]{\rule[.7\baselineskip]{\headwidth}{0.4pt}}%
-\rule[0.85\baselineskip]{\headwidth}{0.4pt} \vskip-.8\baselineskip}
-\makeatletter
-\renewcommand{\headrule}{%
-{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
-\makeheadrule}} \makeatother
-
-\newcommand{\adots}{\mathinner{\mkern 2mu%
-\raisebox{0.1em}{.}\mkern 2mu\raisebox{0.4em}{.}%
-\mkern2mu\raisebox{0.7em}{.}\mkern 1mu}}
 
 \setmainfont{Times New Roman}
 \dottedcontents{chapter}[1.5cm]{\xiaosi\heiti}{3.8em}{9.5pt}
@@ -225,6 +152,33 @@
 \dottedcontents{section}[1.5cm]{\xiaosi\heiti}{2.8em}{9.5pt}
 \lhead{华东师范大学硕士专业学位论文}
 
+%=============================== 代码格式定义 ================================%
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+	frame=single,
+	framexleftmargin=1.5em,
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\scriptsize ,
+	stringstyle=\color{codepurple},
+	basicstyle=\scriptsize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep= 5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,   
+	xleftmargin=2em,       
+	tabsize=2
+}
+
+\lstset{style=mystyle}
 
 %=============================== 正文部分 ================================%
 
@@ -270,6 +224,10 @@
 \newpage
 \pagenumbering{arabic}
 \pagestyle{fancy}
+\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
+\fancyhead[RE,LO]{ \leftmark}
+
+
 
 \CTEXsetup[format+={\zihao{3}\heiti}]{chapter}
 \CTEXsetup[format+={\raggedright\zihao{4}\heiti}]{section}
@@ -277,6 +235,16 @@
 
 
 \setlength{\baselineskip}{25pt}  %%正文设为25磅行间距
+
+% 在章首页添加页眉
+
+\fancypagestyle{plain}{%
+\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
+\fancyhead[RE,LO]{ \leftmark}
+}
+
+
+
 
 \input {chapter-intro.tex}
 
@@ -298,26 +266,39 @@
 
 \clearpage
 
-\addcontentsline{toc}{chapter}{参考文献}
+
+%\addcontentsline{toc}{chapter}{参考文献}
 \bibliographystyle{GBT7714-2005}
 \bibliography{bib/tex}
 
 
-\pagestyle{plain}
+
 \clearpage
-\phantomsection
-\addcontentsline{toc}{chapter}{致谢}
+
+\fancypagestyle{plain}{%
+	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
+	\fancyhead[RE,LO]{ 致  谢}
+}
+
+
+\addcontentsline{toc}{chapter}{致  谢}
+
 \input {D2-ACHNOWLEDGEMENT.tex}
-\pagestyle{plain}
-
 
 \clearpage
-\phantomsection
+
+
+\fancypagestyle{plain}{%
+	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
+	\fancyhead[RE,LO]{ 攻读学位期间发表的学术论文}
+}
+
+
 
 \addcontentsline{toc}{chapter}{攻读学位期间发表的学术论文}
 \input {D3-MYACHIEVEMENTS.tex}
 
 
-\printindex
+
 \end{document}
 

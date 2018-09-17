@@ -20,9 +20,9 @@
 
 	对于一个方法执行$m$，对象和方法执行的关系有如下几种：
 	\begin{itemize}
-		\item 参数关系：若对象$o_p$是这个方法$m$的参数，记为$o_p \stackrel{parameter}{\longrightarrow} m$;%，或者 $ rel(m,o_p) = parameter$，或者三元组$\left\langle m, o_p, parameter\right\rangle $；
-		\item 返回值关系：若对象$o_r$是这个方法$m$的返回值，记为$o_r \stackrel{return}{\longrightarrow} m$;%，或者 $ rel(m,o_r) = return$，或者三元组$\left\langle m, o_p, return\right\rangle $；
-		\item 实例关系：若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$o_i \stackrel{instance}{\longrightarrow} m$。%，或者 $ rel(m,o_i) = instance$，或者三元组$\left\langle m, o_p, instance\right\rangle $；
+		\item 参数关系：若对象$o_p$是这个方法$m$的参数，记为$o_p \joinrel\xrightarrow{parameter} m$;%，或者 $ rel(m,o_p) = parameter$，或者三元组$\left\langle m, o_p, parameter\right\rangle $；
+		\item 返回值关系：若对象$o_r$是这个方法$m$的返回值，记为$o_r \joinrel\xrightarrow{return} m$;%，或者 $ rel(m,o_r) = return$，或者三元组$\left\langle m, o_p, return\right\rangle $；
+		\item 实例关系：若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$o_i \joinrel\xrightarrow{instance} m$。%，或者 $ rel(m,o_i) = instance$，或者三元组$\left\langle m, o_p, instance\right\rangle $；
 	\end{itemize}
 
 \begin{myDef}方法执行\end{myDef}
@@ -117,8 +117,8 @@ E = & \{
 
 以第\ref{chp:background}章中的\autoref{fig:handler-code}为例，我们将简要阐述上述概念。
 在线程WorkerThread中，方法run()\eat{$m_{run}$}依次调用了方法Message.obtain()\eat{$m_{obtain}$}和方法Handler.sendMessage(Message)\eat{$m_{send}$}，则有$m_{run} \to m_{obtain} $和$m_{run} \to m_{send}$。
-对于方法$m_{ontain}$，$o_{m} \stackrel{return}{\rightarrow} m_{obtain} $成立。
-对于方法$m_{send}$，$o_{m} \stackrel{parameter}{\rightarrow} m_{send} $、$o_{handler} \stackrel{instance}{\rightarrow} m_{send} $成立。
+对于方法$m_{ontain}$，$o_{m} \joinrel\xrightarrow{return} m_{obtain} $成立。
+对于方法$m_{send}$，$o_{m} \joinrel\xrightarrow{parameter} m_{send} $、$o_{handler} \joinrel\xrightarrow{instance} m_{send} $成立。
 %在Handler的方法handleMessage(Message)中，则有$m_handle \to $
 通过对Android运行机制的分析，我们知道$m_{send} \stackrel{\ast	}{\Rightarrow} m_{enqueue} $、$m_{enqueue} \hookrightarrow m_{dispatch}$以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，因此，$m_{send} \hookrightarrow m_{handle}$。
 
