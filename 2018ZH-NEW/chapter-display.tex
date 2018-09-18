@@ -7,8 +7,9 @@
 
 
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
 	\centering
+%	\vspace{0.7in}
 	\begin{lstlisting}[language=Java]
 package cn.mijack.rundroidtest;
 
@@ -16,21 +17,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	Button button1,button2,button3;
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			if (msg.what == 1)    
+			if (msg.what == 1)    {
 			      Toast.makeText(MainActivity.this, "handle", Toast.LENGTH_SHORT).show();
+			}
 		}
 	};
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		button1 = findViewById(R.id.button1);
-		button1.setOnClickListener(this);  // button2、button3进行相同的操作，此处省略
+		button1.setOnClickListener(this);  
+		// button2、button3进行相同的操作，此处省略
 	}
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.button1:
 				doHandleButton1();
-				return;				// button2、button3进行相同的操作，此处省略
+				return;				
+				// button2、button3进行相同的操作，此处省略
 		}
 	}
 	public void doHandleButton1() {
@@ -51,10 +55,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		startActivity(new Intent(this, NewActivity.class));
 	}
 }\end{lstlisting}
-%	\vspace{-9px}
-	\caption{待测试APK的主体代码}
+	\caption{\question{待测试APK的主体代码}}
 	\label{fig:code_demo}
 \end{figure}
+
+
 
 \subsection{函数调用图的构建结果展示}
 
@@ -67,7 +72,6 @@ RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
 通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为\question{5}时，对应的结果为\question{5}。
-
 FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示。
 通过比较\autoref{fig:rundroid-result-Fibonacci}和\autoref{fig:flowdroid-result-Fibonacci}，我们可以发现以下有趣的结论：
 
@@ -107,10 +111,11 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 
 
-\subsection{Activity的生命周期效果展示}
+\subsection{Activity 生命周期和事件回调的效果展示}
 
 这本小节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity生命周期方法的呈现效果。
-RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示，FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-lifecycle}所示。
+最终，我们得到的RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示。
+针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，通过构造方法\code{dummyMainMethod()}串联Android Activity的生命周期和UI事件回调，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
 
 \begin{figure*}[ht]
 	\centering
@@ -118,6 +123,13 @@ RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示，FlowDr
 	\caption{RunDroid生成的调用图-Activity部分}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
+
+对比\autoref{fig:rundroid-result-lifecycle}和\autoref{fig:flowdroid-result-lifecycle}，
+我们可以发现RunDroid和FlowDroid在组件生命周期和事件回调上的设计思想上是不同的：
+RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际执行，因此，RunDroid对于上述行为的展现主要是按照时间的先后顺序将这些方法节点串联起来，形成完整的事件序列。
+而FlowDroid在生成函数\code{dummyMainMethod()}时，会为AndroidManifest.xml文件中定义的每一个Activity单独创建包含生命周期方法和事件回调方法的状态迁移图
+（\autoref{fig:flowdroid-result-lifecycle}中的虚线框部分表示Activity的整体状态迁移，灰色部分为\code{MainActivity}中的UI事件响应方法），
+最后将这些Activity的状态迁移串联起来，并将Action为\code{android.intent.action.MAIN}并且category为\code{android.intent.category.LAUNCHER}的Activity组件作为结果的默认启动的Activity，最终形成方法\code{dummyMainMethod()}。
 
 
 \begin{figure*}[ht]
@@ -127,13 +139,32 @@ RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示，FlowDr
 	\label{fig:flowdroid-result-lifecycle}
 \end{figure*}
 
+在结果展现上，RunDroid倾向于将和Activity生命周期相关的所有方法都关联起来。
+例如，虽然在源代码中没有定义\code{onResume()}等方法，但在运行过程中，\code{MainActivity}的父类方法\code{onResume()}被调用了，便会在结果中呈现出来。
+在这点上，FlowDroid的处理方式恰恰相反，考虑到在未重写系统类方法时的类行为表现一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
+
+
+\question{观察\autoref{fig:rundroid-result-lifecycle}中生命周期方法归属的Activity，我们发现，在应用启动\code{NewActivity}过程中，
+\code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
+而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后面一种情况。
+相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，更适合反映应用的状态变化。
+}
 
 \subsection{多线程触发关系效果展示}
+
+
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{./Figures/empty.png}
+	\caption{多线程触发关系-RunDroid生成的调用图}
+	\label{fig:rundroid-result-handler}
+\end{figure*}
 
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
-	\caption{Handler-FlowDroid生成的调用图}
+	\caption{多线程触发关系-FlowDroid生成的调用图}
 	\label{fig:flowdroid-result-handler}
 \end{figure*}
  \section{本章小结}
