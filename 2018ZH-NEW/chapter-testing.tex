@@ -1,10 +1,8 @@
 \chapter{系统测试}  
 \label{chp:testing}
 
-\todo{合并\autoref{chp:testing}、\autoref{chp:display}两章}
+本章中，我们将环绕着日志效率、运行效率等方面对RunDroid角进行系统测试和评估。
 \section{实验设置}
-
-本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统测试和评估。
 
 实验相关配置的环境如下：
 PC端对应的型号是ThinkPad E430，对应的CPU型号为Intel 酷睿i5 3210M（双核），内存为12GB。
@@ -14,7 +12,7 @@ PC端对应的型号是ThinkPad E430，对应的CPU型号为Intel 酷睿i5 3210M
 \eat{
 
 
-\section{构建效率对比实验}
+\subsection{构建效率对比实验}
 为了验证源代码插桩前后对应用程序的影响，我们从开源社区F-Droid\footnote{https://f-droid.org}中随机选取了\todo{十余}个Android App，比较源代码插桩前后应用构建的耗时时间，
 以评估源代码插桩对应用构建的影响。
 
@@ -82,7 +80,7 @@ PC端对应的型号是ThinkPad E430，对应的CPU型号为Intel 酷睿i5 3210M
 
 
 }
-\section{日志效率对比实验}
+\subsection{日志效率对比实验}
 
 由于RunDroid需要将应用程序运行时的方法执行信息以日志的形式记录下来，而日志记录行为是磁盘读写（I/O）操作，在一定程度上属于耗时操作。
 经过技术调研，我们发现Android平台上可行的日志记录方案分为以下几种：
@@ -148,13 +146,13 @@ PC端对应的型号是ThinkPad E430，对应的CPU型号为Intel 酷睿i5 3210M
 上述实验过程各个日志方案的时间消耗统计结果如 \autoref{tbl:logResult} 所示。
 从\autoref{tbl:logResult}中，我们可以看出大部分情况下，Logcat、Java File API 、 MMap三种技术方案的效率依次提升，Logcat效率最低，MMap效率最高。
 经过分析，我们发现Android日志系统Logcat虽然通过内存缓冲区加速日志处理，
-但是在我们测试场景中，每一次日志记录操作，Logcat都会在用户空间和内核空间之间切换，减低了日志记录效率。
+但是，每一次日志记录操作，Logcat都会在用户空间和内核空间之间切换，减低了日志记录效率。
 Java File API方法在执行过程中，不仅涉及到了用户态-内核态之间的切换，内存-页缓存-磁盘三者之间的数据拷贝在一定程度上也增加了整体上的开销。
 而MMap方案只需要一次系统调用，避免了过多数据拷贝，执行效率最高。
 因此在RunDroid最终实现上，我们基于MMap内存映射机制实现了日志读写方案。
 
 
-\section{运行效率对比实验}
+\subsection{运行效率对比实验}
 
 
 \begin{figure*}[!ht]
@@ -208,6 +206,5 @@ Java File API方法在执行过程中，不仅涉及到了用户态-内核态之
 	
 	\label{tbl:hookResult}
 \end{figure*}
- \section{本章小结}
-本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估。
-并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
+
+\input {chapter-display.tex}

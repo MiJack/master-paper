@@ -1,5 +1,6 @@
 \chapter{设计与实现 }
 \label{chp:implement}
+\question{拆成设计、实现两章}
 
 \section{系统功能}
 本文以帮助研究人员和开发人员了解Android应用程序的执行过程作为基本出发点，通过设计与实现Android动态函数调用图构建系统RunDroid，生成Android应用程序运行时对应的动态函数调用图，从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地展现Android应用的执行过程，为应用程序分析提供更为多样、准确的信息。另外，系统具备一定的可拓展性，可以方便相关人员根据自身的业务需求对系统进行扩展，完成相应的需求。
@@ -68,22 +69,21 @@
 \section{相关技术介绍}
 
 
-\subsection{srcML}
+\point{srcML：}
 srcML~\cite{collard2013srcml}是轻量级源代码分析工具，它可以将程序的抽象语法树以XML的形式展现给用户，支持C、C++、C\#以及Java等多个语言的语法解析。
 srcML的语法解析器采用的是基于LL(*)算法实现的语法解析器 ANTLR 2.7.7，解析得到的XML内容保留了源代码中完整的语法树信息。
 同时，srcML还提供了一个强大工具集，支持对生成内容的查询、分析以及修改，可以用于架构设计、语言研究、软件重构等场景，应用于软件工程、编程语言、并行和分布式处理等多个领域。
 在RunDroid，srcML承担的主要职责为源代码的语法解析，辅助完成用户方法层面的日志代码的编织（weaving）。
 
-% \subsection{Soot}
-
-\subsection{Xposed框架}
+\point{Xposed框架：}
 Xposed~\cite{Xposed}是由rovo89主导开发的第三方框架。
 基于Xposed开发的第三方插件，可以在不修改系统和应用程序源代码的情况下，改变他们的运行行为。
 Xposed框架可以运行在不同版本的Android系统上，开发过程十分便利，而且易于撤销。
 Xposed的实现原理具体如下：由于Android系统的所有的应用程序进程都是由Zygote进程孵化而来，Xposed通过替换程序\code{/system/bin/app\_process}，使得系统在启动过程中加载Xposed的相关文件，将所有的目标方法指向Native方法xposedCallHandler，维护目标方法和对应的钩子方法（Hook Function）的映射关系，从而实现对Zygote进程及Dalvik虚拟机的劫持；
 当程序执行到目标方法时，xposedCallHandler会完成目标方法的原有代码和对应钩子方法的调度，达到对目标方法劫持的目的。
 在RunDroid中，Xposed可以帮助我们实现类似面向切面编程（Aspect-Oriented Programming, AOP）的功能，辅助完成系统方法的执行情况的日志记录。
-\subsection{Neo4j}
+
+\point{Neo4j：}
 Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库。
 与传统的基于关系模型的存储结构不同，Neo4j的存储模型是基于图论开发的，遵循属性图数据模型。
 Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，分别对应图论中的点与边。
@@ -347,7 +347,7 @@ Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相
  \subsection{构建多线程触发关系}
 在构建多线程触发关系时，我们只要分为两个方面：基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度。具体的过程如\autoref{alg:buildTrigger}所示。
 
-\textbf{基于Java 的多线程交互}
+\point{基于Java 的多线程交互}
 
 基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
 因此，对于方法\code{Thread.start()}，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$（第8 $\sim$10行）。
@@ -432,7 +432,7 @@ rel(m_{run}, o_r) = instance \\
 
 
 
-\textbf{基于\code{Handler} 的多线程消息调度}
+\point{基于\code{Handler} 的多线程消息调度}
 
 根据第\ref{chp:background}、\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
