@@ -3,7 +3,7 @@
 %  符合 GB/T 7714-2005 规范的 BibTeX 样式文件
 %
 %  作者：    胡海星   南京大学计算机科学与技术系
-%  版本：    v2.1.0  2014年12月18日
+%  版本：    v2.1.1  2015年6月15日
 %  项目主页: http://haixing-hu.github.io/nju-thesis/
 %
 %  参考资料:
@@ -52,7 +52,7 @@ ENTRY                                             % class Entry {
   series                                          %   String series;
   volume                                          %   String volume;
   number                                          %   String number;
-  version                       %   String version;
+  version 										  %	  String version;
   month                                           %   String month;
   school                                          %   String school;
   institution                                     %   String institution;
@@ -94,62 +94,63 @@ STRINGS {                                         % //  declare global String va
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % define global static constants
-FUNCTION {true}         {#1}
-FUNCTION {false}        {#0}
-FUNCTION {debug.enabled}    {true}
-FUNCTION {cap.volume.en}    {"Vol~"}
-FUNCTION {cap.volume.zh}    {"卷"}
-FUNCTION {cap.edition.en}     {"~ed"}
-FUNCTION {cap.edition.zh}     {"版"}
-FUNCTION {cap.anonymous.en}   {"Anon"}
-FUNCTION {cap.anonymous.zh}   {"佚名"}
-FUNCTION {cap.no.address.en}  {"[S.l.]"}
-FUNCTION {cap.no.address.zh}  {"[出版地不详]"}
-FUNCTION {cap.no.publisher.en}  {"[s.n.]"}
-FUNCTION {cap.no.publisher.zh}  {"[出版者不详]"}
-FUNCTION {cap.et.al.en}     {", et~al"}
-FUNCTION {cap.et.al.zh}     {", 等"}
-FUNCTION {cap.translate.en}   {"~trans"}
-FUNCTION {cap.translate.zh}   {"译"}
-FUNCTION {cap.doi.url}      {"http://dx.doi.org/"}
-FUNCTION {cap.st.en}      {"st"}
-FUNCTION {cap.nd.en}      {"nd"}
-FUNCTION {cap.rd.en}      {"rd"}
-FUNCTION {cap.th.en}      {"th"}
+FUNCTION {true} 				{#1}
+FUNCTION {false} 				{#0}
+FUNCTION {debug.enabled} 		{true}
+FUNCTION {cap.volume.en} 		{"Vol~"}
+FUNCTION {cap.volume.zh} 		{"卷"}
+FUNCTION {cap.edition.en} 		{"~ed"}
+FUNCTION {cap.edition.zh} 		{"版"}
+FUNCTION {cap.anonymous.en} 	{"Anon"}
+FUNCTION {cap.anonymous.zh} 	{"佚名"}
+FUNCTION {cap.no.address.en} 	{"[S.l.]"}
+FUNCTION {cap.no.address.zh} 	{"[出版地不详]"}
+FUNCTION {cap.no.publisher.en} 	{"[s.n.]"}
+FUNCTION {cap.no.publisher.zh} 	{"[出版者不详]"}
+FUNCTION {cap.et.al.en} 		{", et~al"}
+FUNCTION {cap.et.al.zh} 		{", 等"}
+FUNCTION {cap.translate.en} 	{"~trans"}
+FUNCTION {cap.translate.zh} 	{"译"}
+FUNCTION {cap.doi.url} 			{"http://dx.doi.org/"}
+FUNCTION {cap.st.en} 			{"st"}
+FUNCTION {cap.nd.en} 			{"nd"}
+FUNCTION {cap.rd.en} 			{"rd"}
+FUNCTION {cap.th.en} 			{"th"}
 
-FUNCTION {cap.period}       {"\@. "}
-FUNCTION {cap.comma}      {"\@, "}
-FUNCTION {cap.colon}      {"\thinspace{}\textnormal{: }"}
-FUNCTION {cap.double.slash}   {" //\thinspace{}"}
-FUNCTION {cap.dash}       {"\thinspace{}\textnormal{--}\thinspace{}"}
+FUNCTION {cap.space}      {" "}
+FUNCTION {cap.period} 		{"\@. "}
+FUNCTION {cap.comma} 			{"\@, "}
+FUNCTION {cap.colon} 			{"\thinspace{}\textnormal{: }"}
+FUNCTION {cap.double.slash} 	{" //\thinspace{}"}
+FUNCTION {cap.dash} 			{"\thinspace{}\textnormal{--}\thinspace{}"}
 
 % Predefined latex command used to format the style of bibitems
-FUNCTION {env.bibbegin}     { "\begin{thebibliography}" }
-FUNCTION {env.bibend}       { "\end{thebibliography}" }
-FUNCTION {cmd.bibauthor}    { "\providecommand{\bibauthor}[1]{#1}" }
-FUNCTION {cmd.bibeditor}    { "\providecommand{\bibeditor}[1]{#1}" }
-FUNCTION {cmd.bibtranslator}  { "\providecommand{\bibtranslator}[1]{#1}" }
-FUNCTION {cmd.bibtitle}     { "\providecommand{\bibtitle}[1]{#1}" }
-FUNCTION {cmd.bibbooktitle}   { "\providecommand{\bibbooktitle}[1]{#1}" }
-FUNCTION {cmd.bibjournal}     { "\providecommand{\bibjournal}[1]{#1}" }
-FUNCTION {cmd.bibmark}      { "\providecommand{\bibmark}[1]{#1}" }
-FUNCTION {cmd.bibcountry}     { "\providecommand{\bibcountry}[1]{#1}" }
-FUNCTION {cmd.bibpatentid}    { "\providecommand{\bibpatentid}[1]{#1}" }
-FUNCTION {cmd.bibedition}     { "\providecommand{\bibedition}[1]{#1}" }
-FUNCTION {cmd.biborganization}  { "\providecommand{\biborganization}[1]{#1}" }
-FUNCTION {cmd.bibaddress}     { "\providecommand{\bibaddress}[1]{#1}" }
-FUNCTION {cmd.bibpublisher}   { "\providecommand{\bibpublisher}[1]{#1}" }
-FUNCTION {cmd.bibinstitution} { "\providecommand{\bibinstitution}[1]{#1}" }
-FUNCTION {cmd.bibschool}    { "\providecommand{\bibschool}[1]{#1}" }
-FUNCTION {cmd.bibvolume}    { "\providecommand{\bibvolume}[1]{#1}" }
-FUNCTION {cmd.bibnumber}    { "\providecommand{\bibnumber}[1]{#1}" }
-FUNCTION {cmd.bibversion}     { "\providecommand{\bibversion}[1]{#1}" }
-FUNCTION {cmd.bibpages}     { "\providecommand{\bibpages}[1]{#1}" }
-FUNCTION {cmd.bibmodifydate}  { "\providecommand{\bibmodifydate}[1]{#1}" }
-FUNCTION {cmd.bibcitedate}    { "\providecommand{\bibcitedate}[1]{#1}" }
-FUNCTION {cmd.bibyear}      { "\providecommand{\bibyear}[1]{#1}" }
-FUNCTION {cmd.bibdate}      { "\providecommand{\bibdate}[1]{#1}" }
-FUNCTION {cmd.biburl}       { "\providecommand{\biburl}[1]{\newline\url{#1}}" }
+FUNCTION {env.bibbegin} 		{ "\begin{thebibliography}" }
+FUNCTION {env.bibend}   		{ "\end{thebibliography}" }
+FUNCTION {cmd.bibauthor} 		{ "\providecommand{\bibauthor}[1]{#1}" }
+FUNCTION {cmd.bibeditor} 		{ "\providecommand{\bibeditor}[1]{#1}" }
+FUNCTION {cmd.bibtranslator} 	{ "\providecommand{\bibtranslator}[1]{#1}" }
+FUNCTION {cmd.bibtitle} 		{ "\providecommand{\bibtitle}[1]{#1}" }
+FUNCTION {cmd.bibbooktitle} 	{ "\providecommand{\bibbooktitle}[1]{#1}" }
+FUNCTION {cmd.bibjournal} 		{ "\providecommand{\bibjournal}[1]{#1}" }
+FUNCTION {cmd.bibmark} 			{ "\providecommand{\bibmark}[1]{#1}" }
+FUNCTION {cmd.bibcountry} 		{ "\providecommand{\bibcountry}[1]{#1}" }
+FUNCTION {cmd.bibpatentid} 		{ "\providecommand{\bibpatentid}[1]{#1}" }
+FUNCTION {cmd.bibedition} 		{ "\providecommand{\bibedition}[1]{#1}" }
+FUNCTION {cmd.biborganization} 	{ "\providecommand{\biborganization}[1]{#1}" }
+FUNCTION {cmd.bibaddress} 		{ "\providecommand{\bibaddress}[1]{#1}" }
+FUNCTION {cmd.bibpublisher} 	{ "\providecommand{\bibpublisher}[1]{#1}" }
+FUNCTION {cmd.bibinstitution}	{ "\providecommand{\bibinstitution}[1]{#1}" }
+FUNCTION {cmd.bibschool} 		{ "\providecommand{\bibschool}[1]{#1}" }
+FUNCTION {cmd.bibvolume} 		{ "\providecommand{\bibvolume}[1]{#1}" }
+FUNCTION {cmd.bibnumber} 		{ "\providecommand{\bibnumber}[1]{#1}" }
+FUNCTION {cmd.bibversion} 		{ "\providecommand{\bibversion}[1]{#1}" }
+FUNCTION {cmd.bibpages} 		{ "\providecommand{\bibpages}[1]{#1}" }
+FUNCTION {cmd.bibmodifydate}	{ "\providecommand{\bibmodifydate}[1]{#1}" }
+FUNCTION {cmd.bibcitedate} 		{ "\providecommand{\bibcitedate}[1]{#1}" }
+FUNCTION {cmd.bibyear} 			{ "\providecommand{\bibyear}[1]{#1}" }
+FUNCTION {cmd.bibdate} 			{ "\providecommand{\bibdate}[1]{#1}" }
+FUNCTION {cmd.biburl} 			{ "\providecommand{\biburl}[1]{\newline\url{#1}}" }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
@@ -814,13 +815,13 @@ FUNCTION {format.number} {                        % String Emtry::format_number(
 FUNCTION {format.report.number} {                 % String Emtry::format_report_number(String number) {
   "number" format.bibinfo                         %   return format_bibinfo(number, "number");
 }                                                 % }
-                                                  %                                                  
+                                                  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
 FUNCTION {format.version} {                       % String Emtry::format_version(String version) {
   "version" format.bibinfo                        %   return format_bibinfo(version, "version");
 }                                                 % }
-                                                  %                                                  
+                                                  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
 FUNCTION {format.pages} {                         % String Emtry::format_pages(String pages) {
@@ -1081,6 +1082,22 @@ FUNCTION {output.publisher} {                     % void Entry::output_publisher
                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
+FUNCTION {output.publisher.no.address} {          % void Entry::output_publisher_no_address(int required) {
+  'required :=                                    %   this.required = required;
+  publisher empty$ not {                          %   if (! empty(this.publisher)) {
+    cap.period write$                             %     write(cap_period);
+    publisher format.publisher write$             %     write(format_publisher(this.publisher));
+  } {                                             %   } else {
+    required {                                    %     if (required == 1) {
+      "Require publisher: " cite$ * warning$      %       warning("Require publisher: " + this.cite);
+      cap.period write$                           %       write(cap_period);
+      cap.no.publisher format.publisher write$    %       write(format_publisher(cap_no_publisher()));
+    } 'skip$ if$                                  %     }
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
 FUNCTION {output.school} {                        % void Entry::output_school(int required) {
   'required :=                                    %   this.required = required;
   school empty$ not {                             %   if (! empty(this.school)) {
@@ -1143,6 +1160,7 @@ FUNCTION {output.pages} {                         % void Entry::output_pages(int
 FUNCTION {output.modifydate} {                    % void Entry::output_modifydate(int required) {
   'required :=                                    %   this.required = required;
   modifydate empty$ not {                         %   if (! empty(this.modifydate)) {
+    cap.space write$                              %     write(cap_space);
     modifydate format.modifydate write$           %     write(format_modifydate(this.modifydate));
   } {                                             %   } else {
     required {                                    %     if (required == 1) {
@@ -1156,6 +1174,7 @@ FUNCTION {output.modifydate} {                    % void Entry::output_modifydat
 FUNCTION {output.citedate} {                      % void Entry::output_citedate(int required) {
   'required :=                                    %   this.required = required;
   citedate empty$ not {                           %   if (! empty(this.citedate)) {
+    cap.space write$                              %     write(cap_space);
     citedate format.citedate write$               %     write(format_citedate(this.citedate));
   } {                                             %   } else {
     required is.online or {                       %     if ((required == 1) || (is_online())) {
@@ -1209,7 +1228,7 @@ FUNCTION {output.number} {                        % void Entry::output_number(in
 FUNCTION {output.report.number} {                 % void Entry::output_report_number(int required) {
   'required :=                                    %   this.required = required;
   number empty$ not {                             %   if (! empty(this.number)) {
-    cap.colon write$                              %     write(cap_colon);
+  	cap.colon write$                              %     write(cap_colon);
     number format.report.number write$            %     write(format_report_number(this.number));
   } {                                             %   } else {
     required {                                    %     if (required == 1) {
@@ -1217,7 +1236,7 @@ FUNCTION {output.report.number} {                 % void Entry::output_report_nu
     } 'skip$ if$                                  %     }
   } if$                                           %   }
 }                                                 % }
-                                                  %                                                  
+                                                  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
 FUNCTION {output.country} {                       % void Entry::output_country(int required) {
@@ -1378,7 +1397,7 @@ FUNCTION {output.version} {                       % void Entry::output_version(i
     } 'skip$ if$                                  %     }
   } if$                                           %   }
 }                                                 % }
-                                                  %                                                  
+                                                  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
 FUNCTION {book.impl} {                            % void Entry::book_impl() {
@@ -1496,7 +1515,7 @@ FUNCTION {techreport} {                           % void Entry::techreport() {
   true output.mark                                %   output_mark(true);
   false output.translator                         %   output_translator(false);
   false output.edition                            %   output_edition(false);
-  false output.version                            %   output_version(false); 
+  false output.version                            %   output_version(false);
   institution empty$ not {                        %   if (! empty(this.institution)) {
     true output.address                           %     output_address(true);
     true output.institution                       %     output_institution(true);
@@ -1639,9 +1658,14 @@ FUNCTION {online} {                               % void Entry::online() {
   true output.title                               %   output_title(true);
   true output.mark                                %   output_mark(true);
   publisher empty$ not {                          %   if (! empty(this.publisher)) {
-    true output.address                           %     output_address(true);
-    true output.publisher                         %     output_publisher(true);
-    cap.comma write$                              %     write(cap_comma);
+    address empty$ not {                          %     if (! empty(this.address)) {
+      true output.address                         %       output_address(true);
+      true output.publisher                       %       output_publisher(true);
+      cap.comma write$                            %       write(cap_comma);
+    } {                                           %     } else {
+      true output.publisher.no.address            %       output_publisher_no_address(true);
+      cap.comma write$                            %       write(cap_comma);
+    } if$                                         %     }
   } {                                             %   } else {
     cap.period write$                             %     write(cap_period);
   } if$                                           %   }
@@ -1650,6 +1674,12 @@ FUNCTION {online} {                               % void Entry::online() {
   true output.citedate                            %   output_citedate(true);
   true output.url                                 %   output_url(true);
   end.bibitem                                     %   end_bibitem();
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {webpage} {                              % void Entry::online() {
+  online                                          %   online();
 }                                                 % }
                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1844,7 +1874,7 @@ FUNCTION {write.style.commands} {                 % void write_style_commands() 
   newline$                                        %   writeln();
   cmd.bibnumber write$                            %   write(cmd_bibnumber);
   newline$                                        %   writeln();
-  cmd.bibversion write$                           %   write(cmd_bibversion);  
+  cmd.bibversion write$                           %   write(cmd_bibversion);
   newline$                                        %   writeln();
   cmd.bibpages write$                             %   write(cmd_bibpages);
   newline$                                        %   writeln();
