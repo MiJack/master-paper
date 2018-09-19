@@ -3,7 +3,8 @@
 在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid做对比，比较两个工具的产出结果，分析各自的优劣。
 
 我们研究的APK的主体代码如\autoref{fig:code_demo}所示。
-在\autoref{fig:code_demo}中，我们声明了有Activity\code{MainActivity}，他是应用层的主Activity，该Activity界面主要有3个按钮组成，方便对应的是斐波拉契数量的计算、基于Handler的异步事件以及启动一个Activity（生命周期相关）。
+在\autoref{fig:code_demo}中，我们声明了有Activity\code{MainActivity}，他是应用层的主Activity，该Activity界面主要有3个按钮组成，
+方便对应的是斐波拉契数量的计算、启动一个Activity（生命周期相关）以及基于Handler的异步事件。
 
 
 
@@ -38,21 +39,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		}
 	}
 	public void doHandleButton1() {
-		int fibonacci = doFibonacci(5);
+		int fibonacci = doFibonacci(4);
 		Toast.makeText(this, "fibonacci: " + fibonacci, Toast.LENGTH_SHORT).show();
 	}
 	private int doFibonacci(int i) {
-		if (i <= 0)    return -1;   
-		if (i == 1 || i == 2)   return 1; 
+		if (i < 1)			return -1;
+		if (i == 1 || i == 2) 		return 1;
 		return doFibonacci(i - 1) + doFibonacci(i - 2);
 	}
 	public void doHandleButton2() {
-		Message message = Message.obtain();
-		message.what = 1;
-		handler.sendMessage(message);
+		Intent intent = new Intent(this, NewActivity.class);
+		startActivity(intent);
 	}
 	public void doHandleButton3() {
-		startActivity(new Intent(this, NewActivity.class));
+		Thread workerThread =new WorkerThread(handler);
+		workerThread.start();
 	}
 }\end{lstlisting}
 	\caption{\question{待测试APK的主体代码}}
@@ -76,7 +77,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 通过比较\autoref{fig:rundroid-result-Fibonacci}和\autoref{fig:flowdroid-result-Fibonacci}，我们可以发现以下有趣的结论：
 
 首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有\question{9}个，即在运行过程中，\code{doFibonacci()}被调用了\question{9}次。
-由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个。
+由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点，该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
 另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
 因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，在一定程度上可以反映程序执行的具体过程。
 
@@ -113,7 +114,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 \subsection{Activity 生命周期和事件回调的效果展示}
 
-这本小节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity生命周期方法的呈现效果。
+在本节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity生命周期方法的呈现效果。
 最终，我们得到的RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示。
 针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，通过构造方法\code{dummyMainMethod()}串联Android Activity的生命周期和UI事件回调，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
 
@@ -152,6 +153,34 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 \subsection{多线程触发关系效果展示}
 
+多线程开发是Android开发中经常涉及的开发要求。
+为此，针对这一场景，我们进行了相关的测试。
+在本节，我们将点击按钮button3，获取\code{doHandleButton3()}相关的调用图情况。
+经过实验，RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler}、\autoref{fig:flowdroid-result-handler}所示。
+两幅图在以下节点上存在不同:
+
+\point{Java API多线程的触发方式}
+
+RunDroid在方法\code{Thread.start()}和方法\code{WorkerThread.run()}之间添加了一条有向边。
+这条有向边从前者指向后者，表示方法\code{Thread.start()}的执行触发了方法\code{WorkerThread.run()}的执行，边上标识着触发原因（通过Thread方式触发，Thread）。
+FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}-第42行中的变量$workerThread$类型为\code{WorkerThread}。
+同时，FlowDroid可以推算出方法\code{Thread.start()}的执行会导致方法\code{WorkerThread.run()}的执行。
+在FlowDroid的设计者看来，方法\code{Thread.start()}可以替换成方法\code{WorkerThread.run()}。
+因此，FlowDroid的结果中，方法\code{doHandleButton3()}和\code{WorkerThread.run()}之间存在调用边。
+这条有向边并不是像RunDroid从\code{Thread.start()}出发。
+虽然RunDroid和FlowDroid都可以在函数调用图表现Java API多线程的触发方式，但相比之下，RunDroid的呈现方式更为全面严谨，比FlowDroid更符合程序的运行过程。
+当方法\code{Thread.start()}和\code{WorkerThread.run()}同时在同一个函数中被调用，FlowDroid在调用图上无法将这两个方法间的调用关系和触发关系区分开。
+而RunDroid针对性地标识了函数间的关系是普通调用关系还是基于线程的触发关系，所以不会在方法关系展现上遇到类似的问题。
+
+
+\point{基于Handler的多线程触发方式}
+
+在WorkerThread的方法run()中，我们通过Handler进行了异步UI操作。
+和上一点类似，在RunDroid展示的结果中，\code{Handler.sendMessage()}和\code{MainActivity\$1.handleMessage(Message)}之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此，编译后的类名为\code{MainActivity\$1}}。
+
+
+\point{静态方法的使用}
+
 
 
 \begin{figure*}[ht]
@@ -167,8 +196,39 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 	\caption{多线程触发关系-FlowDroid生成的调用图}
 	\label{fig:flowdroid-result-handler}
 \end{figure*}
- \section{本章小结}
- 
+
+
+\section{RunDroid和FlowDroid的对比总结}
+
+\section{本章小结}
+
 % 本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估，并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
  
 本章中展示RunDroid系统生成的函数调用图的运行结果，并对函数调用图进行详细的阐述。
+
+
+一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
+又一行\\
