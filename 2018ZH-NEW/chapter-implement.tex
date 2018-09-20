@@ -1,6 +1,6 @@
-\chapter{设计与实现 }
+\chapter{设计与实现 \question{拆封成设计、实现两章}}
 \label{chp:implement}
-\todo{拆封成设计实现两章}
+
 
 \section{系统功能}
 本文以帮助研究人员和开发人员了解Android应用程序的执行过程作为基本出发点，通过设计与实现Android动态函数调用图构建系统RunDroid，生成Android应用程序运行时对应的动态函数调用图，从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地展现Android应用的执行过程，为应用程序分析提供更为多样、准确的信息。另外，系统具备一定的可拓展性，可以方便相关人员根据自身的业务需求对系统进行扩展，完成相应的需求。
@@ -9,7 +9,7 @@
 
 
 
-\begin{figure*}[ht]
+\begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/code-sample.png}
 	\caption{RunDroid的基本思路}
@@ -60,49 +60,15 @@
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[height=0.7\textheight]{./Figures/rundroid-overview.png}
+	\includegraphics[height=0.4\textheight]{./Figures/rundroid-overview.png}
 	\caption{ RunDroid的工作流程}
 	\label{fig:rundroid_overview}
 \end{figure*}
 
 
-\section{相关技术介绍}
 
 
-\point{srcML：}
-srcML~\cite{collard2013srcml}是轻量级源代码分析工具，它可以将程序的抽象语法树以XML的形式展现给用户，支持C、C++、C\#以及Java等多个语言的语法解析。
-srcML的语法解析器采用的是基于LL(*)算法实现的语法解析器 ANTLR 2.7.7，解析得到的XML内容保留了源代码中完整的语法树信息。
-同时，srcML还提供了一个强大工具集，支持对生成内容的查询、分析以及修改，可以用于架构设计、语言研究、软件重构等场景，应用于软件工程、编程语言、并行和分布式处理等多个领域。
-在RunDroid，srcML承担的主要职责为源代码的语法解析，辅助完成用户方法层面的日志代码的编织（weaving）。
-
-\point{Xposed框架：}
-Xposed~\cite{Xposed}是由rovo89主导开发的第三方框架。
-基于Xposed开发的第三方插件，可以在不修改系统和应用程序源代码的情况下，改变他们的运行行为。
-Xposed框架可以运行在不同版本的Android系统上，开发过程十分便利，而且易于撤销。
-Xposed的实现原理具体如下：由于Android系统的所有的应用程序进程都是由Zygote进程孵化而来，Xposed通过替换程序\code{/system/bin/app\_process}，使得系统在启动过程中加载Xposed的相关文件，将所有的目标方法指向Native方法xposedCallHandler，维护目标方法和对应的钩子方法（Hook Function）的映射关系，从而实现对Zygote进程及Dalvik虚拟机的劫持；
-当程序执行到目标方法时，xposedCallHandler会完成目标方法的原有代码和对应钩子方法的调度，达到对目标方法劫持的目的。
-在RunDroid中，Xposed可以帮助我们实现类似面向切面编程（Aspect-Oriented Programming, AOP）的功能，辅助完成系统方法的执行情况的日志记录。
-
-\point{Neo4j：}
-Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库。
-与传统的基于关系模型的存储结构不同，Neo4j的存储模型是基于图论开发的，遵循属性图数据模型。
-Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，分别对应图论中的点与边。
-另外，Neo4j还可以在关系和节点上添加key-value形式的属性，为节点指定一个或者多个标签，为关系指定类型等等。
-Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性，隔离性和持久性）事务规则，提供了基于Cypher脚本、Native Java API和REST Http API等多种方式帮助开发人员进行数据开发工作。
-同时，Neo4j还提供了友好的浏览器界面，具有十分友好的交互体验。
-由于基于属性图数据模型，Neo4j通常适用于和图关系有着密切关系的应用场景：例如社交网络分析，公共交通网络研究以及地图网络拓扑等场景。
-在RunDroid，Neo4j主要承担着拓展函数调用图的存储、查询、展示的主要职责。
-
-\section{模块实现}
-
-
-\subsection{预处理器}
-
-为了捕获用户方法的运行时执行信息，RunDroid的预处理器组件会对应用程序进行插桩工作。
-为了避免传统字节码插桩技术在生成过多的方法数而导致的方法数65K限制问题，预处理器采用的方案是源代码层面的插桩方案。
-该方案通过源程序修改，将日志记录代码直接作用在方法体内部，最大限度地减少了APK构建过程中方法数的增加，避免了方法数65K限制问题。
-日志记录代码在方法执行前后会调用日志记录器输出方法执行日志。
-
+\section{基于源代码的日志代码插桩过程}
 
 预处理器以Android项目源代码作为输入，输出预处理后的APK文件。
 预处理器会遍历项目源代码中的每一个Java文件，利用srcML转化成对应的抽象语法树。
@@ -112,133 +78,22 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，可以看做方法体的唯一标识，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
 另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建。
 最后，预处理器会将插桩后的源代码构建成APK文件。
+\todo{具体过程如\autoref{alg:instrument}所示。}
 
-
-\subsection{运行时拦截器}
-运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
-运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，产生完整的方法调用，进而帮助我们还原出方法间的触发关系。
-
-在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法），如\autoref{tbl:hookMethodList} 所示。
-每当应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。
-在应用程序的运行过程中，HookCallBack对象的\code{beforeHookedMethod(MethodHookParam)}会在目标方法执行之前被调用，
-\code{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
-最终，HookCallBack对应会将方法执行的相关信息传递给日志记录器。
-
-
-
-\begin{table*}[!ht]
-%	\centering
-	%\tiny
-	
-	\caption{运行时拦截器拦截的系统方法列表}
-	
-	\label{tbl:hookMethodList}
-	
-
-	\resizebox{\textwidth}{!}{
-		\begin{threeparttable}[b]
-			
-			\begin{tabular}{|l|c|}
-				\hline
-				方法签名&说明\\
-				\hline
-	Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{和Activity生命周期相关的方法}\\
-%	\cline{1-1}
-	Activit. onStart()    &\\
-	Activity.onResume()     &\\
-	Activity.onPause()    &\\	
-	Activity.onStop()     &\\
-	Activity.onDestroy()    &\\
-				\hline
-				
-				Thread start   & 和Java 线程启动相关的方法\\
-				\hline
-				Message.obtain() & \multirow{15}{0.4\linewidth}{和 Hanlder机制相关的方法}\\
-				Handler.enqueueMessage(MessageQueue,Message,long)&\\
-				Handler.dispatchMessage(Message)&\\
-				Handler.post(Runnable)&\\
-				Handler.postAtTime(Runnable,long)&\\
-				Handler.postAtTime(Runnable,Object,long)&\\
-				Handler.postDelayed(Runnable,long)&\\
-				Handler.postAtFrontOfQueue(Runnable)&\\
-				Handler.sendMessage(Message)&\\
-				Handler.sendEmptyMessage(int)&\\
-				Handler.sendEmptyMessageDelayed(int,long)&\\
-				Handler.sendEmptyMessageAtTime(int,long)&\\
-				Handler.sendMessageAtFrontOfQueue(Message)&\\
-				Handler.sendMessageDelayed(Message,long)&\\
-				Handler.sendMessageAtTime(Message,long)&\\
-				
-				\hline
- 
-				
-		%		AsyncTask execute [Object& \multirow{3}{0.4\linewidth}{和 AsyncTask相关的方法}\\
-		%		AsyncTask publishProgress [Object&\\
-		%		AsyncTask executeOnExecutor Executor [Object &\\
-		%		\hline
- 
-				
-			\end{tabular}
-		
-%		\begin{tablenote}
-	%		\end{tablenote}
-			
-		\end{threeparttable}
-	}
-\end{table*}
-
-
-
-
-%   进而通过日志记录器输出相应的日志。
-
-
-% 拦截器组件基于Xposed框架[5]，它拦截在应用程序层和Android框架之间传递的消息。
- % 拦截器记录在两个层之间进行的每个方法调用，并将它们与应用程序层中对应的方法调用相关联，以产生完整的方法调用跟踪。
- % RunDroid维护感兴趣的方法列表，如生命周期方法和隐式回调，以便日志文件包含每次执行期间调用的方法调用
-
-
-
-
-\subsection{日志记录器}
-
-日志记录器的职责是将方法执行的消息以日志的形式就持久化下来。
-针对不同的方法类型（静态方法与非静态方法、用户方法与系统方法等），日志记录器提供了不同的API，帮助我们记录相应方法执行的日志信息。
-在日志内容上，日志记录器还会记录每个方法执行的所处线程、方法签名标识、所处阶段（开始执行该方法/方法执行完毕）以及相关的方法对象信息（包括对象的类型、基本属性以及内存地址等）。
-% 在底层实现上，考虑日志读入文件对程序执行效率的影响，我们评估了多种日志写入方式，最终我们发现基于mmap的日志记录方式效率最高，对程序运行的影响最小。
-
-
- \subsection{调用图构建器}
-
-拓展函数调用图构建器（以下简称调用图构建器）的主要功能是拓展函数调用图的构建、存储和展现。
-在实现上，调用图构建器主要有以下几个部分组成：对象标识管理器、调用图存储器以及触发关系生成器。
-
-调用图构建器以应用程序在运行时的日志信息作为输入，利用日志中的方法执行信息在调用图储存器中初步建立函数调用图。
-同时，对象标识管理器会根据对象使用的上下文（如该和哪个方法产生关联，具体的关系是什么等）赋予相应的标识ID，并将其添加到函数调用图中。
-最后，根据调用图储存器中方法和对象之间的关系结合具体的触发关系，触发关系生成器会还原出方法间的函数触发关系。
-% RunDroid通过动态执行跟踪匹配这些调用来应对这个挑战，这导致开发三个子组件：引用存储库组件、映射引擎组件、合成器组件。
-% Reference Repository组件构建于Neo4j[4]之上，它处理日志文件，并存储捕获的方法及其执行调用。
-% Mapping Engine组件构建于soot[13]之上，从日志历史中识别异步调用对，搜索它们相应的实例化类，并将这些捕获的多线程方法调用存储为“触发器”关系。
-% 然后，Synthesizer组件将这些触发器关系与捕获的执行调用集成到一个完整的执行调用跟踪中，并存储在Reference Repository中。
-在技术选型上，调用图存储器采用Neo4j作为调用图的底层存储引擎，触发关系生成器中的规则定义由Cypher脚本和Soot共同实现。
-
-
-\section{基于源代码的日志代码插桩过程}
-\todo{xxxx\autoref{alg:instrument}}
 
 
 \begin{algorithm}[!ht]
 	\caption{函数调用图的构建过程} 
 	\label{alg:instrument}
 	\KwIn{ $logs$，应用程序的运行时日志}
-	\KwOut{ $cg$，函数调用图}
+	\KwOut{ $apk$，函数调用图}
 	\SetKwProg{Fn}{Function}{:}{}
 	
 	\Fn{buildCallGraph($log$)}{
 		
 		$cg$ $\gets$ new CallGraph();
 		
-		\KwResult{new Java File }
+		\KwRet{new Java File };
 	}
 	
 \end{algorithm}
@@ -304,6 +159,7 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 				
 			}
 		}
+	\KwRet{ $cg$};
 	}
 	
 \end{algorithm}
@@ -367,7 +223,7 @@ Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相
 		linkItemByTime($list$);
 		
 		
-		\KwResult{$cg$}
+		\KwRet{$cg$};
 	}
 	
 \end{algorithm}
@@ -467,7 +323,7 @@ rel(m_{run}, o_r) = instance \\
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
 %在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
 
-首先，我们利用handler的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
 找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第16$\sim$17 行）；
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
 从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第18行），
@@ -543,6 +399,163 @@ RETURN p,method,enqueue,dispatch
 在分析了Android框架的源代码之后，我们确定了线程，窗口小部件的侦听器注册和异步任务的类似模式。
 因此，DROIDSTITCHER维护一个方法列表，这些方法是触发器关系的潜在目标，并比较这些方法中消息对象的内存地址以推断关系。
 }
+
+\section{相关技术介绍}
+
+
+\point{srcML}
+
+srcML~\cite{collard2013srcml}是轻量级源代码分析工具，它可以将程序的抽象语法树以XML的形式展现给用户，支持C、C++、C\#以及Java等多个语言的语法解析。
+srcML的语法解析器采用的是基于LL(*)算法实现的语法解析器 ANTLR 2.7.7，解析得到的XML内容保留了源代码中完整的语法树信息。
+同时，srcML还提供了一个强大工具集，支持对生成内容的查询、分析以及修改，可以用于架构设计、语言研究、软件重构等场景，应用于软件工程、编程语言、并行和分布式处理等多个领域。
+在RunDroid，srcML承担的主要职责为源代码的语法解析，辅助完成用户方法层面的日志代码的编织（weaving）。
+
+\point{Xposed框架}
+
+
+Xposed~\cite{Xposed}是由rovo89主导开发的第三方框架。
+基于Xposed开发的第三方插件，可以在不修改系统和应用程序源代码的情况下，改变他们的运行行为。
+Xposed框架可以运行在不同版本的Android系统上，开发过程十分便利，而且易于撤销。
+Xposed的实现原理具体如下：由于Android系统的所有的应用程序进程都是由Zygote进程孵化而来，Xposed通过替换程序\code{/system/bin/app\_process}，使得系统在启动过程中加载Xposed的相关文件，将所有的目标方法指向Native方法xposedCallHandler，维护目标方法和对应的钩子方法（Hook Function）的映射关系，从而实现对Zygote进程及Dalvik虚拟机的劫持；
+当程序执行到目标方法时，xposedCallHandler会完成目标方法的原有代码和对应钩子方法的调度，达到对目标方法劫持的目的。
+在RunDroid中，Xposed可以帮助我们实现类似面向切面编程（Aspect-Oriented Programming, AOP）的功能，辅助完成系统方法的执行情况的日志记录。
+
+\point{Neo4j}
+
+Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库。
+与传统的基于关系模型的存储结构不同，Neo4j的存储模型是基于图论开发的，遵循属性图数据模型。
+Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，分别对应图论中的点与边。
+另外，Neo4j还可以在关系和节点上添加key-value形式的属性，为节点指定一个或者多个标签，为关系指定类型等等。
+Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性，隔离性和持久性）事务规则，提供了基于Cypher脚本、Native Java API和REST Http API等多种方式帮助开发人员进行数据开发工作。
+同时，Neo4j还提供了友好的浏览器界面，具有十分友好的交互体验。
+由于基于属性图数据模型，Neo4j通常适用于和图关系有着密切关系的应用场景：例如社交网络分析，公共交通网络研究以及地图网络拓扑等场景。
+在RunDroid，Neo4j主要承担着拓展函数调用图的存储、查询、展示的主要职责。
+
+
+\section{模块实现}
+
+
+\subsection{预处理器}
+
+为了捕获用户方法的运行时执行信息，RunDroid的预处理器组件会对应用程序进行插桩工作。
+为了避免传统字节码插桩技术在生成过多的方法数而导致的方法数65K限制问题，预处理器采用的方案是源代码层面的插桩方案。
+该方案通过源程序修改，将日志记录代码直接作用在方法体内部，最大限度地减少了APK构建过程中方法数的增加，避免了方法数65K限制问题。
+日志记录代码在方法执行前后会调用日志记录器输出方法执行日志。
+
+
+
+
+\subsection{运行时拦截器}
+运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
+运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，产生完整的方法调用，进而帮助我们还原出方法间的触发关系。
+
+
+
+
+\begin{table*}[!ht]
+	%	\centering
+	%\tiny
+	
+	\caption{运行时拦截器拦截的系统方法列表}
+	
+	\label{tbl:hookMethodList}
+	
+	
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}[b]
+			
+			\begin{tabular}{|l|c|}
+				\hline
+				方法签名&说明\\
+				\hline
+				Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{和Activity生命周期相关的方法}\\
+				%	\cline{1-1}
+				Activit. onStart()    &\\
+				Activity.onResume()     &\\
+				Activity.onPause()    &\\	
+				Activity.onStop()     &\\
+				Activity.onDestroy()    &\\
+				\hline
+				
+				Thread start   & 和Java 线程启动相关的方法\\
+				\hline
+				Message.obtain() & \multirow{15}{0.4\linewidth}{和 Hanlder机制相关的方法}\\
+				Handler.enqueueMessage(MessageQueue,Message,long)&\\
+				Handler.dispatchMessage(Message)&\\
+				Handler.post(Runnable)&\\
+				Handler.postAtTime(Runnable,long)&\\
+				Handler.postAtTime(Runnable,Object,long)&\\
+				Handler.postDelayed(Runnable,long)&\\
+				Handler.postAtFrontOfQueue(Runnable)&\\
+				Handler.sendMessage(Message)&\\
+				Handler.sendEmptyMessage(int)&\\
+				Handler.sendEmptyMessageDelayed(int,long)&\\
+				Handler.sendEmptyMessageAtTime(int,long)&\\
+				Handler.sendMessageAtFrontOfQueue(Message)&\\
+				Handler.sendMessageDelayed(Message,long)&\\
+				Handler.sendMessageAtTime(Message,long)&\\
+				
+				\hline
+				
+				
+				%		AsyncTask execute [Object& \multirow{3}{0.4\linewidth}{和 AsyncTask相关的方法}\\
+				%		AsyncTask publishProgress [Object&\\
+				%		AsyncTask executeOnExecutor Executor [Object &\\
+				%		\hline
+				
+				
+			\end{tabular}
+			
+			%		\begin{tablenote}
+			%		\end{tablenote}
+			
+		\end{threeparttable}
+	}
+\end{table*}
+
+
+在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法），如\autoref{tbl:hookMethodList} 所示。
+每当应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。
+在应用程序的运行过程中，HookCallBack对象的\code{beforeHookedMethod(MethodHookParam)}会在目标方法执行之前被调用，
+\code{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
+最终，HookCallBack对应会将方法执行的相关信息传递给日志记录器。
+
+
+
+%   进而通过日志记录器输出相应的日志。
+
+
+% 拦截器组件基于Xposed框架[5]，它拦截在应用程序层和Android框架之间传递的消息。
+% 拦截器记录在两个层之间进行的每个方法调用，并将它们与应用程序层中对应的方法调用相关联，以产生完整的方法调用跟踪。
+% RunDroid维护感兴趣的方法列表，如生命周期方法和隐式回调，以便日志文件包含每次执行期间调用的方法调用
+
+
+
+
+\subsection{日志记录器}
+
+日志记录器的职责是将方法执行的消息以日志的形式就持久化下来。
+针对不同的方法类型（静态方法与非静态方法、用户方法与系统方法等），日志记录器提供了不同的API，帮助我们记录相应方法执行的日志信息。
+在日志内容上，日志记录器还会记录每个方法执行的所处线程、方法签名标识、所处阶段（开始执行该方法/方法执行完毕）以及相关的方法对象信息（包括对象的类型、基本属性以及内存地址等）。
+% 在底层实现上，考虑日志读入文件对程序执行效率的影响，我们评估了多种日志写入方式，最终我们发现基于mmap的日志记录方式效率最高，对程序运行的影响最小。
+
+
+\subsection{调用图构建器}
+
+拓展函数调用图构建器（以下简称调用图构建器）的主要功能是拓展函数调用图的构建、存储和展现。
+在实现上，调用图构建器主要有以下几个部分组成：对象标识管理器、调用图存储器以及触发关系生成器。
+
+调用图构建器以应用程序在运行时的日志信息作为输入，利用日志中的方法执行信息在调用图储存器中初步建立函数调用图。
+同时，对象标识管理器会根据对象使用的上下文（如该和哪个方法产生关联，具体的关系是什么等）赋予相应的标识ID，并将其添加到函数调用图中。
+最后，根据调用图储存器中方法和对象之间的关系结合具体的触发关系，触发关系生成器会还原出方法间的函数触发关系。
+% RunDroid通过动态执行跟踪匹配这些调用来应对这个挑战，这导致开发三个子组件：引用存储库组件、映射引擎组件、合成器组件。
+% Reference Repository组件构建于Neo4j[4]之上，它处理日志文件，并存储捕获的方法及其执行调用。
+% Mapping Engine组件构建于soot[13]之上，从日志历史中识别异步调用对，搜索它们相应的实例化类，并将这些捕获的多线程方法调用存储为“触发器”关系。
+% 然后，Synthesizer组件将这些触发器关系与捕获的执行调用集成到一个完整的执行调用跟踪中，并存储在Reference Repository中。
+在技术选型上，调用图存储器采用Neo4j作为调用图的底层存储引擎，触发关系生成器中的规则定义由Cypher脚本和Soot共同实现。
+
+
+
  \section{本章小结}
 
 本章详细介绍了RunDroid的设计与实现。

@@ -10,7 +10,7 @@
 
 \begin{figure}[!h]
 	\centering
-%	\vspace{0.7in}
+	\vspace{0.7in}
 	\begin{lstlisting}[language=Java]
 package cn.mijack.rundroidtest;
 
@@ -76,18 +76,20 @@ RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示。
 通过比较\autoref{fig:rundroid-result-Fibonacci}和\autoref{fig:flowdroid-result-Fibonacci}，我们可以发现以下有趣的结论：
 
+
+\begin{figure*}[!ht]
+	\centering
+	\includegraphics[width=\textwidth]{./Figures/empty.png}
+	\caption{斐波拉契数列-RunDroid生成的调用图（局部）}
+	\label{fig:rundroid-result-Fibonacci}
+\end{figure*}
+
 首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有\question{9}个，即在运行过程中，\code{doFibonacci()}被调用了\question{9}次。
 由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点，该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
 另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
 因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，在一定程度上可以反映程序执行的具体过程。
 
 
-\begin{figure*}[!ht]
-	\centering
-	\includegraphics[width=\textwidth]{./Figures/empty.png}
-	\caption{斐波拉契数列-RunDroid生成的调用图}
-	\label{fig:rundroid-result-Fibonacci}
-\end{figure*}
 
 其次，方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，而FlowDroid给出的结果却有展现：
 而在运行过程中，我们却可以看到Toast提示。
@@ -99,7 +101,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/FlowDroid-Fibonacci.png}
-	\caption{斐波拉契数列-FlowDroid生成的调用图}
+	\caption{斐波拉契数列-FlowDroid生成的调用图（局部）}
 	\label{fig:flowdroid-result-Fibonacci}
 \end{figure*}
 
@@ -121,7 +123,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/empty.png}
-	\caption{RunDroid生成的调用图-Activity部分}
+	\caption{Activity部分-RunDroid生成的调用图（局部）}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
 
@@ -141,8 +143,8 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \end{figure*}
 
 在结果展现上，RunDroid倾向于将和Activity生命周期相关的所有方法都关联起来。
-例如，虽然在源代码中没有定义\code{onResume()}等方法，但在运行过程中，\code{MainActivity}的父类方法\code{onResume()}被调用了，便会在结果中呈现出来。
-在这点上，FlowDroid的处理方式恰恰相反，考虑到在未重写系统类方法时的类行为表现一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
+例如，虽然开发人员在源代码中没有定义\code{onResume()}等方法，但在运行过程中，\code{MainActivity}的父类方法\code{onResume()}被调用了，便会在结果中呈现出来。
+在这点上，FlowDroid的处理方式恰恰相反，考虑到在未重写系统类方法时的类行为表现基本保持一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
 
 
 \question{观察\autoref{fig:rundroid-result-lifecycle}中生命周期方法归属的Activity，我们发现，在应用启动\code{NewActivity}过程中，
@@ -159,11 +161,33 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 经过实验，RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler}、\autoref{fig:flowdroid-result-handler}所示。
 两幅图在以下节点上存在不同:
 
+
+
+
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{./Figures/empty.png}
+	\caption{多线程触发关系-RunDroid生成的调用图（局部）}
+	\label{fig:rundroid-result-handler}
+\end{figure*}
+
+
+
+
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
+	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
+	\label{fig:flowdroid-result-handler}
+\end{figure*}
+
+
 \point{Java API多线程的触发方式}
 
 RunDroid在方法\code{Thread.start()}和方法\code{WorkerThread.run()}之间添加了一条有向边。
 这条有向边从前者指向后者，表示方法\code{Thread.start()}的执行触发了方法\code{WorkerThread.run()}的执行，边上标识着触发原因（通过Thread方式触发，Thread）。
-FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}-第42行中的变量$workerThread$类型为\code{WorkerThread}。
+FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}第42行中的变量$workerThread$类型为\code{WorkerThread}。
 同时，FlowDroid可以推算出方法\code{Thread.start()}的执行会导致方法\code{WorkerThread.run()}的执行。
 在FlowDroid的设计者看来，方法\code{Thread.start()}可以替换成方法\code{WorkerThread.run()}。
 因此，FlowDroid的结果中，方法\code{doHandleButton3()}和\code{WorkerThread.run()}之间存在调用边。
@@ -175,60 +199,35 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 \point{基于Handler的多线程触发方式}
 
-在WorkerThread的方法run()中，我们通过Handler进行了异步UI操作。
-和上一点类似，在RunDroid展示的结果中，\code{Handler.sendMessage()}和\code{MainActivity\$1.handleMessage(Message)}之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此，编译后的类名为\code{MainActivity\$1}}。
+在WorkerThread的方法run()中，我们通过Handler进行了异步UI操作，触发了方法\code{MainActivity\$1.handleMessage(Message)}的执行。
+在构建拓展调用图过程中，RunDroid充分挖掘了这些方法和对应的方法对象的关联关系，进而补全方法\code{Handler.sendMessage()}和\code{MainActivity\$1.handleMessage(Message)}之间的触发关系。
+因此，在RunDroid展示的结果中，上述两个方法之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此，编译后的类名为\code{MainActivity\$1}}。
+但是，FlowDroid分析相关代码时，由于缺少运行时上下文的基本信息，无法分析出\code{WorkerThread.run()}中handler的具体类型，因此，无法将Handler相关的两个方法连接起来。
+
+
 
 
 \point{静态方法的使用}
 
 
-
-\begin{figure*}[ht]
-	\centering
-	\includegraphics[width=\textwidth]{./Figures/empty.png}
-	\caption{多线程触发关系-RunDroid生成的调用图}
-	\label{fig:rundroid-result-handler}
-\end{figure*}
-
-\begin{figure*}[ht]
-	\centering
-	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
-	\caption{多线程触发关系-FlowDroid生成的调用图}
-	\label{fig:flowdroid-result-handler}
-\end{figure*}
+另外，在FlowDroid给出的结果中，我们发现方法\code{doHandleButton3()}还调用了类\code{Message}的类初始化方法\code{<clinit>()}。
+原因是方法\code{doHandleButton3()}调用类\code{Message}的静态方法\code{obtain()}，因此可能需要进行类的初始化。
+由于在程序运行过中，方法\code{doHandleButton3()}在执行方法\code{Message.obtain()}前，类\code{Message}已经完成了类的初始化，方法\code{Message.<clinit>()}并没有被调用。
+因此RunDroid的结果中显示上述两个方法不存在调用关系。
+这从一个侧面方面反映出FlowDroid分析的结果和动态运行的过程可能存在一定的偏差。
 
 
-\section{RunDroid和FlowDroid的对比总结}
+
+%\section{RunDroid和FlowDroid的对比总结}
 
 \section{本章小结}
 
 % 本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估，并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
  
-本章中展示RunDroid系统生成的函数调用图的运行结果，并对函数调用图进行详细的阐述。
+本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
+同时，我们还对比分析在相同场景下静态分析工具FlowDroid的运行结果。
+我们发现，RunDroid生成的调用图的完整性依赖于源代码处理以及待拦截的目标系统方法列表的完整程度，而FlowDroid的分析对象是Android应用程序APK文件，调用图的完整性受到自身算法实现的限制。
+另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
+前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。
+综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
 
-
-一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
-又一行\\
