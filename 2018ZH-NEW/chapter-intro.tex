@@ -109,7 +109,7 @@ SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时
 
 安全性分析包括隐私泄露、权限机制研究、恶意软件排查等。
 
-IOS Detecting privacy leaks in ios applications
+%IOS Detecting privacy leaks in ios applications
 
 为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout~\cite{au2012pscout}利用Soot对Android系统程序源代码进行静态分析，
 构建出整个Android系统的函数调用图，在调用图中标识权限相关的Binder跨进程调用，结合逆向可达性分析技术得出相关API接口以及对应调用路径上的所有权限检查的映射关系。
@@ -125,24 +125,22 @@ Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为
 为了筛选出这种类型的恶意软件，Wei Yang等人提出了一个基于静态分析技术的解决方案AppContext~\cite{yang2015appcontext}：
 在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件，提取出安全敏感行为及对应的上下文，并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
 实验结果显示，AppContext的准确率和召回率分别达到了87.7\%和95\%，这从一个侧面反映了安全敏感行为的恶意性与该行为的意图(通过上下文反映)更密切相关，验证之前提到的问题。
-
-
-AppIntent~\cite{yang2013appintent}
-
-也有一部分研究Socket~\cite{Shao2016The,Jia2017Open,bu2017program}聚焦移动应用在网络传输上的安全问题。
+Zhemin Yang等人的AppIntent~\cite{yang2013appintent}利用静态分析技术提取应用程序的时间约束条件，再结合符号执行技术，最后得到一串可以导致用户信息泄露的序列。
+同时，也有一部分研究Socket~\cite{Shao2016The,Jia2017Open,bu2017program}聚焦移动应用在网络传输上的安全问题。
 
 
 
 \textbf{质量保障：}
 
+错误定位\cite{mirzaei2015exception,machado2013mzoltar}
 
-Exception fault localization in Android applications~\cite{mirzaei2015exception}
+覆盖率测试 \cite{androidtest2,su2016fsmdroid}
 
-machado2013mzoltar~\cite{machado2013mzoltar}
 
-Suting~\cite{androidtest2}
+变异测试\cite{MutationOperatorsAndroid}
 
-Fan~\cite{fan2018efficiently, fan2018large}
+
+Fan Lingling的工作~\cite{fan2018efficiently, fan2018large}
 
 现有的性能测试的工作中，Mario Linares-Vasquez[25]等提出通过对开源社区 App 的分析，详细归纳了 App 性能中由线程问题、GUI 渲染问题、内存问题导致 App 运行 异常的原因。
 
