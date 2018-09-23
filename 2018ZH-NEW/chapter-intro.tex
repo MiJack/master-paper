@@ -103,23 +103,20 @@ SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时
 
 \subsection{分析技术的应用}
 
-上述技术广泛运用在安全性分析、质量保障、应用分析等领域。
+上述技术广泛运用在安全性分析、质量保障等领域。
 
 \point{安全性分析：}
 
 安全性分析包括隐私泄露、权限机制研究、恶意软件排查等。
 
 %IOS Detecting privacy leaks in ios applications
-\todo{缩减此处}
+\todo{缩减此处，再添加3$\sim$5篇文献}
 为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout~\cite{au2012pscout}利用Soot对Android系统程序源代码进行静态分析，
 构建出整个Android系统的函数调用图，在调用图中标识权限相关的Binder跨进程调用，结合逆向可达性分析技术得出相关API接口以及对应调用路径上的所有权限检查的映射关系。
 相比其他类似工作，由于考虑了Android系统特性，PScout分析的到结果更加完整，但受到可达性分析的精度限制，存在部分错误的映射关系。
 此外，该团队对Android 2.1 $\sim$  4.0等四个版本的系统源代码进行了广泛的分析，就权限设计的冗余性、无文档说明API的权限要求、权限在Android系统升级的演变等多个研究问题进行深入的探讨。
 在PScout的基础上，Rahul Pandita等人将目光聚焦到应用市场上，他们开发的\textsc{WhyPer}~\cite{pandita2013whyper}将自然语言处理技术（NLP）和传统静态分析技术相结合，
 可以帮人们找出那些应用描述和实际使用到的权限不符的应用。
-
-
-
 Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为以防止被安全机构识别出来，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
 不同的是恶意软件一般在特定的时间点（深夜）运行，以防止引起用户的注意。
 为了筛选出这种类型的恶意软件，Wei Yang等人提出了一个基于静态分析技术的解决方案AppContext~\cite{yang2015appcontext}：
@@ -135,9 +132,8 @@ Android应用程序中存在着大量的网络交互，因此，也有一部分�
 伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。
 %传统测试观点认为，在测试过程中，如果源代码的覆盖率可以维持在一个较高的水平，可在一定程度上可以覆盖
 %其中，提高代码的覆盖率就是非常重要的一个方面。
-这方面的工作包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、对程序进行错误定位与修复\cite{mirzaei2015exception,machado2013mzoltar,tan2018repairing,QingGaoASE15}
-以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}
-等。
+这方面的工作包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、程序错误的定位、分析与修复\cite{mirzaei2015exception,machado2013mzoltar,tan2018repairing,QingGaoASE15}以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}等。
+%t, most GUI testing techniques, e.g., random testing [39, 57], search-based testing [58, 60], and model-based testing [2, 3, 8, 78, 85]
 工作\cite{azim2013targeted}利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
 Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，在深度优先算法的基础上，使得程序在当前状态无可再遍历状态的情况下进行回溯。
 相比传统的深度优先算法，Wei Yang的工作对应的时间开销更小，效率更高。
@@ -145,19 +141,17 @@ Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，�
 基于该模型，Stoat进行模型变异、测试用例生成与执行、模型迭代，使得应用程序的覆盖率相比之前工作\cite{hao2014puma,amalfitano2015mobiguitar}提升了17$\sim$31\%。
 工作\cite{mirzaei2015exception,machado2013mzoltar}等将传统软件的错误定位技术——基于频谱的错误定位技术运用在Android应用上，取得了不错的成绩。
 工作\cite{tan2018repairing,QingGaoASE15}等主要聚焦如何在Android应用程序出现问题时，根据异常的堆栈信息结合软件变异技术或者问答网站生成补丁代码，实现程序的自动修复。
+Lingling Fan等人的工作~\cite{fan2018large}通过开源社区的大量应用的issue解析分析，从异常种类（应用异常、系统异常、库（Library）异常）、系统异常分类、错误检查工具以及错误修复方式等若干方面进行较为深入的分析、探讨和总结。
 
-
-%变异测试
-
-Lingling Fan的工作~\cite{fan2018efficiently, fan2018large}
-
-%现有的性能测试的工作中，Mario Linares-Vasquez等提出通过对开源社区 App 的分析，详细归纳了 App 性能中由线程问题、GUI 渲染问题、内存问题导致 App 运行 异常的原因。
+\eat{
 
 \point{应用分类：}
 
 Simapp~\cite{chen2015simapp}
 
 mobile app tagging ~\cite{chen2016mobile}
+
+}
 
 
 % 例如错误定位、自动化分析、profiling等
