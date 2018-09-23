@@ -105,12 +105,12 @@ SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时
 
 上述技术广泛运用在安全性分析、质量保障、应用分析等领域。
 
-\textbf{安全性分析：}
+\point{安全性分析：}
 
 安全性分析包括隐私泄露、权限机制研究、恶意软件排查等。
 
 %IOS Detecting privacy leaks in ios applications
-
+\todo{缩减此处}
 为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout~\cite{au2012pscout}利用Soot对Android系统程序源代码进行静态分析，
 构建出整个Android系统的函数调用图，在调用图中标识权限相关的Binder跨进程调用，结合逆向可达性分析技术得出相关API接口以及对应调用路径上的所有权限检查的映射关系。
 相比其他类似工作，由于考虑了Android系统特性，PScout分析的到结果更加完整，但受到可达性分析的精度限制，存在部分错误的映射关系。
@@ -126,25 +126,34 @@ Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为
 在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件，提取出安全敏感行为及对应的上下文，并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
 实验结果显示，AppContext的准确率和召回率分别达到了87.7\%和95\%，这从一个侧面反映了安全敏感行为的恶意性与该行为的意图(通过上下文反映)更密切相关，验证之前提到的问题。
 Zhemin Yang等人的AppIntent~\cite{yang2013appintent}利用静态分析技术提取应用程序的时间约束条件，再结合符号执行技术，最后得到一串可以导致用户信息泄露的序列。
-同时，也有一部分研究Socket~\cite{Shao2016The,Jia2017Open,bu2017program}聚焦移动应用在网络传输上的安全问题。
+Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket~\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。
 
 
 
-\textbf{质量保障：}
+\point{质量保障}
 
-错误定位\cite{mirzaei2015exception,machado2013mzoltar}
+伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。
+%传统测试观点认为，在测试过程中，如果源代码的覆盖率可以维持在一个较高的水平，可在一定程度上可以覆盖
+%其中，提高代码的覆盖率就是非常重要的一个方面。
+这方面的工作包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、对程序进行错误定位与修复\cite{mirzaei2015exception,machado2013mzoltar,tan2018repairing,QingGaoASE15}
+以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}
+等。
+工作\cite{azim2013targeted}利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
+Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，在深度优先算法的基础上，使得程序在当前状态无可再遍历状态的情况下进行回溯。
+相比传统的深度优先算法，Wei Yang的工作对应的时间开销更小，效率更高。
+此外，Stoat\cite{su2016fsmdroid,androidtest2}利用静态、动态分析技术标识出程序本身的状态和事件，将应用初始化一个有限状态机（FSM）模型。
+基于该模型，Stoat进行模型变异、测试用例生成与执行、模型迭代，使得应用程序的覆盖率相比之前工作\cite{hao2014puma,amalfitano2015mobiguitar}提升了17$\sim$31\%。
+工作\cite{mirzaei2015exception,machado2013mzoltar}等将传统软件的错误定位技术——基于频谱的错误定位技术运用在Android应用上，取得了不错的成绩。
+工作\cite{tan2018repairing,QingGaoASE15}等主要聚焦如何在Android应用程序出现问题时，根据异常的堆栈信息结合软件变异技术或者问答网站生成补丁代码，实现程序的自动修复。
 
-覆盖率测试 \cite{androidtest2,su2016fsmdroid}
 
+%变异测试
 
-变异测试\cite{MutationOperatorsAndroid}
+Lingling Fan的工作~\cite{fan2018efficiently, fan2018large}
 
+%现有的性能测试的工作中，Mario Linares-Vasquez等提出通过对开源社区 App 的分析，详细归纳了 App 性能中由线程问题、GUI 渲染问题、内存问题导致 App 运行 异常的原因。
 
-Fan Lingling的工作~\cite{fan2018efficiently, fan2018large}
-
-现有的性能测试的工作中，Mario Linares-Vasquez[25]等提出通过对开源社区 App 的分析，详细归纳了 App 性能中由线程问题、GUI 渲染问题、内存问题导致 App 运行 异常的原因。
-
-\textbf{应用分类：}
+\point{应用分类：}
 
 Simapp~\cite{chen2015simapp}
 
