@@ -11,12 +11,12 @@
 
 \subsection{关于方法和对象的定义}
 
-\begin{myDef}
+\begin{Def}
 	方法对象（Method Object，MO）
-\end{myDef}
-\question{此处需要缩进吗}
-	和方法执行相关的对象称为方法对象，可以体现对象和执行方法的相互关系。
-	在本文中，方法对象通常用符号$o$表示。
+\end{Def}
+
+和方法执行相关的对象称为方法对象，可以体现对象和执行方法的相互关系。
+在本文中，方法对象通常用符号$o$表示。
 	
 
 	对于一个方法执行$m$，对象和方法执行的关系有如下几种：
@@ -26,14 +26,16 @@
 		\item 实例关系：若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$o_i \joinrel\xrightarrow{instance} m$。%，或者 $ rel(m,o_i) = instance$，或者三元组$\left\langle m, o_p, instance\right\rangle $；
 	\end{itemize}
 
-\begin{myDef}方法执行\end{myDef}
+\begin{Def}方法执行\end{Def}
+
 方法执行是对方法执行过程中的相关信息的描述，完整的信息包括对应方法的完整签名、执行时所处的线程$m_t$以及相关的方法对象。
 在本文中，方法执行通常用符号$m$表示。
 
 \subsection{关于方法间关系的定义}
-\begin{myDef}
+\begin{Def}
 	调用关系（Invoke）
-\end{myDef}
+\end{Def}
+
 	对于程序$P$的两个方法$m_1$和$m_2$，方法$m_1$调用了方法$m_2$，则记作$m_1 \to m_2$，称为方法$m_1$调用方法$m_2$。
 
 \begin{equation}
@@ -43,12 +45,12 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 在此基础上，对于方法$m$，若存在方法$m_i$（$i=0,\dots,n , n \geqslant 0$），使得~\autoref{equ:extend_invoke}成立，则记作$m_0 \stackrel{\ast}{\to} m$，称为方法$m_0$扩展调用方法$m_n$。
 特殊的，对于方法$m_1$和方法$m_2$，若$m_1 \to m_2$，则$m_1  \stackrel{\ast}{\to}  m_2$也成立。
 
-在系统源代码的层面上，如果对于方法$m$和$m'$，$m \to m'$总是成立，可以记为 $m \Rightarrow m'$；
+\important{在系统源代码的层面上}，如果对于方法$m$和$m'$，$m \to m'$\important{总是}成立，可以记为 $m \Rightarrow m'$；
 如果对于方法$m$和$m'$，$m  \stackrel{\ast}{\to}  m'$总是成立，可以记为 $m  \stackrel{\ast}{ \Rightarrow } m'$。
 
-\begin{myDef}
+\begin{Def}
 	触发关系（Trigger）
-\end{myDef}
+\end{Def}
 	
 	%如果对于动态函数调用图$DCG$中两个方法（不妨记为$m_a$和$m_b$，$m_a \in DCG$，$m_b \in DCG $），
 	若方法$m_a$和方法$m_b$之间同时需要满足以下三个条件，
@@ -66,9 +68,10 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 
 \subsection{关于调用图的定义}
 
-\begin{myDef}
+\begin{Def}
 	函数调用图（CallGraph，CG）
-\end{myDef}	
+\end{Def}	
+
 	函数调用图是对程序运行时行为的描述，用有向图$CG = ( V , E)$表示。 图中的点$ v \in V $表示一个\textbf{方法执行} $m$；
 	如果方法$m_1$调用方法$m_2$（即$m_1 \to m_2$），则有向边 $e = \left\langle m_1 ,m_2 \right\rangle $属于集合 $E$。 
 
@@ -92,25 +95,29 @@ E = & \{
 
 
 
-\begin{myDef}
+\begin{Def}
 	拓展函数调用图（Extended Dynamic CallGraph，EDCG）
-\end{myDef}
+\end{Def}
+
+
 	在函数调用图（DCG）的基础上，添加了方法对象和函数间的触发关系。
 	拓展函数调用图中的节点包括方法执行节点和方法对象节点。图中的边包括描述方法间关系的边和描述方法和对象间的边：
 	前者的方法间关系包括调用关系和触发关系；而后者的关系包括和方法对象相关的三个关系。
+\eat{
 	具体定义如~\autoref{equ:def_edcg}所示：
-	
-	\begin{equation}
-	\begin{aligned}
-	EDCG =              & (V_{EDCG},E_{EDCG}) ,\\ 
-	DCG =                & (V_{DCG},E_{DCG}) ,\\ 
-	V_{EDCG} =      & V_{method} \bigcup V_{object} ,\\
-	V_{method} =   & V_{DCG}, \\ 
-	G_{EDCG} =      & G_{method} \bigcup G_{object} , \\
-	G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_1 \hookrightarrow m_2 \}
-	\end{aligned}
-	\label{equ:def_edcg} 
-	\end{equation}
+
+\begin{equation}
+\begin{aligned}
+EDCG =              & (V_{EDCG},E_{EDCG}) ,\\ 
+DCG =                & (V_{DCG},E_{DCG}) ,\\ 
+V_{EDCG} =      & V_{method} \bigcup V_{object} ,\\
+V_{method} =   & V_{DCG}, \\ 
+G_{EDCG} =      & G_{method} \bigcup G_{object} , \\
+G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_1 \hookrightarrow m_2 \}
+\end{aligned}
+\label{equ:def_edcg} 
+\end{equation}
+}
 	
 	
 \section{举例说明}

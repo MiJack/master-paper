@@ -60,7 +60,7 @@
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[height=0.4\textheight]{./Figures/rundroid-overview.png}
+	\includegraphics[width=\textwidth]{./Figures/rundroid-overview.png}
 	\caption{ RunDroid的工作流程}
 	\label{fig:rundroid_overview}
 \end{figure*}
@@ -68,35 +68,62 @@
 
 
 
-\section{基于源代码的日志代码插桩过程}
-
-预处理器以Android项目源代码作为输入，输出预处理后的APK文件。
-预处理器会遍历项目源代码中的每一个Java文件，利用srcML转化成对应的抽象语法树。
-%  利用获取的语法结构，预处理器会提取出所有的方法体，
-对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名，并将这些信息以日志记录代码的形式写回到方法体中。
-另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
-全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，可以看做方法体的唯一标识，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
-另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建。
-最后，预处理器会将插桩后的源代码构建成APK文件。
-\todo{具体过程如\autoref{alg:instrument}所示。}
-
-
+\section{用户方法执行信息的获取——基于源代码的日志代码插桩过程}
 
 \begin{algorithm}[!ht]
-	\caption{函数调用图的构建过程} 
+	\caption{日志代码插桩过程} 
 	\label{alg:instrument}
-	\KwIn{ $logs$，应用程序的运行时日志}
-	\KwOut{ $apk$，函数调用图}
+	\KwIn{ $javaFiles$，应用程序的源代码}
+	\KwOut{ $apk$，包含插桩代码的APK文件}
 	\SetKwProg{Fn}{Function}{:}{}
 	
-	\Fn{buildCallGraph($log$)}{
+	\Fn{buildApk($log$)}{
 		
-		$cg$ $\gets$ new CallGraph();
+		\For{$ javaFile \in javaFiles $}{
+			
+			transform $javaFile $ to xml-format File $xmlFile$
+			
+			transform $xmlFile$ to DOM Object $document$
+			
+			\For{ \emph { $ classEle \in document$}}{
+				
+				$className \gets $computeClassSign($classEle$,$xmlFile$); 	
+				
+				\For{\emph { $methodEle \in classEle$}}{
+					
+					$methodId\gets $computeMethodId($methodEle$,$className$ ); 	 \label{alg:instrument:computeMethodId}
+					
+					addMethodExitLogCode($methodEle$,$methodId$); \label{alg:instrument:addMethodExitLogCode}
+					
+					addMethodCatchLogCode($methodEle$,$methodId$);  \label{alg:instrument:addMethodCatchLogCode}
+					
+					addMethodEnterLogCode($methodEle$,$methodId$); \label{alg:instrument:addMethodEnterLogCode}
+				}
+				
+			}
+			write $document$ into new Java File $newJavaFile$
+			
+		}
+		$	apk  \gets buildApk(newJavaFiles)$  \label{alg:instrument:buildApk}
 		
-		\KwRet{new Java File };
+		\KwRet{apk };
 	}
 	
 \end{algorithm}
+
+预处理器以Android项目源代码作为输入，输出预处理后的APK文件；输出的APK文件在应用执行过程中将用户方法的执行信息输出出来。
+具体过程如\autoref{alg:instrument}所示：
+预处理器会遍历项目源代码中的每一个Java文件，将对应利用srcML转化成对应的抽象语法树。
+%  利用获取的语法结构，预处理器会提取出所有的方法体，
+对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名（第\ref{alg:instrument:computeMethodId}行），并将这些信息以日志记录代码的形式写回到方法体中（第\ref{alg:instrument:addMethodExitLogCode}$\sim$\ref{alg:instrument:addMethodEnterLogCode}行）。
+另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
+全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，可以看做方法体的唯一标识，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
+另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建（第\ref{alg:instrument:addMethodCatchLogCode}行）。
+最后，预处理器会将插桩后的源代码构建成APK文件（第\ref{alg:instrument:buildApk}行）。
+
+
+%\section{系统方法执行信息的获取——}
+
 
 \section{扩展函数调用图的构建过程}
 
@@ -197,9 +224,9 @@
 
 Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相关方法的签名的不变性。
 具体过程如\autoref{alg:buildActivityLifecycle}所示：
-遍历调用图中所有的方法，如果一个方法的方法签名属于第\ref{chp:background}章中\autoref{fig:Activity-lifecycle}定义的方法，并且这个方法在调用图中不在调用者\footnote{不允许调用者存在是为了防止误判下面这种情况：开发人员在重写生命周期方法时调用了父类的生命周期方法。}，执行线程为主线程，则这些线程为Activity生命周期的相关方法。
+遍历调用图中所有的方法，如果一个方法的方法签名属于第\ref{chp:background}章中\autoref{fig:Activity-lifecycle}定义的方法，并且这个方法在调用图中不在调用者，执行线程为主线程，则这些线程为Activity生命周期的相关方法。
 将上述方法按照时间顺序连接起来，即可得到\code{Activity}的生命周期。
-
+\question{不允许调用者存在是为了防止误判下面这种情况：开发人员在重写生命周期方法时调用了父类的生命周期方法。}
 
 \begin{algorithm}[!ht]
 	\caption{构建Activity的生命周期} 
@@ -232,6 +259,55 @@ Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相
  \subsection{构建多线程触发关系}
 在构建多线程触发关系时，我们只要分为两个方面：基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度。具体的过程如\autoref{alg:buildTrigger}所示。
 
+
+
+\begin{algorithm}[!ht]
+	\caption{扩展函数调用图的构建过程}
+	\label{alg:buildTrigger}
+	\KwIn {	$cg$， 函数调用图} 
+	\KwOut {	$ecg$，拓展函数调用图}
+	
+	
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{buildExtendedCallGraph($cg$)}{
+		
+		$ecg \gets cg$;
+		
+		addThreadTrigger($ecg$);
+		
+		addHandlerTrigger($ecg$);
+		
+		\KwRet $ecg$;
+	}
+	
+	% $o_p \stackrel{parameter}{\longrightarrow} m$
+	\Fn{addThreadTrigger($ecg$)} {
+		\For{\emph{$o_r \in \{ o \mid o$  is the $Runnable$ object node $\in$ $ecg \}$} }{
+			\If{ \todo{$ \left\langle m_{start}\joinrel\xrightarrow{instance} o_r \right\rangle \in ecg$ } \\\qquad 
+				and   \todo{$\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$ }}{
+				$ecg$.addThreadTriggerRel($m_{start} \hookrightarrow m_{run} $)	
+			}
+			\If{ \todo{$ \left\langle m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \right\rangle \in ecg$}  \\\qquad   
+				and  \todo{ $\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$  }}{
+				$ecg$.addThreadTriggerRel($m_{runOnUiThread} \hookrightarrow m_{run} $)	
+			}	
+		}
+	}	
+	\Fn{addHandlerTrigger($ecg$)} {
+		
+		\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node $\in$ $ecg \}$} }{
+			\If{\todo{ $ \left\langle m_{enqueue}\joinrel\xrightarrow{parameter} o_m\right\rangle \in ecg$}  \\\qquad   
+				and  \todo{ $\left\langle m_{dispatch}\joinrel\xrightarrow{parameter} o_m\right\rangle  \in ecg$ }}{
+				$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
+				
+				$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
+				
+				$ecg$.addHandleTriggerRel($m_{send} \hookrightarrow m_{handle} $)	
+			}	
+		}
+	}
+	
+\end{algorithm}
 \point{基于Java 的多线程交互}
 
 基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
@@ -265,55 +341,6 @@ rel(m_{run}, o_r) = instance \\
 
 
 
-\begin{algorithm}[!ht]
-	\caption{扩展函数调用图的构建过程}
-	\label{alg:buildTrigger}
-	\KwIn {	$cg$， 函数调用图} 
-	\KwOut {	$ecg$，拓展函数调用图}
-
-	
-	\SetKwProg{Fn}{Function}{:}{}
-	\Fn{buildExtendedCallGraph($cg$)}{
-		
-		$ecg \gets cg$;
-		
-		addThreadTrigger($ecg$);
-		
-		addHandlerTrigger($ecg$);
-		
-		\KwRet $ecg$;
-	}
-
-% $o_p \stackrel{parameter}{\longrightarrow} m$
-	\Fn{addThreadTrigger($ecg$)} {
-		\For{\emph{$o_r \in \{ o \mid o$  is the $Runnable$ object node $\in$ $ecg \}$} }{
-			\If{ \todo{$ \left\langle m_{start}\joinrel\xrightarrow{instance} o_r \right\rangle \in ecg$ } \\\qquad 
-					and   \todo{$\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$ }}{
-				$ecg$.addThreadTriggerRel($m_{start} \hookrightarrow m_{run} $)	
-			}
-			\If{ \todo{$ \left\langle m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \right\rangle \in ecg$}  \\\qquad   
-				and  \todo{ $\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$  }}{
-				$ecg$.addThreadTriggerRel($m_{runOnUiThread} \hookrightarrow m_{run} $)	
-			}	
-		}
-	}	
-	\Fn{addHandlerTrigger($ecg$)} {
-		
-		\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node $\in$ $ecg \}$} }{
-				\If{\todo{ $ \left\langle m_{enqueue}\joinrel\xrightarrow{parameter} o_m\right\rangle \in ecg$}  \\\qquad   
-					and  \todo{ $\left\langle m_{dispatch}\joinrel\xrightarrow{parameter} o_m\right\rangle  \in ecg$ }}{
-						$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
-						
-						$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
-						
-						$ecg$.addHandleTriggerRel($m_{send} \hookrightarrow m_{handle} $)	
-				}	
-		}
-	}
-	
-\end{algorithm}
-
-
 
 
 
@@ -322,7 +349,6 @@ rel(m_{run}, o_r) = instance \\
 根据第\ref{chp:background}、\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
 %在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
-
 首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
 找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第16$\sim$17 行）；
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
@@ -404,6 +430,6 @@ RETURN p,method,enqueue,dispatch
 
  \section{本章小结}
 
-本章详细介绍了RunDroid的设计与实现。
+本章详细介绍了RunDroid的设计。
 首先，本章简要介绍了RunDroid实现的基本功能，并通过一个简单的例子介绍了RunDroid运行的基本思路。
 由此，我们提出了RunDroid具体的技术路线：RunDroid利用源代码插桩和运行时拦截器相结合的方式，将运行时的方法执行信息以日志的形式保存下来，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并利用调用图中方法和方法对象之间的关系结合具体的触发关系补全方法间的触发关系，形成最终的拓展函数调用图。

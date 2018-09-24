@@ -72,7 +72,7 @@ RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 如果两个方法执行之间存在调用关系，则他们之间会通过从调用发起方指向被调用方的有向边进行连接。
 
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
-通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为\question{5}时，对应的结果为\question{5}。
+通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为5时，对应的结果为5。
 FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示。
 通过比较\autoref{fig:rundroid-result-Fibonacci}和\autoref{fig:flowdroid-result-Fibonacci}，我们可以发现以下有趣的结论：
 
@@ -84,7 +84,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 	\label{fig:rundroid-result-Fibonacci}
 \end{figure*}
 
-首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有\question{9}个，即在运行过程中，\code{doFibonacci()}被调用了\question{9}次。
+首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有9个，即在运行过程中，\code{doFibonacci()}被调用了9次。
 由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点，该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
 另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
 因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，在一定程度上可以反映程序执行的具体过程。

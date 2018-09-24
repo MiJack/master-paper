@@ -63,7 +63,7 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 \end{enumerate}
 
 Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
-Android \code{Activity}提供的方法包括\code{onCreate()}, \code{onStart()},\code{ onResume()}, \code{onPaused()},\code{ onRestart()}, \code{ onStoped()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
+Android \code{Activity}提供的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、\code{ onRestart()}、 \code{ onStoped()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
 对应的\code{Activity}的生命周期具体如~\autoref{fig:Activity-lifecycle}所示：
 
 
@@ -186,6 +186,6 @@ Handler对象则负责将消息发送到对应的MessageQueue中（扮演着消�
 
 \section{本章小结}
 
-本章主要介绍了Android系统的相关背景知识，较为详细的阐述了Android的系统结构，详细介绍了Android四大组件之一的Activity机器生命周期。
+本章主要介绍了Android系统的相关背景知识，较为详细的阐述了Android的系统结构，详细介绍了Android四大组件之一的Activity生命周期。
 同时，本章还介绍了基于Runnable/Thread、Handler消息调度两种不同的多线程交互方式，较为详细地分析了Handler的运行机制，为下文基于函数调用图的多线程触发关系生成做了铺垫。
 最后，本章还介绍了系统在实现上可能遇到的困难。
