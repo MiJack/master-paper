@@ -11,7 +11,7 @@
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/code-sample.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/code-sample.png}
 	\caption{RunDroid的基本思路}
 	\label{fig:code_sample}
 \end{figure*}
@@ -64,10 +64,23 @@
 	\label{fig:rundroid_overview}
 \end{figure*}
 
-
 \section{方法信息的捕获}
 
 \subsection{用户方法执行信息的获取}%——基于源代码的日志代码插桩过程}
+
+
+预处理器以Android项目源代码作为输入，输出预处理后的APK文件；输出的APK文件在应用执行过程中将用户方法的执行信息输出出来。
+具体过程如\autoref{alg:instrument}所示：
+预处理器会遍历项目源代码中的每一个Java文件，解析每一个利用srcML转化成对应的抽象语法树。
+%  利用获取的语法结构，预处理器会提取出所有的方法体，
+对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名（第\ref{alg:instrument:computeMethodId}行），并将这些信息以日志记录代码的形式写回到方法体中（第\ref{alg:instrument:addMethodExitLogCode}$\sim$\ref{alg:instrument:addMethodEnterLogCode}行）。
+另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
+全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，可以看做方法体的唯一标识，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
+另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建（第\ref{alg:instrument:addMethodCatchLogCode}行）。
+最后，预处理器会将插桩后的源代码构建成APK文件（第\ref{alg:instrument:buildApk}行）。
+
+
+
 
 \begin{algorithm}[!ht]
 	\caption{日志代码插桩过程} 
@@ -109,19 +122,6 @@
 	}
 	
 \end{algorithm}
-
-预处理器以Android项目源代码作为输入，输出预处理后的APK文件；输出的APK文件在应用执行过程中将用户方法的执行信息输出出来。
-具体过程如\autoref{alg:instrument}所示：
-预处理器会遍历项目源代码中的每一个Java文件，解析每一个利用srcML转化成对应的抽象语法树。
-%  利用获取的语法结构，预处理器会提取出所有的方法体，
-对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名（第\ref{alg:instrument:computeMethodId}行），并将这些信息以日志记录代码的形式写回到方法体中（第\ref{alg:instrument:addMethodExitLogCode}$\sim$\ref{alg:instrument:addMethodEnterLogCode}行）。
-另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
-全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，可以看做方法体的唯一标识，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
-另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建（第\ref{alg:instrument:addMethodCatchLogCode}行）。
-最后，预处理器会将插桩后的源代码构建成APK文件（第\ref{alg:instrument:buildApk}行）。
-
-
-
 \subsection{系统方法执行信息的获取}%——基于动态拦截技术的方法信息捕获}
 
 
@@ -225,34 +225,29 @@
 %因此，通过将触发关系添加为边，将所有调用图拼接成一个调用图作为输出。
 
 
-
-\subsection{构建Activity的生命周期}
-
-Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相关方法的签名的不变性。
-具体过程如\autoref{alg:buildActivityLifecycle}所示：
-遍历调用图中所有的方法，如果一个方法的方法签名属于第\ref{chp:background}章中\autoref{fig:Activity-lifecycle}定义的方法，并且这个方法在调用图中不在调用者，执行线程为主线程，则这些线程为Activity生命周期的相关方法。
-将上述方法按照时间顺序连接起来，即可得到\code{Activity}的生命周期。
-\question{不允许调用者存在是为了防止误判下面这种情况：开发人员在重写生命周期方法时调用了父类的生命周期方法。}
-
 \begin{algorithm}[!ht]
 	\caption{构建Activity的生命周期} 
 	\label{alg:buildActivityLifecycle}
-	\KwIn{ $cg$，函数调用图}
+	\KwIn{ $cg$，函数调用图}	
+	\KwIn{ $activity$，AndroidManifest定义的Activity组件}
 	\KwOut{ $cg'$，包括Activity生命周期的函数调用图}
+    
+
+
 	\SetKwProg{Fn}{Function}{:}{}
 	
 	\Fn{patchActivityLifecycle($cg$)}{
 		
-	%	$cg'  \gets  cg$;
-	
-	从AndroidManifest文件中解析Activity组件
-	
+		%	$cg'  \gets  cg$;
+		
+		从AndroidManifest文件中解析Activity组件
+		
 		$list \gets$ new   $ List()$;
-
+		
 		\For{ \emph{ $m \in \{ m \mid  m$ is the method node in $ cg \}$}}{
 			\If{ \emph{ $m$ is the method of Activity's Lifecycle   \\\qquad  
-						and   {$  \left\langle  m' \to m \right\rangle  \notin cg$} }}{
-			
+					and   {$  \left\langle  m' \to m \right\rangle  \notin cg$} }}{
+				
 				$list$.add($m$);
 			}
 		}
@@ -263,6 +258,15 @@ Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相
 	}
 	
 \end{algorithm}
+
+
+\subsection{构建Activity的生命周期}
+
+Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相关方法的签名的不变性。
+具体过程如\autoref{alg:buildActivityLifecycle}所示：
+遍历调用图中所有的方法，如果一个方法的方法签名属于第\ref{chp:background}章中\autoref{fig:Activity-lifecycle}定义的方法，并且这个方法在调用图中不在调用者，执行线程为主线程，则这些线程为Activity生命周期的相关方法。
+将上述方法按照时间顺序连接起来，即可得到\code{Activity}的生命周期。
+\question{不允许调用者存在是为了防止误判下面这种情况：开发人员在重写生命周期方法时调用了父类的生命周期方法。}
 
 
  \subsection{构建多线程触发关系}

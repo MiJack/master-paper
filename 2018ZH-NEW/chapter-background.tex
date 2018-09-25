@@ -41,7 +41,7 @@ Android程序中较为常见的是组件（Component，例如Activity、Service�
 
 \section{Android中的Activity}
 
-在Android应用程序运行过程中，Activity向用户展示图形界面，响应用户的反馈，和其他组件一同完成相关业务，扮演着最为重要的作用。
+在Android应用程序运行过程中，Activity向用户展示图形界面，响应用户的反馈，和其他组件一同完成相关业务，扮演着最为重要的作用\cite{Activity2:online}。
 由于Android应用程序在架构选型上采用了事件驱动模型，为了便于协调应用内部状态的管理，Android组件通常有生命周期的概念，Activity也不例外。
 
 Android系统根据Activity 在运行时和用户的反馈将其状态分为以下四种：
@@ -88,14 +88,16 @@ Android \code{Activity}提供的方法包括\code{onCreate()}、 \code{onStart()
 
 \section{Android中的多线程交互}
 Android系统在架构设计上采用了事件驱动架构。在多线程并发访问时，若UI控件对于各线程均是可见的，并发对控件做读写操作会使控件处于不可预期的状态；
-若贸然对控件使用锁机制，这将会使阻塞部分线程业务逻辑的执行，使得应用变得复杂低效。
-上述情况对于应用程序都是不可接受的。
-为了避免多线程操作之间的竞争关系带来的低效率问题，Android系统在设计事件驱动架构时，采用了单线程的消息队列，即只允许在主线程（也称为主线程，Main Thread）进行界面更新操作，不允许在其他线程（也称为工作线程，Worker Thread）进行界面更新操作。
+若贸然对控件使用锁机制，访问控件的各个线程之间存在竞争关系，阻塞相关线程业务逻辑的执行，使得应用变得复杂低效。
+%上述情况对于应用程序都是不可接受的。
+为了避免此类低效率问题，Android系统在设计事件驱动架构时，采用了单线程的消息队列，即只允许在UI线程（也称为主线程，Main Thread）进行界面更新操作，不允许在其他线程（也称为工作线程，Worker Thread）进行界面更新操作。
+另外，为了保证应用程序界面渲染和事件响应的及时性，任何在主线程上产生的耗时操作（例如加载磁盘上的图片、网络请求等）都是不被允许的。
+换而言之，当应用程序需要进行耗时操作时，这个操作往往会在一个新的线程中执行，而不是在主线程中。
 
-当应用程序出现耗时操作（例如加载磁盘上的图片、网络请求等）时，应用程序往往需要在一个新的线程中执行上述逻辑。
-当应用程序界面中的某些控件需要根据耗时操作的结果（例如渲染得到的图片对象、网络请求得到的JSON字段）更新界面状态时，开发人员需要切换到主线程进行界面的更新。
 
-从整体上，开发者可以需要的交互方式分为基于Java的多线程交互和基于Handler的交互方式。
+Android系统架构中的单线程消息队列以及主线程的非阻塞性，使得界面更新和耗时操作分散在不同的线程中。
+只因如此，多线程交互在Android应用程序开发过程中十分常见。
+从整体上，系统提供的交互方式分为两种：基于Java的多线程交互和基于Handler的交互方式\cite{androidSourceCode}。
 
 \subsection{基于Java的多线程交互}
 
@@ -109,10 +111,18 @@ Android系统在架构设计上采用了事件驱动架构。在多线程并发�
 \subsection{基于Handler的多线程消息调度}
 
 为了满足开发人员多样化的业务在多线程间的切换，Android提供了基于Handler消息调度的多线程交互方式。
-\autoref{fig:handler-code}为Handler的简单示例：用户在工作线程执行一项耗时任务（生成一个字符串），将生成的字符串传递给Message对象，并通过Handler对象通知主线程进行界面更新。
-当开发人员需要当前业务逻辑转移到其他线程时，通过方法\code{Message.obtain()}获取一个Message，将对应的业务逻辑封装成\code{Runnable}对象传递给Message中对应的字段，
-或者将对应的参数传递给Message中的参数字段，最后通过Handler对象发送给指定的消息队列。
-当目标线程的消息队列读取到这条消息时，便会在该线程中执行预定的业务逻辑。
+
+\autoref{fig:handler-code}为关于Handler的使用示例。
+图中对应的场景为应用由于业务需要获取一个字符串，并将这个字符串展现在用户界面上。
+考虑到获取字符串的过程比较耗时，可能会阻塞主线程的相关业务，因此我们会在工作线程执行这部分逻辑（如\autoref{fig:handler-code}-左所示），而在主线程执行信息展现的逻辑（如\autoref{fig:handler-code}-右所示）。
+具体的，在工作线程中，用户生成的字符串和对应的逻辑代码\code{MSG\_CHANGE\_TEXT}封装到\code{Message}对象中，通过Handler发送出去；
+Handler在主线程中收到了该\code{Message}对象时，会根据逻辑代码（即\code{Message.what}的值）决定进行对应的逻辑处理（本例中，对应逻辑为更新界面信息）。
+
+
+%用户在工作线程执行生成一个字符串，将生成的字符串传递给Message对象，并通过Handler对象通知主线程进行界面更新。
+%当开发人员需要当前业务逻辑转移到其他线程时，通过方法\code{Message.obtain()}获取一个Message，
+%或者将对应的参数传递给Message中的参数字段，最后通过Handler对象发送给指定的消息队列。
+%当目标线程的消息队列读取到这条消息时，便会在该线程中执行预定的业务逻辑。
 
 
 
@@ -123,9 +133,9 @@ Android系统在架构设计上采用了事件驱动架构。在多线程并发�
 	\label{fig:handler-code}
 \end{figure*}
 
-\todo{未完整介绍分发过程！！！}
 
-从Android SDK提供的API来看，开发人员可以通过\code{post(Runnable)}，\code{postAtTime(Runnable，long)}，\code{sendMessage(Message)}，\code{postDelayed(Runnable, Object, long)},
+除了实例中的调用方式，Android SDK提供的API\cite{HandlerA26:online}还提供多种API，同时支持基于\code{Runnable}的消息调度和基于逻辑代码的消息调度：
+开发人员可以通过\code{post(Runnable)}，\code{postAtTime(Runnable，long)}，\code{sendMessage(Message)}，\code{postDelayed(Runnable, Object, long)},
  \code{sendMessageDelayed(Message，long)}，\code{sendMessageAtTime(Message，long)}和\code{sendEmptyMessage(int)}等多种API形式实现消息调度。
  通过查阅和分析Android系统相关源代码，我们发现上述Handler相关的API关系如~\autoref{fig:handler-apis}所示。
 从~\autoref{fig:handler-apis}中，我们可以发现所有的API最后就会调用到\code{android.os.Handler enqueueMessage(MessageQueue, Message, long)}方法。
@@ -140,6 +150,7 @@ Android系统在架构设计上采用了事件驱动架构。在多线程并发�
 
 
 
+	
 从底层实现上看，Handler机制主要由Handler、Looper、MessageQueue、Message等若干部分组成。
 Message是跨线程交互的主要载体，Android系统采用对象池的设计模式来管理Message对象；无论开发人员以何种形式调用了Handler发送消息，传递的参数最后均会封装到Message对象中。
 MessageQueue则存放着所有待处理的Message对象，它是一个双端队列，开发人员可以根据具体业务场景在消息队列的头部、尾部或者适当位置插入消息队列。
@@ -151,7 +162,7 @@ Handler对象则负责将消息发送到对应的MessageQueue中（扮演着消�
 具体地，Handler的工作原理如~\autoref{fig:handler-framework}所示：
 
 
-\begin{figure*}[h]
+\begin{figure*}[!hb]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/Handler-framework.png}
 	\caption{ Handler的工作原理}
@@ -159,8 +170,8 @@ Handler对象则负责将消息发送到对应的MessageQueue中（扮演着消�
 \end{figure*}
 
 
-综上所述，基于Handler消息调度的多线程交互方式，不仅可以帮助开发人员实现业务逻辑在主线程和工作线程间的自由转移，而且其灵活的API设计还帮助开发人员降低应用的设计复杂程度，提升了系统架构的可拓展性。
-因此，在Android开发过程中，基于Handler消息调度的多线程交互十分常见。
+基于Handler消息调度的多线程交互方式，不仅可以帮助开发人员实现业务逻辑在主线程和工作线程间的自由转移，而且其灵活的API设计还帮助开发人员降低应用的设计复杂程度，提升了系统架构的可拓展性。
+正因如此，在Android开发过程中，基于Handler消息调度的多线程交互十分常见。
 \section{本文遇到的困难与挑战}
 
 
