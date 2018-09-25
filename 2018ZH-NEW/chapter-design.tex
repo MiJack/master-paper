@@ -30,7 +30,6 @@
 若在程序执行前后均记录日志（即一个方法的执行会输出两条日志：方法开始日志、方法结束日志）时，
 我们得到的遍历序列是唯一的，可以直接用于函数调用图的还原。
 % 而且，函数执行过程中出现的错误异常可能使得序列输出中断，阻碍调用图的构建。
-
 为此，我们采用的基本思路如下：
 通过对源程序（\autoref{fig:code_sample}-左上）进行预处理，得到包含日志记录功能的运行代码（\autoref{fig:code_sample}-右上）；
 程序在函数执行前后可以输出和方法执行相关的日志信息，（\autoref{fig:code_sample}-右下）；
@@ -66,9 +65,9 @@
 \end{figure*}
 
 
+\section{方法信息的捕获}
 
-
-\section{用户方法执行信息的获取——基于源代码的日志代码插桩过程}
+\subsection{用户方法执行信息的获取}%——基于源代码的日志代码插桩过程}
 
 \begin{algorithm}[!ht]
 	\caption{日志代码插桩过程} 
@@ -113,7 +112,7 @@
 
 预处理器以Android项目源代码作为输入，输出预处理后的APK文件；输出的APK文件在应用执行过程中将用户方法的执行信息输出出来。
 具体过程如\autoref{alg:instrument}所示：
-预处理器会遍历项目源代码中的每一个Java文件，将对应利用srcML转化成对应的抽象语法树。
+预处理器会遍历项目源代码中的每一个Java文件，解析每一个利用srcML转化成对应的抽象语法树。
 %  利用获取的语法结构，预处理器会提取出所有的方法体，
 对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名（第\ref{alg:instrument:computeMethodId}行），并将这些信息以日志记录代码的形式写回到方法体中（第\ref{alg:instrument:addMethodExitLogCode}$\sim$\ref{alg:instrument:addMethodEnterLogCode}行）。
 另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
@@ -122,7 +121,14 @@
 最后，预处理器会将插桩后的源代码构建成APK文件（第\ref{alg:instrument:buildApk}行）。
 
 
-%\section{系统方法执行信息的获取——}
+
+\subsection{系统方法执行信息的获取}%——基于动态拦截技术的方法信息捕获}
+
+
+
+运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
+运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，产生完整的方法调用，进而帮助我们还原出方法间的触发关系。
+
 
 
 \section{扩展函数调用图的构建过程}
@@ -238,11 +244,14 @@ Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相
 	\Fn{patchActivityLifecycle($cg$)}{
 		
 	%	$cg'  \gets  cg$;
+	
+	从AndroidManifest文件中解析Activity组件
+	
 		$list \gets$ new   $ List()$;
 
 		\For{ \emph{ $m \in \{ m \mid  m$ is the method node in $ cg \}$}}{
 			\If{ \emph{ $m$ is the method of Activity's Lifecycle   \\\qquad  
-						and   \todo{$  \left\langle  m' \to m \right\rangle  \notin cg$} }}{
+						and   {$  \left\langle  m' \to m \right\rangle  \notin cg$} }}{
 			
 				$list$.add($m$);
 			}
@@ -282,27 +291,27 @@ Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相
 	
 	% $o_p \stackrel{parameter}{\longrightarrow} m$
 	\Fn{addThreadTrigger($ecg$)} {
-		\For{\emph{$o_r \in \{ o \mid o$  is the $Runnable$ object node $\in$ $ecg \}$} }{
-			\If{ \todo{$ \left\langle m_{start}\joinrel\xrightarrow{instance} o_r \right\rangle \in ecg$ } \\\qquad 
-				and   \todo{$\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$ }}{
-				$ecg$.addThreadTriggerRel($m_{start} \hookrightarrow m_{run} $)	
+		\For{\emph{$o_r \in \{ o \mid o $  is the $Runnable$ object node ,$o \in$ $ecg \}$} }{
+			\If{ {$ \left\langle m_{start}\joinrel\xrightarrow{instance} o_r \right\rangle \in ecg$ } \\\qquad 
+				and   {$\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$ }}{
+				$ecg$.addTriggerRel($m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $)	
 			}
-			\If{ \todo{$ \left\langle m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \right\rangle \in ecg$}  \\\qquad   
-				and  \todo{ $\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$  }}{
-				$ecg$.addThreadTriggerRel($m_{runOnUiThread} \hookrightarrow m_{run} $)	
+			\If{ {$ \left\langle m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \right\rangle \in ecg$}  \\\qquad   
+				and  { $\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$  }}{
+				$ecg$.addTriggerRel($m_{runOnUiThread}  \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run} $)	
 			}	
 		}
 	}	
 	\Fn{addHandlerTrigger($ecg$)} {
 		
-		\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node $\in$ $ecg \}$} }{
-			\If{\todo{ $ \left\langle m_{enqueue}\joinrel\xrightarrow{parameter} o_m\right\rangle \in ecg$}  \\\qquad   
-				and  \todo{ $\left\langle m_{dispatch}\joinrel\xrightarrow{parameter} o_m\right\rangle  \in ecg$ }}{
+		\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node ,$o \in$ $ecg \}$} }{
+			\If{{ $ \left\langle m_{enqueue}\joinrel\xrightarrow{parameter} o_m\right\rangle \in ecg$}  \\\qquad   
+				and  { $\left\langle m_{dispatch}\joinrel\xrightarrow{parameter} o_m\right\rangle  \in ecg$ }}{
 				$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
 				
 				$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
 				
-				$ecg$.addHandleTriggerRel($m_{send} \hookrightarrow m_{handle} $)	
+				$ecg$.addTriggerRel($m_{send} \lhook\joinrel\xrightarrow{Handler} m_{handle} $ )	
 			}	
 		}
 	}
@@ -354,7 +363,7 @@ rel(m_{run}, o_r) = instance \\
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
 从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第18行），
 从$m_{dispatch}$ 顺着调用关系往下找到用户定义的方法\code{Handler.handleMessage(Message)}$m_{handle}$（第19行），
-最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \hookrightarrow m_{handle}$（第20行）。
+最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \lhook\joinrel\xrightarrow{Handler} m_{handle}$（第20行）。
 %如果$m_{send}$和$m_{handle}$中有一个方法未找到，表示
 
 

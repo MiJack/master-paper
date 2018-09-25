@@ -28,7 +28,7 @@
 
 \begin{Def}方法执行\end{Def}
 
-方法执行是对方法执行过程中的相关信息的描述，完整的信息包括对应方法的完整签名、执行时所处的线程$m_t$以及相关的方法对象。
+方法执行是对方法执行过程中的相关信息的描述，完整的信息包括对应方法的完整签名、执行时所处的线程以及相关的方法对象。
 在本文中，方法执行通常用符号$m$表示。
 
 \subsection{关于方法间关系的定义}
@@ -38,14 +38,15 @@
 
 	对于程序$P$的两个方法$m_1$和$m_2$，方法$m_1$调用了方法$m_2$，则记作$m_1 \to m_2$，称为方法$m_1$调用方法$m_2$。
 
+在此基础上，对于方法$m$，若存在方法$m_i$（$i=0,\dots,n , n \geqslant 0$），使得~\autoref{equ:extend_invoke}成立，则记作$m_0 \stackrel{\ast}{\to} m$，称为方法$m_0$扩展调用方法$m_n$。
+特殊的，对于方法$m_1$和方法$m_2$，若$m_1 \to m_2$，则$m_1  \stackrel{\ast}{\to}  m_2$也成立。
+
 \begin{equation}
 m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 \end{equation}
 
-在此基础上，对于方法$m$，若存在方法$m_i$（$i=0,\dots,n , n \geqslant 0$），使得~\autoref{equ:extend_invoke}成立，则记作$m_0 \stackrel{\ast}{\to} m$，称为方法$m_0$扩展调用方法$m_n$。
-特殊的，对于方法$m_1$和方法$m_2$，若$m_1 \to m_2$，则$m_1  \stackrel{\ast}{\to}  m_2$也成立。
 
-\important{在系统源代码的层面上}，如果对于方法$m$和$m'$，$m \to m'$\important{总是}成立，可以记为 $m \Rightarrow m'$；
+\important{在系统源代码的层面上}，如果对于方法$m$和$m'$，方法$m$的执行过程总是会调用方法$m'$（即$m \to m'$\important{总是}成立），可以记为 $m \Rightarrow m'$；
 如果对于方法$m$和$m'$，$m  \stackrel{\ast}{\to}  m'$总是成立，可以记为 $m  \stackrel{\ast}{ \Rightarrow } m'$。
 
 \begin{Def}
@@ -59,8 +60,14 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 	\begin{itemize}
 		\item 方法$m_a$的执行时间总是在方法$m_b$的执行时间之前；
 		\item $m_a \stackrel{\ast}{\to} m_b $不成立；
-		\item $m_a$、$m_b$之间存在着一定的因果关系，包括但不限于生命周期事件，UI交互事件或多线程通信等。
+		\item $m_a$、$m_b$之间存在着因果关系，包括但不限于事件回调或多线程交互等。
 	\end{itemize}
+
+
+以多线程中的Thread为例，方法\code{Thread.start()}（记为$m_{start}$）执行会使JVM/Dalvik虚拟机创建一个新的线程。
+最终在这个线程中，虚拟机会在新的线程中回调该Thread对象的方法\code{Thread.run()}（记为$m_{run}$）。
+上述描述可以表示成$m_{start} \hookrightarrow m_{run}$。由于这个触发关系和多线程相关，也可以记作$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $。
+
 
 在系统源代码的层面上，对于方法$m_a$ ,$m_b$ ,$m_c$ ，
 若$m_a  \stackrel{\ast}{ \Rightarrow } m_b$ 和 $m_b \hookrightarrow m_c$同时成立，则$m_a \hookrightarrow m_c$也成立；
@@ -96,11 +103,11 @@ E = & \{
 
 
 \begin{Def}
-	拓展函数调用图（Extended Dynamic CallGraph，EDCG）
+	拓展函数调用图（Extended CallGraph，ECG）
 \end{Def}
 
 
-	在函数调用图（DCG）的基础上，添加了方法对象和函数间的触发关系。
+	在函数调用图（CG）的基础上，添加了方法对象和函数间的触发关系。
 	拓展函数调用图中的节点包括方法执行节点和方法对象节点。图中的边包括描述方法间关系的边和描述方法和对象间的边：
 	前者的方法间关系包括调用关系和触发关系；而后者的关系包括和方法对象相关的三个关系。
 \eat{

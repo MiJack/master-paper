@@ -65,9 +65,9 @@ FlowDroid通过定义数据源点和数据泄漏点，在Android应用生命周�
 
 Yang等人~\cite{yang2015static}，利用静态分析技术，并将回调函数添加到控制流图（调用图）中，形成了回调控制流图（Callback control-flow gragh）。
 实验结果显示，Yang的工作比Gator~\cite{rountev2014static}在控件监听器绑定上得到了更为准确结果。
-法国和意大利的学者~\cite{payet2012static}通过对Java字节码静态分析器Julia进行扩展，使得其支持对 Android 应用程序的静态分析；
-他们通过改写 Android 库中 Activity、LayoutInflater 等类的代码逻辑，规避了Android系统分析常见难点(如程序的事件机制，基于反射的视图加载等)，
-实现了包括死代码检查、空指针检查在内的7种静态分析技术。
+%法国和意大利的学者~\cite{payet2012static}通过对Java字节码静态分析器Julia进行扩展，使得其支持对 Android 应用程序的静态分析；
+%他们通过改写 Android 库中 Activity、LayoutInflater 等类的代码逻辑，规避了Android系统分析常见难点(如程序的事件机制，基于反射的视图加载等)，
+%实现了包括死代码检查、空指针检查在内的7种静态分析技术。
 
 
 
@@ -111,16 +111,16 @@ SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时
 
 %IOS Detecting privacy leaks in ios applications
 \todo{缩减此处，再添加3$\sim$5篇文献}
-为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout~\cite{au2012pscout}利用Soot对Android系统程序源代码进行静态分析，
-构建出整个Android系统的函数调用图，在调用图中标识权限相关的Binder跨进程调用，结合逆向可达性分析技术得出相关API接口以及对应调用路径上的所有权限检查的映射关系。
-相比其他类似工作，由于考虑了Android系统特性，PScout分析的到结果更加完整，但受到可达性分析的精度限制，存在部分错误的映射关系。
-此外，该团队对Android 2.1 $\sim$  4.0等四个版本的系统源代码进行了广泛的分析，就权限设计的冗余性、无文档说明API的权限要求、权限在Android系统升级的演变等多个研究问题进行深入的探讨。
+为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout~\cite{au2012pscout}利用Soot对Android系统程序进行静态分析，
+构建出Android系统的函数调用图，在调用图中标识权限相关的Binder跨进程调用，结合逆向可达性分析技术得出相关API接口以及对应调用路径上的所有权限检查的映射关系。
+%相比其他类似工作，由于考虑了Android系统特性，PScout分析的到结果更加完整，但受到可达性分析的精度限制，存在部分错误的映射关系。
+%此外，该团队对Android 2.1 $\sim$  4.0等四个版本的系统源代码进行了广泛的分析，就权限设计的冗余性、无文档说明API的权限要求、权限在Android系统升级的演变等多个研究问题进行深入的探讨。
 在PScout的基础上，Rahul Pandita等人将目光聚焦到应用市场上，他们开发的\textsc{WhyPer}~\cite{pandita2013whyper}将自然语言处理技术（NLP）和传统静态分析技术相结合，
 可以帮人们找出那些应用描述和实际使用到的权限不符的应用。
-Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为以防止被安全机构识别出来，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
-不同的是恶意软件一般在特定的时间点（深夜）运行，以防止引起用户的注意。
-为了筛选出这种类型的恶意软件，Wei Yang等人提出了一个基于静态分析技术的解决方案AppContext~\cite{yang2015appcontext}：
-在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件，提取出安全敏感行为及对应的上下文，并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
+Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为以防止被安全机构识别出来。%，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
+不同的是恶意软件的行为一般在特定条件下（例如深夜）运行。
+为此，Wei Yang等人提出了一种基于静态分析技术的解决方案AppContext~\cite{yang2015appcontext}：
+在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件形成ICFG，提取出安全敏感行为及对应的上下文，并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
 实验结果显示，AppContext的准确率和召回率分别达到了87.7\%和95\%，这从一个侧面反映了安全敏感行为的恶意性与该行为的意图(通过上下文反映)更密切相关，验证之前提到的问题。
 Zhemin Yang等人的AppIntent~\cite{yang2013appintent}利用静态分析技术提取应用程序的时间约束条件，再结合符号执行技术，最后得到一串可以导致用户信息泄露的序列。
 Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket~\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。
@@ -157,6 +157,7 @@ mobile app tagging ~\cite{chen2016mobile}
 % 例如错误定位、自动化分析、profiling等
 
 \section{本文的主要工作}
+\question{
 
 本文的主要研究工作包括以下：
 
@@ -164,7 +165,8 @@ mobile app tagging ~\cite{chen2016mobile}
 
 2)	提出并实现Android动态函数调用图构建系统RunDroid，包含传统函数调用图的构建以及在此基础之上的多线程函数调用关系的构建。
 
-3)	针对不同的
+3)	将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
+}
 
 %\todo{对上述系统设计对应的实验方案，评估对应的实验效果。}
 

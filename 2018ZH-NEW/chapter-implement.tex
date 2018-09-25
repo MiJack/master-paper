@@ -49,9 +49,6 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 
 \point{运行时拦截器}
 
-运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
-运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，产生完整的方法调用，进而帮助我们还原出方法间的触发关系。
-
 
 在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法）。%，如\autoref{tbl:hookMethodList} 所示。
 每当应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。

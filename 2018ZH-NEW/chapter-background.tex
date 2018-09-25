@@ -109,11 +109,11 @@ Android系统在架构设计上采用了事件驱动架构。在多线程并发�
 \subsection{基于Handler的多线程消息调度}
 
 为了满足开发人员多样化的业务在多线程间的切换，Android提供了基于Handler消息调度的多线程交互方式。
+\autoref{fig:handler-code}为Handler的简单示例：用户在工作线程执行一项耗时任务（生成一个字符串），将生成的字符串传递给Message对象，并通过Handler对象通知主线程进行界面更新。
 当开发人员需要当前业务逻辑转移到其他线程时，通过方法\code{Message.obtain()}获取一个Message，将对应的业务逻辑封装成\code{Runnable}对象传递给Message中对应的字段，
 或者将对应的参数传递给Message中的参数字段，最后通过Handler对象发送给指定的消息队列。
 当目标线程的消息队列读取到这条消息时，便会在该线程中执行预定的业务逻辑。
 
-~\autoref{fig:handler-code}为Handler的简单示例：用户在工作线程执行一项耗时任务（生成一个字符串），将生成的字符串传递给Message对象，并通过Handler对象通知主线程进行界面更新。
 
 
 \begin{figure*}[h]
