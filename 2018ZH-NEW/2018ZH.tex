@@ -25,8 +25,9 @@
 
 \usepackage{indentfirst,latexsym,colortbl,subfigure,clrscode}
 
+%\usepackage[ruled,vlined,linesnumbered,]{algorithm2e}
 
-\usepackage[linesnumbered,ruled,vlined]{algorithm2e}%[ruled,vlined]{  
+\usepackage[linesnumbered,ruled,vlined,resetcount,algochapter]{algorithm2e}%[ruled,vlined]{  
 \usepackage{algorithmicx}
 \usepackage{listings}
 \usepackage{algcompatible}
@@ -116,6 +117,7 @@
 \renewcommand{\algorithmautorefname}{算法}
 
 
+\renewcommand{\listalgorithmcfname}{算法清单}
 
 
 
@@ -231,6 +233,9 @@
 \newpage
 \pagenumbering{roman}
 \pagestyle{plain}
+
+
+
 \input {B1-ABSTRACT.tex}
 
 
@@ -267,6 +272,7 @@
 
 
 \setlength{\baselineskip}{25pt}  %%正文设为25磅行间距
+
 
 
 % 在章首页添加页眉
