@@ -69,9 +69,9 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 上述描述可以表示成$m_{start} \hookrightarrow m_{run}$。由于这个触发关系和多线程相关，也可以记作$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $。
 
 
-在系统源代码的层面上，对于方法$m_a$ ,$m_b$ ,$m_c$ ，
-若$m_a  \stackrel{\ast}{ \Rightarrow } m_b$ 和 $m_b \hookrightarrow m_c$同时成立，则$m_a \hookrightarrow m_c$也成立；
-若$m_a  \hookrightarrow m_b$ 和 $m_b \stackrel{\ast}{ \Rightarrow }  m_c$同时成立，则$m_a \hookrightarrow m_c$也成立。
+\important{在系统源代码的层面上}，对于方法$m_a$ ,$m_b$ ,$m_c$ ，
+若$m_a  \stackrel{\ast}{ \Rightarrow } m_b$ 和 $m_b \hookrightarrow m_c$\important{同时}成立，则$m_a \hookrightarrow m_c$也成立；
+若$m_a  \hookrightarrow m_b$ 和 $m_b \stackrel{\ast}{ \Rightarrow }  m_c$\important{同时}成立，则$m_a \hookrightarrow m_c$也成立。
 
 \subsection{关于调用图的定义}
 
@@ -130,11 +130,12 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 \section{举例说明}
 
 以第\ref{chp:background}章中的\autoref{fig:handler-code}为例，我们将简要阐述上述概念。
-在线程WorkerThread中，方法run()\eat{$m_{run}$}依次调用了方法Message.obtain()\eat{$m_{obtain}$}和方法Handler.sendMessage(Message)\eat{$m_{send}$}，则有$m_{run} \to m_{obtain} $和$m_{run} \to m_{send}$。
+在线程WorkerThread中，方法\code{run()}\eat{$m_{run}$}依次调用了方法\code{Message.obtain()}\eat{$m_{obtain}$}和方法\code{Handler.sendMessage(Message)}\eat{$m_{send}$}，则有$m_{run} \to m_{obtain} $和$m_{run} \to m_{send}$。
 对于方法$m_{ontain}$，$o_{m} \joinrel\xrightarrow{return} m_{obtain} $成立。
 对于方法$m_{send}$，$o_{m} \joinrel\xrightarrow{parameter} m_{send} $、$o_{handler} \joinrel\xrightarrow{instance} m_{send} $成立。
 %在Handler的方法handleMessage(Message)中，则有$m_handle \to $
-通过对Android运行机制的分析，我们知道$m_{send} \stackrel{\ast	}{\Rightarrow} m_{enqueue} $、$m_{enqueue} \hookrightarrow m_{dispatch}$以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，因此，$m_{send} \hookrightarrow m_{handle}$。
+通过对Android Handler 运行机制的分析，我们知道$m_{send} \stackrel{\ast	}{\Rightarrow} m_{enqueue} $、$m_{enqueue} \hookrightarrow m_{dispatch}$以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，
+因此，$m_{send} \hookrightarrow m_{handle}$或$m_{send} \lhook\joinrel\xrightarrow{Handler}  m_{handle} $。
 
 
 \section{本章小结}
