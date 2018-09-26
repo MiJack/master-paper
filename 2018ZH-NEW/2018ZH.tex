@@ -23,6 +23,7 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 
+
 \usepackage{indentfirst,latexsym,colortbl,subfigure,clrscode}
 
 %\usepackage[ruled,vlined,linesnumbered,]{algorithm2e}
@@ -68,6 +69,8 @@
 \usepackage{longtable,booktabs}
 \usepackage{multirow}
 \usepackage{subfigure}
+\usepackage[subfigure]{tocloft}
+
 \usepackage{float}
 \usepackage{balance}
 \usepackage {paralist}
@@ -117,8 +120,20 @@
 \renewcommand{\algorithmautorefname}{算法}
 
 
-\renewcommand{\listalgorithmcfname}{算法清单}
 
+
+
+\renewcommand{\contentsname}{\hfill\bfseries\Large 目录\hfill}   
+\renewcommand{\cftaftertoctitle}{\hfill}
+%\setlength{\cftbeforetoctitleskip}{30pt}
+%\setlength{\cftaftertoctitleskip}{20pt}
+
+
+\renewcommand{\listtablename}{\hfill\bfseries\Large 表格清单\hfill} 
+\renewcommand{\listfigurename}{\hfill\bfseries\Large 插图清单\hfill} 
+
+
+\renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算法清单}
 
 
 
@@ -244,11 +259,12 @@
 
 %\clearpage{\pagestyle{plain}\cleardoublepage}
 %\textcolor[rgb]{1,1,1}{文本} 
+\clearpage
 
 \setcounter{tocdepth}{2}
 \tableofcontents
 
-
+\clearpage
 \input{B3-FIGURES.tex}
 
 

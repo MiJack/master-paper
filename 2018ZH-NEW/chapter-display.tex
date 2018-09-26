@@ -241,10 +241,91 @@ treatment group 就是实验组，也就是在做实验的时候，实验组如�
 
 
 
+\begin{algorithm}[!ht]
+	
+	
+	\caption{错误定位的计算方法} 
+	
+	
+	\label{alg:fault-localization}
+	
+	
+	\KwIn{ $P$，应用程序}
+	\KwIn{ $logs$，应用程序的运行时日志}
+	
+	
+	\KwOut{ $cg$，函数调用图}
+	
+	
+	\SetKwProg{Fn}{Function}{:}{}
+	
+	\Fn{buildCallGraph($log$)}{
+		
+		$cg$ $\gets$ new CallGraph();
+		
+		\KwRet{ $cg$};
+		
+		
+	}
+
+\end{algorithm}
 
 To compare the effectiveness of causal influence model with and without the dynamic call graphs provided by RunDroid, we follow the experiment setup at~\cite{baah2010causal,baah2011mitigating}, use the original causal influence model (without RunDroid) as a baseline, and compare their computed \textit{causal-effect estimates}.
 
 
+
+
+\begin{table}[h]
+	
+	\caption{结果对比}
+	
+	\label{tab:result}
+	
+	\begin{tabular}{rl*{5} {|c}|c|c}
+		
+		
+		
+		&                    & $t_1$ & $t_2$ & $t_3$ & $t_4$ & $t_5$ &  $\tau$ &  $\tau'$ \\
+		
+		\hline
+		
+		1&void onClick(View v) \{                       &   &   &   &   &   &         \\
+		
+		2&\quad num = getNumber();                   & 1 & 1 & 1 & 1 & 1 &  NA  &  NA    \\
+		
+		3&\quad if(v.getId() == R.id.btn1) \{           & 1 & 1 & 1 & 1 & 1 &  NA    &  NA \\
+		
+		4&\quad \quad if( num == 0 ) \{                    & 0 & 1 & 1 & 0 & 1 & 0.67   & 0.67 \\
+		
+		5&\quad \quad \quad num=1;                         & 0 & 0 & 1 & 0 & 0 & -1.0  &-1\\
+		
+		6&\quad \quad \}                                   &   &   &   &   &   &             \\
+		
+		7&\quad   \}                                       &   &   &   &   &   &            \\
+		
+		8&\quad Thread t = createThread(v.getId());          & 1 & 1 & 1 & 1 & 1 & NA&  NA  \\
+		
+		9&\quad t.start();                                 & 1 & 1 & 1 & 1 & 1 & 0.67   & 0.67 \\
+		
+		10&\}                                              &   &   &   &   &   &             \\
+		
+		11&TaskThread.run() \{                             &   &   &   &   &   &       \\
+		
+		12&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & 0.67 \\
+		
+		13&\quad \quad \textbf{loadData(num); /* FAULT */} & 0 & 1 & 1 & 0 & 1 & 0.67    & 1  \\
+		
+		14&\quad\}                                         &   &   &   &   &   &            \\
+		
+		15&\}                                              &   &   &   &   &   &           \\
+		
+		\hline
+		
+		&                                                  & 0 & 1 & 0 & 0 & 1 &            \\
+		
+	\end{tabular}
+	
+\end{table}
 
 We take the motivating example as the subject program. Causal influence model relies heavily on dependence relationship among statements. With RunDroid, the asynchronized trigger relation between Line 9 \textit{t.start()} and Line 11 \textit{TaskThread.run()}, is captured, hence the predecessors of Line 13 are Lines ${\{}$5, 8, 9, 13$\}$, instead of Line 13 only, which is the case of original causal influence model. \autoref{fig:motivationResultTreatment} shows the treatment units and the control units with their associated test cases for Line 13. Specifically, \autoref{fig:motivationResultTreatment}-(a) represents the case of without RunDroid, and \autoref{fig:motivationResultTreatment}-(b) represents the case with RunDroid. The treatment units, which are test cases that cover Line 13 are $t_2$, $t_3$, and $t_5$; the control units, which are test cases that do not cover Line 13 are $t_1$ and $t_4$.
 
@@ -274,92 +355,11 @@ The estimate for Line 13 is $\frac{(1+1)}{2}-\frac{(0+0)}{2} = 1.0$. The estimat
 
 
 
-\begin{algorithm}[!ht]
-
-
-	\caption{错误定位的计算方法} 
-
-
-	\label{alg:fault-localization}
-
-
-	\KwIn{ $P$，应用程序}
-	\KwIn{ $logs$，应用程序的运行时日志}
-
-
-	\KwOut{ $cg$，函数调用图}
-
-
-	\SetKwProg{Fn}{Function}{:}{}
-
-	\Fn{buildCallGraph($log$)}{
-
-		$cg$ $\gets$ new CallGraph();
-
-		\KwRet{ $cg$};
-
-
-	}
-
-
 	
 
 
-\end{algorithm}
 
 
-
-\begin{table}[h]
-
-	\caption{结果对比}
-
-	\label{tab:result}
-
-	\begin{tabular}{rl*{5} {|c}|c|c}
-
-		
-
-		&                    & $t_1$ & $t_2$ & $t_3$ & $t_4$ & $t_5$ &  $\tau$ &  $\tau'$ \\
-
-		\hline
-
-		1&void onClick(View v) \{                       &   &   &   &   &   &         \\
-
-		2&\quad num = getNumber();                   & 1 & 1 & 1 & 1 & 1 &  NA  &  NA    \\
-
-		3&\quad if(v.getId() == R.id.btn1) \{           & 1 & 1 & 1 & 1 & 1 &  NA    &  NA \\
-
-		4&\quad \quad if( num == 0 ) \{                    & 0 & 1 & 1 & 0 & 1 & 0.67   & 0.67 \\
-
-		5&\quad \quad \quad num=1;                         & 0 & 0 & 1 & 0 & 0 & -1.0  &-1\\
-
-		6&\quad \quad \}                                   &   &   &   &   &   &             \\
-
-		7&\quad   \}                                       &   &   &   &   &   &            \\
-
-		8&\quad Thread t = createThread(v.getId());          & 1 & 1 & 1 & 1 & 1 & NA&  NA  \\
-
-		9&\quad t.start();                                 & 1 & 1 & 1 & 1 & 1 & 0.67   & 0.67 \\
-
-		10&\}                                              &   &   &   &   &   &             \\
-
-		11&TaskThread.run() \{                             &   &   &   &   &   &       \\
-
-		12&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & 0.67 \\
-
-		13&\quad \quad \textbf{loadData(num); /* FAULT */} & 0 & 1 & 1 & 0 & 1 & 0.67    & 1  \\
-
-		14&\quad\}                                         &   &   &   &   &   &            \\
-
-		15&\}                                              &   &   &   &   &   &           \\
-
-		\hline
-
-		&                                                  & 0 & 1 & 0 & 0 & 1 &            \\
-
-	\end{tabular}
-
-\end{table}
 
 
 \section{本章小结}
