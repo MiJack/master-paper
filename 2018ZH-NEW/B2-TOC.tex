@@ -1,0 +1,42 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             目录                                                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\clearpage
+\let\origaddvspace\addvspace
+\renewcommand{\addvspace}[1]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             插图                                                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%\setlength{\baselineskip}{30pt}  %%正文设为25磅行间距
+\renewcommand{\cftfigpresnum}{图}
+\setlength{\cftfignumwidth}{3em}
+
+\listoffigures
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             表格                                                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\renewcommand{\cfttabpresnum}{表}
+\setlength{\cfttabnumwidth}{3em}
+
+\listoftables
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             算法                                                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\renewcommand*{\l@algocf}[2]{\@dottedtocline{1}{1em}{2.3em}{算法 #1 }{#2}}
+\makeatother
+
+\listofalgorithms
+\setlength{\baselineskip}{25pt}
+ \renewcommand{\addvspace}[1]{\origaddvspace{#1}}

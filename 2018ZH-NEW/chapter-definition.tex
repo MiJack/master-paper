@@ -72,7 +72,7 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 	\end{itemize}
 
 
-以多线程中的Thread为例，方法\code{Thread.start()}（记为$m_{start}$）执行会使JVM/Dalvik虚拟机创建一个新的线程。
+以多线程中的Thread为例，方法\code{Thread.start()}（记为$m_{start}$）执行会使JVM / Dalvik虚拟机创建一个新的线程。
 最终在这个线程中，虚拟机会在新的线程中回调该Thread对象的方法\code{Thread.run()}（记为$m_{run}$）。
 上述描述可以表示成$m_{start} \hookrightarrow m_{run}$。由于这个触发关系和多线程相关，也可以记作$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $。
 
@@ -118,6 +118,7 @@ E = & \{
 	在函数调用图（CG）的基础上，添加了方法对象和函数间的触发关系。
 	拓展函数调用图中的节点包括方法执行节点和方法对象节点。图中的边包括描述方法间关系的边和描述方法和对象间的边：
 	前者的方法间关系包括调用关系和触发关系；而后者的关系包括和方法对象相关的三个关系。
+	
 \eat{
 	具体定义如~\autoref{equ:def_edcg}所示：
 

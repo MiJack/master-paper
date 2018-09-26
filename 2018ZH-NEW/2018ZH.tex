@@ -18,7 +18,7 @@
 \usepackage{amssymb}               % AMSLaTeX宏包 用来排出更加漂亮的公式
 %\usepackage[CJKbookmarks]{hyperref}
 \usepackage{url}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{shortvrb,indentfirst,ulem,makeidx}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
@@ -129,11 +129,11 @@
 %\setlength{\cftaftertoctitleskip}{20pt}
 
 
-\renewcommand{\listtablename}{\hfill\bfseries\Large 表格清单\hfill} 
-\renewcommand{\listfigurename}{\hfill\bfseries\Large 插图清单\hfill} 
+\renewcommand{\listtablename}{\hfill\bfseries\Large 表~~~~格\hfill} 
+\renewcommand{\listfigurename}{\hfill\bfseries\Large 插~~~~图\hfill} 
 
 
-\renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算法清单}
+\renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算~~~~法}
 
 
 
@@ -261,16 +261,7 @@
 %\textcolor[rgb]{1,1,1}{文本} 
 \clearpage
 
-\setcounter{tocdepth}{2}
-\tableofcontents
-
-\clearpage
-\input{B3-FIGURES.tex}
-
-
-
-\input{B5-TABLES.tex}
-%\input{B4-SYMBOLS.tex}
+\input {B2-TOC.tex}
 
 
 
@@ -298,7 +289,7 @@
 \fancyhead[RE,LO]{ \leftmark}
 }
 
-
+\raggedbottom
 
 
 \input {chapter-intro.tex}

@@ -1,61 +1,63 @@
-\chapter{系统的设计}
+\chapter{RunDroid的系统设计}
 \label{chp:design}
 
 
-\section{系统功能}
-本文以帮助研究人员和开发人员了解Android应用程序的执行过程作为基本出发点，通过设计与实现Android动态函数调用图构建系统RunDroid，生成Android应用程序运行时对应的动态函数调用图，从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地展现Android应用的执行过程，为应用程序分析提供更为多样、准确的信息。
-%另外，系统具备一定的可拓展性，可以方便相关人员根据自身的业务需求对系统进行扩展，完成相应的需求。
 
-\section{基本思想}
+
+
+为了了解Android 应用程序在运行阶段的执行过程，本文提出了一个可用于还原Android应用程序运行时动态函数调用图的工具——RunDroid。
+RunDroid利用源程序代码插桩和运行时方法拦截的相结合的方式，捕获应用程序在应用层面和系统层面的方法执行信息，还原方法间的调用关系。
+在此基础上，RunDroid利用对象和方法的关系结合具体的触发规则，进而还原出方法间触发关系，在调用图中展现运行过程中的Android特性行为。
+RunDroid提供的函数调用图从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地刻画了Android应用程序的执行过程，可以为应用程序分析提供更为多样、准确的信息。
+
+
+\section{整体设计框架}
 
 
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/code-sample.png}
+	\includegraphics[width=\textwidth]{./Figures/code-sample.png}
 	\caption{RunDroid的基本思路}
 	\label{fig:code_sample}
 \end{figure*}
 
 
 %在本节，
-以\autoref{fig:code_sample}为例，%简要介绍一下RunDroid还原Android应用程序的函数调用图的基本思路：
+%以\autoref{fig:code_sample}为例，%简要介绍一下RunDroid还原Android应用程序的函数调用图的基本思路：
 \autoref{fig:code_sample}-左上为一段示例代码：在main函数执行时，程序会依次调用A、B两个函数，而B函数则会调用了C、D两个函数。
-\autoref{fig:code_sample}-左下则是期望输出——函数调用图。
-在本质上，函数调用图属于树。程序执行过程可以看做树的深度优先遍历过程。
-函数调用图还原的关键点，在于如何在程序执行过程中输出树的遍历序列，并根据遍历序列进行还原。
+\autoref{fig:code_sample}-左下则是程序的运行时函数调用图，即RunDroid实际的输出产物。
+程序执行过程可以看做函数调用图（树）的深度优先遍历过程\footnote{如果我们将运行过程中一个方法执行看做动态函数调用图中的一个节点，那么，动态函数调用图本身就是一颗树，而不是一个图。}。
+还原函数调用图的关键点，在于如何在程序执行过程中输出树的遍历序列，并根据遍历序列进行还原函数调用图。
+\eat{
 通常的，树的遍历分为中序遍历、前序遍历以及后序遍历三种。
 但是，两颗结构完全不同的树对应的遍历序列可能是一样的，
 这也就意味着上述三种遍历方法均不能直接还原出函数调用图。
+而且，函数执行过程中出现的错误异常可能使得序列输出中断，阻碍调用图的构建。
+}
+%本文采用的方案是利用在方法执行前后均记录执行日志（即一个方法的执行会输出两条日志：方法开始日志、方法结束日志），
+%进行动态函数调用图的还原。
 
-若在程序执行前后均记录日志（即一个方法的执行会输出两条日志：方法开始日志、方法结束日志）时，
-我们得到的遍历序列是唯一的，可以直接用于函数调用图的还原。
-% 而且，函数执行过程中出现的错误异常可能使得序列输出中断，阻碍调用图的构建。
-为此，我们采用的基本思路如下：
-通过对源程序（\autoref{fig:code_sample}-左上）进行预处理，得到包含日志记录功能的运行代码（\autoref{fig:code_sample}-右上）；
+本文采用的方案：
+RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理，得到包含日志记录功能的运行代码（\autoref{fig:code_sample}-右上）；
 程序在函数执行前后可以输出和方法执行相关的日志信息，（\autoref{fig:code_sample}-右下）；
 最后，我们根据这些日志信息构建出函数调用图（\autoref{fig:code_sample}-左下）。
-在函数调用图的基础上，RunDroid利用日志中包括的方法对象信息，挖掘和方法对象相关联的方法，结合具体触发规则，进而建立方法触发关系。
+另外，在函数调用图的基础上，RunDroid利用日志中包括的方法对象信息，挖掘和方法对象相关联的方法，结合具体触发规则，进而建立方法触发关系。
 
 % 从函数调用图的构建过程可以看出，程序的执行过程就是对函数调用图自上而下的深度优先遍历过程。由此可见，若要还原出图 6-右中的函数调用图，本文采用的基本思路是以日志方式输出对右图中的函数调用图的深度优先遍历序列，并基于得到的遍历序列还原出函数调用图。
 % 由于Android是由面向对象编程语言Java开发的系统，系统还需要考虑面向对象编程的特性——多态性（即同一个行为在不同的对象下的表现可以不同）。为此，RunDroid还会在函数调用图将函数执行和对应的对象进行关联，更好地体现面向对象编程的函数调用关系。基于上述的函数调用关系的信息，RunDroid根据函数调用之间的关系进一步挖掘，进一步挖掘Android系统中的特性（例如组件Activity的生命周期、多线程的交互方式）。
+%\section{总体框架}
 
-
-
-\section{技术路线}
-
-在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分。
-对应技术路线如下：
-预处理器通过源代码插桩技术实现用户方法层面的信息记录，而运行时拦截器则负责拦截系统方法的执行。
-在应用运行时，日志记录器会记录用户方法和系统方法对应的执行信息，以日志的形式记录下来。
+在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分，对应的工作流程如\autoref{fig:rundroid_overview}所示。
+从功能上，预处理器和运行时拦截器两者的作用是一致的：在程序运行过程中，当相关方法执行时，触发日志记录器记录相应的信息。
+预处理器通过源代码编织技术实现运行时方法触发用户方法的信息记录，而运行时拦截器则是通过方法劫持技术实现对系统方法执行的拦截，进而触发日志记录。
+%系统方法的执行。
+%由于，用户方法层面的代码已修改，而系统方法的行为难以修改
+%并非所有的方法都是进行日志代码织入的。RunDroid可以接触到用户方法（开发者在应用层面定义的方法）的源代码，而对于前者，
+在应用运行时，日志记录器会以日志的形式将用户方法和系统方法对应的执行信息记录下来。
 最后，调用图构建器会根据应用程序运行时输出的日志，构建拓展函数调用图。
-对应的工作流程如\autoref{fig:rundroid_overview}所示。
 
 
-% 本技术路线拟利用语法分析工具，对Android应用程序进行了应用源代码层面的执行日志插桩工作，利用非侵入式系统行为修改插件获取系统层面的函数执行信息。
-% 结合以上日志信息，方案对日志进行初步处理，在图数据库上构建原始的Android应用程序的动态函数调用图。
-% 通过阅读分析Android系统中多线程相关的源代码，制定具体的多线程分析插件，进而在函数调用图中标识出多线程相关的方法间触发关系，
-%全面地展现Android应用的执行过程。
 
 
 \begin{figure*}[!ht]
@@ -65,20 +67,39 @@
 	\label{fig:rundroid_overview}
 \end{figure*}
 
+
+
+% 本技术路线拟利用语法分析工具，对Android应用程序进行了应用源代码层面的执行日志插桩工作，利用非侵入式系统行为修改插件获取系统层面的函数执行信息。
+% 结合以上日志信息，方案对日志进行初步处理，在图数据库上构建原始的Android应用程序的动态函数调用图。
+% 通过阅读分析Android系统中多线程相关的源代码，制定具体的多线程分析插件，进而在函数调用图中标识出多线程相关的方法间触发关系，
+%全面地展现Android应用的执行过程。
+
+
 \section{方法信息的捕获}
+
+在RunDroid中，方法一共分为两类，用户方法和系统方法。
+用户方法是由用户定义的，直接修改的成本较低，易于实现。
+而系统方法在系统中定义，属于系统运行环境的一部份，行为修改成本较高。
+因此，记录这两种方法的执行信息的方式是不一样的。
+
+
 
 \subsection{用户方法执行信息的获取}%——基于源代码的日志代码插桩过程}
 
 
-预处理器以Android项目源代码作为输入，输出预处理后的APK文件；输出的APK文件在应用执行过程中将用户方法的执行信息输出出来。
-具体过程如\autoref{alg:instrument}所示：
-预处理器会遍历项目源代码中的每一个Java文件，解析每一个利用srcML转化成对应的抽象语法树。
+预处理器以Android项目源代码作为输入，输出预处理后的APK文件。
+%输出的APK文件在应用执行过程中将用户方法的执行信息输出出来。
+具体处理过程如\autoref{alg:instrument}所示：
+预处理器会遍历项目源代码中的Java源文件，将源文件和对应的抽象语法树转化成XML格式的文件，并以DOM的形式加载到程序中（第1$\sim$4行）。
 %  利用获取的语法结构，预处理器会提取出所有的方法体，
-对于抽象语法树中的每一个方法，预处理器会计算出编译后所处的类的全限类名及对应的完整的方法签名（第\ref{alg:instrument:computeMethodId}行），并将这些信息以日志记录代码的形式写回到方法体中（第\ref{alg:instrument:addMethodExitLogCode}$\sim$\ref{alg:instrument:addMethodEnterLogCode}行）。
-另外，日志记录代码记录了和方法相关的方法对象信息：和方法有参数或者实例关系的对象会在方法执行时输出到日志，方法的返回值对象则是在方法结束以后输出到日志中。
-全限类名和方法签名的组合<全限类名，方法签名>和抽象语法树中的方法体一一对应，可以看做方法体的唯一标识，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。
+对于抽象语法树中的每一个类和每一个方法，预处理器会计算出编译后所处的类的全限类名及方法签名（第5$\sim$\ref{alg:instrument:computeMethodId}行）
+%\footnote{全限类名和方法签名的组合<全限类名，方法签名>可以作为方法体的唯一标识，和抽象语法树中的方法体一一对应，因此我们根据这些日志信息，定位到具体对应的方法体，还原出函数调用关系，构建出函数调用图。}
+。
+在每个方法内部，预处理器会插入用户方法日志记录的代码，实现日志代码编织，达到用户方法运行时信息记录的目的（第\ref{alg:instrument:addMethodExitLogCode}$\sim$\ref{alg:instrument:addMethodEnterLogCode}行）。
 另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建（第\ref{alg:instrument:addMethodCatchLogCode}行）。
-最后，预处理器会将插桩后的源代码构建成APK文件（第\ref{alg:instrument:buildApk}行）。
+上述操作都是对DOM对象\code{document}直接操作的。
+当一个Java文件修改完毕后，预处理器会将DOM对象重新转换成Java源文件，并替换原来的文件（第12行）。
+最后，预处理器会利用编织后得到的源代码构建成APK文件（第\ref{alg:instrument:buildApk}行）。
 
 
 
@@ -117,7 +138,7 @@
 			write $document$ into new Java File $newJavaFile$
 			
 		}
-		$	apk  \gets buildApk(newJavaFiles)$  \label{alg:instrument:buildApk}
+		$	apk  \gets$ buildApk($newJavaFiles$)  \label{alg:instrument:buildApk}
 		
 		\KwRet{apk };
 	}
@@ -127,18 +148,87 @@
 
 
 
-运行时拦截器的主要职责是对Android系统定义的方法执行进行拦截，将相关信息传递给日志记录器，弥补预处理器无法捕获系统方法执行信息的缺陷。
-运行时拦截器可以帮助提供系统方法的执行信息，填补调用图缺失的系统方法执行，进而可以还原出应用层和系统层之间以及系统内部的方法调用，产生完整的方法调用，进而帮助我们还原出方法间的触发关系。
+运行时拦截器的主要职责是对Android系统方法的执行进行拦截，将相关信息传递给日志记录器并记录下来。
+运行时拦截器维护着系统方法列表。
+列表中的方法通常和Android特性相关，例如Activity的生命周期方法、Java Thread API以及Handler相关的API，具体如\autoref{tbl:hookMethodList}所示。
+在目标应用程序开始运行前，运行时拦截器会为上述目标方法注册执行回调函数。
+在目标方法执行前和执行后，对应的回调函数会被执行，进而通过日志记录器记录下这些方法执行的相关信息。
+在RunDroid中，运行时拦截器可以弥补预处理器无法提供系统方法执行信息的不足，填补调用图缺失的系统方法执行，进而还原出应用层和系统层之间以及系统内部的方法调用，使得产生的调用图更加完整。
 
 
+
+\begin{table*}[!ht]
+	%	\centering
+	%\tiny
+	
+	\caption{运行时拦截器拦截的系统方法列表}
+	
+	\label{tbl:hookMethodList}
+	
+	
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}[b]
+			
+			\begin{tabular}{|l|c|}
+				\hline
+				方法签名&说明\\
+				\hline
+				Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{和Activity生命周期相关的方法}\\
+				%	\cline{1-1}
+				Activit.onStart()    &\\
+				Activity.onResume()     &\\
+				Activity.onPause()    &\\	
+				Activity.onStop()     &\\
+				Activity.onDestroy()    &\\
+				\hline
+				
+				Thread.start()   & 和Java 线程启动相关的方法\\
+				\hline
+				Message.obtain() & \multirow{15}{0.4\linewidth}{和 Hanlder机制相关的方法}\\
+				Handler.enqueueMessage(MessageQueue,Message,long)&\\
+				Handler.dispatchMessage(Message)&\\
+				Handler.post(Runnable)&\\
+				Handler.postAtTime(Runnable,long)&\\
+				Handler.postAtTime(Runnable,Object,long)&\\
+				Handler.postDelayed(Runnable,long)&\\
+				Handler.postAtFrontOfQueue(Runnable)&\\
+				Handler.sendMessage(Message)&\\
+				Handler.sendEmptyMessage(int)&\\
+				Handler.sendEmptyMessageDelayed(int,long)&\\
+				Handler.sendEmptyMessageAtTime(int,long)&\\
+				Handler.sendMessageAtFrontOfQueue(Message)&\\
+				Handler.sendMessageDelayed(Message,long)&\\
+				Handler.sendMessageAtTime(Message,long)&\\
+				
+				\hline
+				
+				
+				%		AsyncTask execute [Object& \multirow{3}{0.4\linewidth}{和 AsyncTask相关的方法}\\
+				%		AsyncTask publishProgress [Object&\\
+				%		AsyncTask executeOnExecutor Executor [Object &\\
+				%		\hline
+				
+				
+			\end{tabular}
+			
+			%		\begin{tablenote}
+			%		\end{tablenote}
+			
+		\end{threeparttable}
+	}
+\end{table*}
 
 \section{扩展函数调用图的构建过程}
 
-调用图构建器构建拓展函数调用图的过程分为两个阶段：RunDroid根据程序运行时的日志提取函数间的调用关系，创建函数调用图；
-在函数调用图的基础上，RunDroid利用方法执行与方法对象的关联关系，结合具体的触发关系规则，创建方法间的触发关系，形成最终的拓展函数调用图。
+调用图构建器构建拓展函数调用图的过程分为如下几个阶段：
+ RunDroid根据程序运行时的日志提取函数间的调用关系，创建函数调用图；
+根据AndroidManifest.xml的Activity组件声明，在函数调用图上标识出完整的Activity 生命周期流转序列；
+利用方法执行与方法对象的关联关系，结合触发关系规则，补全方法间的触发关系，形成最终的拓展函数调用图。
 
 
-\begin{algorithm}[!ht]
+
+
+\begin{algorithm}[ht]
 	\caption{函数调用图的构建过程} 
 	\label{alg:buildCG}
 	\KwIn{ $logs$，应用程序的运行时日志}
@@ -193,11 +283,10 @@
 				
 			}
 		}
-	\KwRet{ $cg$};
+		\KwRet{ $cg$};
 	}
 	
 \end{algorithm}
-
 \subsection{构建函数调用图}
 
 %虽然所有线程的方法日志输入到同一个文件中，但是，从单个线程的视角看这些日志，日志在时间维度上的先后顺序就是对调用图的深度遍历。
@@ -207,12 +296,15 @@
 
 由于各个线程在执行过程中，不存在一个调用关系跨越两个线程，因此，在整个构建过程中，RunDroid以产生日志的线程为基本构建单元，向调用图添加方法调用关系。
 函数调用图的构建过程如\autoref{alg:buildCG}所示。
-对于每个线程，RunDroid顺序遍历对应的日志，使用栈$stack$的入栈、出栈操作来模拟对应线程的函数执行的过程，还原调用关系（第3$\sim$ 20行）：
+
+对于每个线程，RunDroid顺序遍历对应的日志，使用栈$stack$的入栈、出栈操作来模拟对应线程的函数执行的过程，还原调用关系（第2$\sim$ 20行）：
 当读取到方法执行的开始日志时，系统会在调用图创建一个节点表示该方法的执行（第7$\sim$8行），
 同时也在调用图中添加方法参数、方法实例对应的对象节点$o_p$、$o_i$以及方法对象和方法的关系$ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $、$ \left\langle   o_i \joinrel\xrightarrow{instance}   m \right\rangle  $（第9$\sim$10行）。
 如果此时当前线程栈$stack$的栈顶方法元素$top$存在，系统会创建从方法$top$到当前方法$m$的调用关系，$\left\langle top \to m \right \rangle  $，并将当前方法$m$压入栈$stack$中（第11$\sim$ 14行）。
 当读取到方法执行的结束日志时，该日志对应的方法必然是栈顶方法$top$，若栈顶方法$top$存在返回对象$o_r$，则只需要将$o_r$和$top$的关系添加到调用图中即可，最后弹出栈顶的$top$即可（第 16$\sim$ 18行）。
 在上述过程中，如果待添加的方法对象在调用图中已经存在时，该对象则无须重新添加，只需添加方法与对象间的关系即可。
+
+
 
 
 % 当日志条目表示方法条目时，将根据日志条目和来自的4元组信息创建节点 日志存储在节点中（第6行）。
@@ -226,52 +318,75 @@
 %因此，通过将触发关系添加为边，将所有调用图拼接成一个调用图作为输出。
 
 
+
+\subsection{构建Activity的生命周期}
+
+Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联起来，利用的是\code{Activity}生命周期方法的签名的不变性。
+
 \begin{algorithm}[!ht]
 	\caption{构建Activity的生命周期} 
 	\label{alg:buildActivityLifecycle}
+	\KwIn{ $manifestFile$，AndroidManifest文件}
 	\KwIn{ $cg$，函数调用图}	
-	\KwIn{ $activity$，AndroidManifest定义的Activity组件}
 	\KwOut{ $cg'$，包括Activity生命周期的函数调用图}
-    
-
-
+	
+	
+	
 	\SetKwProg{Fn}{Function}{:}{}
 	
 	\Fn{patchActivityLifecycle($cg$)}{
 		
-		%	$cg'  \gets  cg$;
 		
-		从AndroidManifest文件中解析Activity组件
+		$lifecycleList \gets$ new   $ List()$;
 		
-		$list \gets$ new   $ List()$;
 		
-		\For{ \emph{ $m \in \{ m \mid  m$ is the method node in $ cg \}$}}{
-			\If{ \emph{ $m$ is the method of Activity's Lifecycle   \\\qquad  
-					and   {$  \left\langle  m' \to m \right\rangle  \notin cg$} }}{
+		\For{ \emph{ $o_{activity} \in \{ activity \mid activity $ defined in  $manifestFile \} $ }}{
+			
+			
+			
+			\For{ \emph{ $m \in \{ m \mid  m$ is method node in $ cg $   
+					and $o_{activity}$ is instance of $m\}$}}{
 				
-				$list$.add($m$);
+				
+				\If{ \emph{ $m$ is the method of Activity's Lifecycle   \\\qquad
+						and  Thread for $m$ is MainThread	  \\\qquad
+						and $  \left\langle  m' \to m \right\rangle  \notin cg$
+				} }{
+					
+					$lifecycleList$.add($m$);
+				}
+				
+				
 			}
 		}
-		linkItemByTime($list$);
 		
+		sortListByTime($lifecycleList$);
 		
-		\KwRet{$cg$};
+		linkItemsByTime($lifecycleList$,$cg$);
+		
+		$cg' \gets cg$;
+		
+		\KwRet{$cg'$};
 	}
 	
 \end{algorithm}
 
+整个过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加表示Activity生命周期的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
+对于AndroidManifest文件中声明的每一个Activity组件$o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
+若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第3$\sim$8行）。
+最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第9$\sim$10行）。
 
-\subsection{构建Activity的生命周期}
+这三个条件分别为：
+（1）方法$m$的方法签名和\autoref{fig:Activity-lifecycle}中的任何一个生命周期方法的签名保持一致；
+（2）方法$m$执行时所处的线程为主线程；
+（3）方法$m$在调用图$cg$中不在调用者，即在调用图$cg$中不存在方法$m' \in cg$，使得$m' \to m $成立。
 
-Android Acticvity生命周期的构建利用的是\code{Activity}生命周期相关方法的签名的不变性。
-具体过程如\autoref{alg:buildActivityLifecycle}所示：
-遍历调用图中所有的方法，如果一个方法的方法签名属于第\ref{chp:background}章中\autoref{fig:Activity-lifecycle}定义的方法，并且这个方法在调用图中不在调用者，执行线程为主线程，则这些线程为Activity生命周期的相关方法。
-将上述方法按照时间顺序连接起来，即可得到\code{Activity}的生命周期。
-\question{不允许调用者存在是为了防止误判下面这种情况：开发人员在重写生命周期方法时调用了父类的生命周期方法}
+
+
 
 
  \subsection{构建多线程触发关系}
-在构建多线程触发关系时，我们只要分为两个方面：基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度。具体的过程如\autoref{alg:buildTrigger}所示。
+基于函数调用图构建多线程触发关系主要分为两个方面，基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度，具体的过程如\autoref{alg:buildTrigger}所示。
 
 
 
@@ -445,5 +560,5 @@ RETURN p,method,enqueue,dispatch
  \section{本章小结}
 
 本章详细介绍了RunDroid的设计。
-首先，本章简要介绍了RunDroid实现的基本功能，并通过一个简单的例子介绍了RunDroid运行的基本思路。
-由此，我们提出了RunDroid具体的技术路线：RunDroid利用源代码插桩和运行时拦截器相结合的方式，将运行时的方法执行信息以日志的形式保存下来，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并利用调用图中方法和方法对象之间的关系结合具体的触发关系补全方法间的触发关系，形成最终的拓展函数调用图。
+首先，本章简要介绍了RunDroid实现的基本功能，并通过一个简单的例子介绍了RunDroid的整体运行框架。
+由此，我们提出了RunDroid技术路线：RunDroid利用源代码插桩和运行时拦截器相结合的方式，将运行时的方法执行信息以日志的形式保存下来，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并在此基础上构建Activity的生命周期，补全方法间的触发关系，形成最终的拓展函数调用图。

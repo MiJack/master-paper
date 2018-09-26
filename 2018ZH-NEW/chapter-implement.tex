@@ -1,4 +1,4 @@
-\chapter{系统的实现 }
+\chapter{RunDroid系统的实现 }
 \label{chp:implement}
 
 
@@ -51,77 +51,7 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 
 
 
-\subsection{运行时拦截器}
 
-
-在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法）。%，如\autoref{tbl:hookMethodList} 所示。
-每当应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。
-在应用程序的运行过程中，HookCallBack对象的\code{beforeHookedMethod(MethodHookParam)}会在目标方法执行之前被调用，
-\code{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
-最终，HookCallBack对应会将方法执行的相关信息传递给日志记录器。
-
-
-
-\begin{table*}[!ht]
-	%	\centering
-	%\tiny
-	
-	\caption{运行时拦截器拦截的系统方法列表}
-	
-	\label{tbl:hookMethodList}
-	
-	
-	\resizebox{\textwidth}{!}{
-		\begin{threeparttable}[b]
-			
-			\begin{tabular}{|l|c|}
-				\hline
-				方法签名&说明\\
-				\hline
-				Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{和Activity生命周期相关的方法}\\
-				%	\cline{1-1}
-				Activit.onStart()    &\\
-				Activity.onResume()     &\\
-				Activity.onPause()    &\\	
-				Activity.onStop()     &\\
-				Activity.onDestroy()    &\\
-				\hline
-				
-				Thread.start()   & 和Java 线程启动相关的方法\\
-				\hline
-				Message.obtain() & \multirow{15}{0.4\linewidth}{和 Hanlder机制相关的方法}\\
-				Handler.enqueueMessage(MessageQueue,Message,long)&\\
-				Handler.dispatchMessage(Message)&\\
-				Handler.post(Runnable)&\\
-				Handler.postAtTime(Runnable,long)&\\
-				Handler.postAtTime(Runnable,Object,long)&\\
-				Handler.postDelayed(Runnable,long)&\\
-				Handler.postAtFrontOfQueue(Runnable)&\\
-				Handler.sendMessage(Message)&\\
-				Handler.sendEmptyMessage(int)&\\
-				Handler.sendEmptyMessageDelayed(int,long)&\\
-				Handler.sendEmptyMessageAtTime(int,long)&\\
-				Handler.sendMessageAtFrontOfQueue(Message)&\\
-				Handler.sendMessageDelayed(Message,long)&\\
-				Handler.sendMessageAtTime(Message,long)&\\
-				
-				\hline
-				
-				
-				%		AsyncTask execute [Object& \multirow{3}{0.4\linewidth}{和 AsyncTask相关的方法}\\
-				%		AsyncTask publishProgress [Object&\\
-				%		AsyncTask executeOnExecutor Executor [Object &\\
-				%		\hline
-				
-				
-			\end{tabular}
-			
-			%		\begin{tablenote}
-			%		\end{tablenote}
-			
-		\end{threeparttable}
-	}
-\end{table*}
 
 
 
@@ -163,8 +93,15 @@ Neo4j以Lucence作为索引支撑，支持完整的 ACID（原子性，一致性
 \section{技术实现细节}
 
 
-\subsection{Message对象的标识}
+\subsection{对象的标识}
+\subsubsection{Message对象的标识?}
 \subsection{系统方法的捕获}
+
+在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法）。%，如\autoref{tbl:hookMethodList} 所示。
+每当应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。
+在应用程序的运行过程中，HookCallBack对象的\code{beforeHookedMethod(MethodHookParam)}会在目标方法执行之前被调用，
+\code{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
+最终，HookCallBack对应会将方法执行的相关信息传递给日志记录器。
 
 
  \section{本章小结}
