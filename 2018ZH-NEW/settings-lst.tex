@@ -1,0 +1,106 @@
+
+% thesis color scheme
+\RequirePackage[table]{xcolor}
+\definecolor{Strong Blue}{RGB}{6,64,194}
+\definecolor{Dark Blue}{RGB}{6,46,139}
+\definecolor{Night Blue}{RGB}{0,0,89}
+\definecolor{Beige}{RGB}{219,212,192}
+\definecolor{Dark Beige}{RGB}{185,170,129}
+\definecolor{Night Beige}{RGB}{90,83,63}
+\definecolor{Light Khaki}{RGB}{217,219,209}
+\definecolor{Khaki}{RGB}{181,186,159}
+\definecolor{Dark Khaki}{RGB}{113,117,99}
+\definecolor{Light Red}{RGB}{214,124,118}
+\definecolor{Red}{RGB}{212,24,14}
+\definecolor{Night Red}{RGB}{105,18,12}
+\definecolor{White}{RGB}{255,255,255}
+\definecolor{Grey 1}{RGB}{238,238,238}
+\definecolor{Grey 2}{RGB}{204,204,204}
+\definecolor{Grey 3}{RGB}{170,170,170}
+\definecolor{Grey 4}{RGB}{136,136,136}
+\definecolor{Grey 5}{RGB}{102,102,102}
+\definecolor{Grey 6}{RGB}{51,51,51}
+\definecolor{Grey 7}{RGB}{33,33,33}
+\definecolor{Black}{RGB}{0,0,0}
+\definecolor{Frame Blue}{RGB}{0,85,128}
+\definecolor{Frame Red}{RGB}{169,18,0}
+\definecolor{Frame Green}{RGB}{55,143,23}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\lstdefinestyle{mystyle}{
+	frame=single,
+	framexleftmargin=1.5em,
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\scriptsize ,
+	stringstyle=\color{codepurple},
+	basicstyle=\scriptsize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep= 5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,   
+	xleftmargin=2em,       
+	tabsize=2
+}
+
+% General style
+\lstdefinestyle{normal}{
+  aboveskip = 1.5em,
+  backgroundcolor = \color{White},
+   basicstyle = \ttfamily,
+  belowskip = 1em,
+   breakatwhitespace = false,
+   breaklines = true,
+   captionpos = b,
+  commentstyle = \itshape\color{Dark Khaki},
+  extendedchars = true,
+  frame = lines,
+  framerule = .6pt,
+   framexleftmargin = 1em,
+  framexrightmargin = 1em,
+  gobble = 2,
+  keywordstyle = \bfseries\color{Frame Blue},
+  keywordstyle = [2]\bfseries\color{Frame Red},
+  numbers = none,
+  prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+  showspaces = false,
+  showstringspaces = false,
+  showtabs = false,
+  stepnumber = 1,
+  stringstyle = \color{Frame Green},
+  tabsize = 2,
+  upquote = true,
+  xleftmargin = 1em,
+  xrightmargin = 1em
+}
+
+
+
+% Cypher query language
+\lstdefinelanguage{cypher} {
+	keywords={start,create,set,delete,foreach,match,%
+		where,with,return,skip,limit,order,by,asc,%
+		ascending,desc,descending},
+	morekeywords = {[2]type,id,length,nodes,rels,%
+		relationships,abs,round,sqrt,sign,head,last,%
+		tail,replace,left,right,substring,lower,upper,%
+		ltrim,rtrim,trim,str,shortestpath,range,count,%
+		sum,min,max,avg,collect,percentile\_cont,%
+		percentile\_disc},
+	sensitive = false,
+	morecomment=[l]{//},
+	morestring=[b]",
+	morestring=[b]'
+}
+
+
+\lstset{style=mystyle}

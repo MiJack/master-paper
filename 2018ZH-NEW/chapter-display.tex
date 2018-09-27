@@ -10,7 +10,7 @@
 
 \begin{figure}[!h]
 	\centering
-	\vspace{0.7in}
+\vspace{0.6 in}
 	\begin{lstlisting}[language=Java]
 package cn.mijack.rundroidtest;
 
@@ -27,15 +27,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		button1 = findViewById(R.id.button1);
-		button1.setOnClickListener(this);  
-		// button2、button3进行相同的操作，此处省略
+		button1.setOnClickListener(this);   	// button2、button3进行相同的操作，此处省略
 	}
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.button1:
 				doHandleButton1();
-				return;				
-				// button2、button3进行相同的操作，此处省略
+				return;				 	// button2、button3进行相同的操作，此处省略
 		}
 	}
 	public void doHandleButton1() {
@@ -147,7 +145,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 在这点上，FlowDroid的处理方式恰恰相反，考虑到在未重写系统类方法时的类行为表现基本保持一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
 
 
-\question{观察\autoref{fig:rundroid-result-lifecycle}中生命周期方法归属的Activity，我们发现，在应用启动\code{NewActivity}过程中，
+{观察\autoref{fig:rundroid-result-lifecycle}中生命周期方法归属的Activity，我们发现，在应用启动\code{NewActivity}过程中，
 \code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
 而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后面一种情况。
 相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，更适合反映应用的状态变化。
@@ -227,17 +225,11 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 \subsection{结果分析}
 
-
-\begin{figure}[h]
-		\includegraphics[width=\textwidth]{./Figures/treatment.png}
-	\caption{Units in treatment group and control group with their covariate values}
-	\label{fig:motivationResultTreatment}
-\end{figure}
-
 \todo{解释原理公式}
-
+\eat{
 control group 一般译为对照组，直译是控制组，因此不难理解对照组就是控制住变量的组，在实验中control group的组的实验操作是固定的，作用就是对照变化的实验组。
 treatment group 就是实验组，也就是在做实验的时候，实验组如果有许多的变量，须通过“控制变量法”来进行研究。进行多次的实验，而对照组就是一组不变的实验。
+}
 
 
 
@@ -248,22 +240,37 @@ treatment group 就是实验组，也就是在做实验的时候，实验组如�
 	
 	
 	\label{alg:fault-localization}
-	
-	
 	\KwIn{ $P$，应用程序}
-	\KwIn{ $logs$，应用程序的运行时日志}
-	
-	
-	\KwOut{ $cg$，函数调用图}
+	\KwIn{ $CoverageInfo$，应用程序的覆盖信息}
+	\KwOut{ $sorted\_\tau$，程序语句的逆向排序}
 	
 	
 	\SetKwProg{Fn}{Function}{:}{}
 	
-	\Fn{buildCallGraph($log$)}{
+	\Fn{FaultLocazilation($P$,$CoverageInfo$)}{
 		
-		$cg$ $\gets$ new CallGraph();
+		\For{$s \in P$ }{
 		
-		\KwRet{ $cg$};
+			Model($s$) = Compute causal model of $s$;
+			
+			 Pred($s$) = Compute predecessors of s from Model($s$);
+			
+			  Mdata($s$) = Match on Pred($s$) in $CoverageInfo$;
+			  
+			\eIf{\emph{Mdata($s$) = $\emptyset$	}}{
+				  Compute $\tau(s)$ from Mdata($s$) using Equation $\tau(s) = E[Y^1] - E [Y^0]$;}
+			  {
+%				  Y = α + τT + βX + ε
+%				$\tau(s) = NA$;
+				
+			  Compute $\tau(s)$ using Equation $\tau(s) =\alpha +\tau T+\beta X+\varepsilon $;
+			 }
+			
+		}
+	$sorted\_\tau$ = sort $\tau$ in descending order;
+		
+		
+		\KwRet{$sorted\_\tau$};
 		
 		
 	}
@@ -327,31 +334,27 @@ To compare the effectiveness of causal influence model with and without the dyna
 	
 \end{table}
 
-We take the motivating example as the subject program. Causal influence model relies heavily on dependence relationship among statements. With RunDroid, the asynchronized trigger relation between Line 9 \textit{t.start()} and Line 11 \textit{TaskThread.run()}, is captured, hence the predecessors of Line 13 are Lines ${\{}$5, 8, 9, 13$\}$, instead of Line 13 only, which is the case of original causal influence model. \autoref{fig:motivationResultTreatment} shows the treatment units and the control units with their associated test cases for Line 13. Specifically, \autoref{fig:motivationResultTreatment}-(a) represents the case of without RunDroid, and \autoref{fig:motivationResultTreatment}-(b) represents the case with RunDroid. The treatment units, which are test cases that cover Line 13 are $t_2$, $t_3$, and $t_5$; the control units, which are test cases that do not cover Line 13 are $t_1$ and $t_4$.
-
-
+We take the motivating example as the subject program.
+Causal influence model relies heavily on dependence relationship among statements.
+With RunDroid, the asynchronized trigger relation between Line 9 \textit{t.start()} and Line 11 \textit{TaskThread.run()}, is captured, hence the predecessors of Line 13 are Lines ${\{}$5, 8, 9, 13$\}$, instead of Line 13 only, which is the case of original causal influence model.
+\autoref{fig:motivationResultTreatment} shows the treatment units and the control units with their associated test cases for Line 13.
+Specifically, \autoref{fig:motivationResultTreatment}-(a) represents the case of without RunDroid, and \autoref{fig:motivationResultTreatment}-(b) represents the case with RunDroid.
+The treatment units, which are test cases that cover Line 13 are $t_2$, $t_3$, and $t_5$; the control units, which are test cases that do not cover Line 13 are $t_1$ and $t_4$.
 For target statement, we use the vector of covariate to present the cover information of its predecessor statements in a test case.
-
-
-%The vector of covariate values generated by the test cases is shown.
-
-
+The vector of covariate values generated by the test cases is shown.
 In \autoref{fig:motivationResultTreatment}-(b), the vector $\langle$0,1,1,1$\rangle$ means that for test case $t_2$, only Line 5 is not covered, the other three predecessor statements (Lines 8, 9, 12) are all covered.
-
-
-
-
-
-
-
-
 Using the same equation from causal inference model, the causal-effect estimates for the latter case (with dependence information from RunDroid) are resulted differently. 
-
-
 The estimate for Line 13 is $\frac{(1+1)}{2}-\frac{(0+0)}{2} = 1.0$. The estimates for the other statements are shown in Table 2, in the far right column.
 
 
 
+
+
+\begin{figure}[h]
+	\includegraphics[width=\textwidth]{./Figures/treatment.png}
+	\caption{Units in treatment group and control group with their covariate values}
+	\label{fig:motivationResultTreatment}
+\end{figure}
 
 
 

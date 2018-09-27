@@ -253,7 +253,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 					$cg$.addMethodNode($m$);
 					%\Comment 在调用图中提交方法节点 
 					
-					$cg$.addMethodObjects($ o_p $,$o_i $) 	;							
+					$cg$.addMethodObjectsIfNotExists($ o_p $,$o_i $) 	;							
 					
 					$cg$.addMethodObjectRels($ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $,$ \left\langle  o_i \joinrel\xrightarrow{instance}   m \right\rangle  $) ;
 					
@@ -268,7 +268,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 					
 				}{ 
 					
-					$cg$.addMethodObject($  o_r  $) ;
+					$cg$.addMethodObjectIfNotExists($  o_r  $) ;
 					
 					$cg$.addMethodObjectRel($ \left\langle   o_r \joinrel\xrightarrow{return}   m \right\rangle  $) ;
 					

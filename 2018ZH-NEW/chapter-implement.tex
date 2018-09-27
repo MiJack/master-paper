@@ -2,7 +2,10 @@
 \label{chp:implement}
 
 
-\foreach \t  in {1,...,3}{\todo{缺点东西，待补充 \t} \newline }
+RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术，由预处理器、运行时拦截器、日志记录器、调用图构建器等部分组成。
+本章将详细的介绍上述技术及RunDroid各组成部分的实现细节。
+
+
 \section{相关技术介绍}
 
 
@@ -36,7 +39,7 @@ Xposed的实现原理具体如下：由于Android系统的所有的应用程序�
 
 Neo4j~\cite{Neo4jthe19}是基于Java语言开发的图数据库，可以用于存储图结构相关的数据结构。
 %与传统的基于关系模型的存储结构不同，Neo4j的存储模型是基于图论开发的，遵循属性图数据模型。
-Neo4j的数据主要分为节点（Node）和关系（Relationship）两大类，分别对应图论中的点与边。
+Neo4j的数据主要分为节点\eat{（Node）}和关系\eat{（Relationship）}两大类，分别对应图论中的点与边。
 Neo4j支持在关系和节点上添加自定义键值属性，为节点指定标签，为关系指定类型等等。
 在数据操作接口方面，Neo4j支持Cypher、Java API和RESTful API等多种方式，同时也提供了友好的数据浏览界面用于数据的展示与修改。
 \eat{由于基于属性图数据模型，Neo4j通常适用于和图关系有着密切关系的应用场景：例如社交网络分析，公共交通网络研究以及地图网络拓扑等场景。}
@@ -62,6 +65,14 @@ Neo4j支持在关系和节点上添加自定义键值属性，为节点指定标
 % 拦截器记录在两个层之间进行的每个方法调用，并将它们与应用程序层中对应的方法调用相关联，以产生完整的方法调用跟踪。
 % RunDroid维护感兴趣的方法列表，如生命周期方法和隐式回调，以便日志文件包含每次执行期间调用的方法调用
 
+\subsection{运行时拦截器}%——系统方法的捕获}
+
+在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法）。%，如\autoref{tbl:hookMethodList} 所示。
+每当应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。
+在应用程序的运行过程中，HookCallBack对象的\code{beforeHookedMethod(MethodHookParam)}会在目标方法执行之前被调用，
+\code{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
+最终，HookCallBack对应会将方法执行的相关信息传递给日志记录器。
+
 
 \subsection{日志记录器}
 
@@ -74,36 +85,42 @@ Neo4j支持在关系和节点上添加自定义键值属性，为节点指定标
 
 
 
-\subsection{调用图构建器的实现}
 
-调用图构建器的主要功能是拓展函数调用图的构建、存储和展现。
-在实现上，调用图构建器主要有以下几个部分组成：对象标识管理器、调用图存储器以及触发关系生成器。
+\subsection{调用图构建器}
 
-调用图构建器以应用程序在运行时的日志信息作为输入，利用日志中的方法执行信息在调用图储存器中初步建立函数调用图。
-同时，对象标识管理器会根据对象使用的上下文（如该和哪个方法产生关联，具体的关系是什么等）赋予相应的标识ID，并将其添加到函数调用图中。
-最后，根据调用图储存器中方法和对象之间的关系结合具体的触发关系，触发关系生成器会还原出方法间的函数触发关系。
-% RunDroid通过动态执行跟踪匹配这些调用来应对这个挑战，这导致开发三个子组件：引用存储库组件、映射引擎组件、合成器组件。
-% Reference Repository组件构建于Neo4j[4]之上，它处理日志文件，并存储捕获的方法及其执行调用。
-% Mapping Engine组件构建于soot[13]之上，从日志历史中识别异步调用对，搜索它们相应的实例化类，并将这些捕获的多线程方法调用存储为“触发器”关系。
-% 然后，Synthesizer组件将这些触发器关系与捕获的执行调用集成到一个完整的执行调用跟踪中，并存储在Reference Repository中。
-在技术选型上，调用图存储器采用Neo4j作为调用图的底层存储引擎，触发关系生成器中的规则定义由Cypher脚本和Soot共同实现。
+%调用图构建器的主要功能是拓展函数调用图的构建、存储和展现。
+在实现上，调用图构建器如\autoref{fig:rundroid_overview}所示，主要有以下几个部分组成：调用图存储器、对象管理器以及触发关系生成器。
 
-\section{技术实现细节}
+调用图存储器将Neo4j作为调用图的底层存储引擎，调用图中的方法和对象会以节点的形式出现在调用图中，采用Neo4j中的关系表示两者之间的边。
 
+对象管理器负责将日志中的对象信息映射成调用图中的节点。
+通常情况下，我们认为一个对象和一个全局ID一一对应，所以，我们将全局ID相同的对象信息映射成调用图中的一个节点。
+但考虑到有些类型（例如Handler机制中的Message）使用对象池技术，我们还在全局ID的基础上引入对象版本号，避免对象在不同生命周期的串用。
+以Message为例，调用图构建过程中，如果对象管理器发现待提交的Message对象$m$是方法\code{Message.obtain()}的返回值，处理逻辑如下：
+如果调用图中不存在一个全局ID和$m$一致的节点，则对象管理器会创建一个全新的节点来表示$m$，设置其对象版本号为1；
+而调用图已经存在一个全局ID和$m$一致，版本号为$version$的节点$m'$，则对象管理器会创建一个全新的节点来表示$m$，并将$version + 1$作为节点$m$的版本号，而不是复用原有节点象$m'$。
 
-\subsection{对象的标识}
-\subsubsection{Message对象的标识?}
-\subsection{系统方法的捕获}
+触发关系生成器是第\ref{chp:design}章中\autoref{alg:buildTrigger}的具体实现，基于Cypher脚本和Soot完成。
+例如，\autoref{alg:buildTrigger}第16$\sim$17行中，我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$，并建立两者之间的触发关系。
+传统的实现方式需要对图进行遍历，效率较低。而RunDroid在实现上采用了Cypher脚本，如\autoref{fig:cypher_code}所示。
+Soot的工作主要是提供应用程序相关的类型查询服务。
+例如，\autoref{alg:buildTrigger}第7行中，我们需要知道所有的Runnable对象，此处便需要通过Soot查询所有的Runnable子类。
+另外，在\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
 
-在实现上，运行时拦截器是基于Xposed的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法）。%，如\autoref{tbl:hookMethodList} 所示。
-每当应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。
-在应用程序的运行过程中，HookCallBack对象的\code{beforeHookedMethod(MethodHookParam)}会在目标方法执行之前被调用，
-\code{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
-最终，HookCallBack对应会将方法执行的相关信息传递给日志记录器。
-\foreach \t  in {1,...,22}{\newline\t }
+\begin{figure}[!h]
+	\centering
+	%normal
+	\begin{lstlisting}[style=normal,language=cypher]
+	MATCH (m_enqueue:METHOD)-[:PARAM]->(o_m:OBJECT),
+					(m_dispatch:METHOD)-[:PARAM]->(o_m:OBJECT)
+	return o_m, m_enqueue, m_dispatch\end{lstlisting}
+	\caption{使用Cypher查找共用对象$o_m$的方法$m_{enqueue}$、$m_{dispatch}$}
+	\label{fig:cypher_code}
+\end{figure}
+
 
  \section{本章小结}
 
-本章介绍了RunDroid的实现。
-本章先对RunDroid使用到的技术（srcML、Xposed、Neo4J）做了基础的介绍。
-并在从技术基础上，我们介绍了RunDroid中各模块的具体实现。
+本章侧重介绍RunDroid的技术实现。
+本章先对RunDroid使用到的技术（srcML、Xposed、Neo4J）做了简要的介绍，并介绍了这些技术在RunDroid中的主要职责。
+并在此基础上，我们介绍了RunDroid中预处理器、运行时拦截器、日志记录器、调用图构建器等模块的实现细节。
