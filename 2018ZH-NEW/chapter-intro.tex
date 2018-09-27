@@ -53,7 +53,7 @@ Android应用程序的特性（例如，基于事件驱动的基础架构、面�
 \subsection{静态分析技术}
 \todo{缩减此处，再添加3$\sim$5篇文献}
 在不执行应用程序的情况下，静态分析技术通过对应用程序的源代码或者执行文件进行控制流分析和数据流分析，进而推断应用程序在运行过程中可能产生的行为。
-这方面相关工具包括\cite{vallee1999soot,arzt2014flowdroid,AmanDroid,iccta,androguard:online}等。
+这方面相关工具包括Soot\cite{vallee1999soot}、FlowDroid\cite{arzt2014flowdroid}、AmanDroid\cite{AmanDroid}、IccTA\cite{iccta}、AndroGuard\cite{androguard:online}等。
 Soot\cite{vallee1999soot}是传统的静态分析工具，其思路是将所有的Java字节码文件转化成一种中间语言Jimple，并在Jimple的基础上进行常规的控制流分析、数据流分析，理论上适用于所有可以在Java虚拟机上运行的语言（例如Scala、Groovy等等）的分析。
 由于Android程序本身的字节码Davlik和Java字节码在格式上保持一致，因此，Soot也支持Android应用程序的静态分析。
 但是，Soot在分析过程中没有考虑一些Android的特性难免会出现一些问题。
@@ -157,16 +157,32 @@ mobile app tagging ~\cite{chen2016mobile}
 
 % 例如错误定位、自动化分析、profiling等
 
-\section{本文的主要工作}
+\section{论文研究内容}
+
+\todo{解释本文的主要研究内容是那几点，为什么}
+\eat{
+本文提出的基于GUI的自动化性能测试技术，整合了性能测试技术和传统的自动化测试的技术，并针对性能测试的挑战，针对性地设计了自动化测试技术。
+本文主要有以下几点贡献：
+	本文定义了App运行时的页面状态，并依据状态，提出计算页面相似度的算法。通过页面相似度的定义，可有效合并App运行时的状态，缩短测试时间，同时可以生成更多有效的测试用例和测试序列，提升测试效果。
+	本文提出一个基于页面状态的反馈性随机测试算法，根据不同的App状态和被测历史的记录，对需要被测的控件赋予不同的权值，并根据权值来计算被执行的概率。该随机算法结合相似度算法，可以促使本框架在测试App的过程中，探索到更多的页面状态，发现更多潜在的性能问题。
+	本文提出并实现了Android应用程序的性能测试框架PerDroid，并和自动化测试有效的结合在一起。针对性能测试，提出了一个特有的自动化测试技术，可有效发现App运行时页面延迟、不流畅、甚至未响应的异常状态，并对其效果进行实验，发现了开源社区上App的性能问题。
+
+}
 
 本文的主要研究工作包括以下：
-
-1)	调研最近几年Android应用分析领域的静动态分析工具，了解各项工具的优劣以及相关的应用案例。
-
-2)	提出并实现Android动态函数调用图构建系统RunDroid，包含传统函数调用图的构建以及在此基础之上的多线程函数调用关系的构建。
-
-3)	将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
-
+\begin{itemize}
+	%				\setlength{\itemsep}{-5pt}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item 本文调研最近几年Android应用分析领域的静动态分析工具，了解各项工具的优劣以及相关的应用案例。
+	\item 本文深入Android系统的平台特性，在传统调用图的方法调用关系的基础上，提出了函数触发关系的观念。
+	\item 本文提出并实现Android动态函数调用图构建系统RunDroid。
+	RunDroid生成的函数调用图不仅体现了传统调用图的方法调用关系，还展示方法执行过程相关的对象信息和函数间的触发关系，反映Android平台相关的特性。
+	\item 
+	
+	将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
+\end{itemize}
 
 %\todo{对上述系统设计对应的实验方案，评估对应的实验效果。}
 
@@ -174,16 +190,22 @@ mobile app tagging ~\cite{chen2016mobile}
 
 本文共分为六章，环绕着Android动态函数调用图构建系统的设计与实现展开，各章节内容如下：
 
-第一章：主要介绍了本文的主要研究背景、相关工作以及主要工作内容。
+\textbf{\fullref{chp:intro}}主要介绍了本文的主要研究背景、相关工作以及主要工作内容。
 
-第二章：从Android的体系结构出发，介绍了和Android系统相关的背景知识。
 
-第三章：方法和对象的关系、方法间关系、调用图等几个方面介绍本文用到的概念做了符号化的定义，并结合文章的例子对这些概念做了进一步的说明。
+\textbf{\fullref{chp:background}}从Android的体系结构出发，介绍了和Android系统相关的背景知识。
 
-第四章：从系统功能、相关挑战、技术路线、技术选型、模块实现等若干方面介绍RunDroid的设计与实现。
 
-第五章：将展示RunDroid系统生成的函数调用图的运行结果，并对函数调用图进行详细的阐述。
+\textbf{\fullref{chp:definition}}方法和对象的关系、方法间关系、调用图等几个方面介绍本文用到的概念做了符号化的定义，并结合文章的例子对这些概念做解释。
 
-第六章：对本文工作进行总结，并对下一步工作进行展望。
+\textbf{\fullref{chp:design}}从系统功能、相关挑战、技术路线、技术选型、模块实现等若干方面介绍RunDroid的设计与实现。
+
+\textbf{\fullref{chp:implement}}
+
+
+\textbf{\fullref{chp:testing}}将展示RunDroid系统生成的函数调用图的运行结果，并对函数调用图进行详细的阐述。
+
+
+\textbf{\fullref{chp:future}}对本文工作进行总结，并对下一步工作进行展望。
 
 
