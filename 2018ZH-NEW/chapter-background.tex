@@ -19,7 +19,7 @@ Framework层主要是系统管理类库，包括Activity的管理，消息通知
 
 \begin{figure*}[!h]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/Android-Framework.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/Android-Framework.png}
 	\caption{Android系统框架图}
 	\label{fig:Android-Framework}
 \end{figure*}
@@ -65,17 +65,19 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 	处于该状态下的Activity将不能直接恢复。
 \end{itemize}
 
+
+\begin{figure*}
+	\centering
+	\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
+	\caption{Activity的生命周期}
+	\label{fig:Activity-lifecycle}
+\end{figure*}
+
+
 Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
 Android \code{Activity}提供的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、\code{ onRestart()}、 \code{ onStoped()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
 对应的\code{Activity}的生命周期具体如~\autoref{fig:Activity-lifecycle}所示：
 
-
-\begin{figure*}
-	\centering
-	\includegraphics[width=\textwidth]{./Figures/Activity-lifecycle.png}
-	\caption{Activity的生命周期}
-	\label{fig:Activity-lifecycle}
-\end{figure*}
 
 
 当用户点击应用图标，系统启动应用程序后，系统会创建Activity、启动Activity并使之可以和用户进行交互。
@@ -175,7 +177,7 @@ Handler在整个过程中承担着消息的发送者和消费者两个身份，�
 
 \begin{figure*}[!hb]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/Handler-framework.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/Handler-framework.png}
 	\caption{ Handler机制中各组成部分的相互关系}
 	\label{fig:handler-framework}
 \end{figure*}

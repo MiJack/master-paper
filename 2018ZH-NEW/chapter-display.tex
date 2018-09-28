@@ -10,7 +10,6 @@
 
 \begin{figure}[!h]
 	\centering
-\vspace{0.6 in}
 	\begin{lstlisting}[language=Java]
 package cn.mijack.rundroidtest;
 
@@ -77,7 +76,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/empty.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/empty.png}
 	\caption{斐波拉契数列-RunDroid生成的调用图（局部）}
 	\label{fig:rundroid-result-Fibonacci}
 \end{figure*}
@@ -98,7 +97,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/FlowDroid-Fibonacci.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/FlowDroid-Fibonacci.png}
 	\caption{斐波拉契数列-FlowDroid生成的调用图（局部）}
 	\label{fig:flowdroid-result-Fibonacci}
 \end{figure*}
@@ -120,7 +119,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/empty.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/empty.png}
 	\caption{Activity部分-RunDroid生成的调用图（局部）}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
@@ -135,7 +134,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/flowdroid-dummyMainMethod.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/flowdroid-dummyMainMethod.png}
 	\caption{dummyMainMethod-FlowDroid生成的调用图}
 	\label{fig:flowdroid-result-lifecycle}
 \end{figure*}
@@ -165,7 +164,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/empty.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/empty.png}
 	\caption{多线程触发关系-RunDroid生成的调用图（局部）}
 	\label{fig:rundroid-result-handler}
 \end{figure*}
@@ -175,7 +174,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/FlowDroid-handler.png}
 	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
 	\label{fig:flowdroid-result-handler}
 \end{figure*}
@@ -216,6 +215,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 
 
+\eat{
 
 \section{实验效果评估}
 
@@ -308,18 +308,43 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 	\end{table*}
 	
 }
+}
 \section{RunDroid在错误定位领域的应用}
 在本节中，我们将采用因果关联模型\cite{baah2010causal,baah2011mitigating}作为错误定位技术。
 相比传统错误定位技术（基于频谱的错误定位）只考虑了程序语句的覆盖情况，基于因果关联模型的错误定位技术还考虑程序在执行过程中的程序依赖（即控制依赖和数据依赖），分析的准确度较高。
+
+\subsection{原理简介}
+
 基于因果关联模型的错误定位技术，以程序本身$P$和程序在一组测试用例下的覆盖率信息作为输入，
-通过计算程序$P$中的语句$s$的相应的错误估计值$\tau$。
-$\tau$的值越大，语句$s$越有可能是错误。
+通过期望模型（\autoref{equ:expectEquation}）和线性回归模型（\autoref{equ:linearEquation}）计算程序$P$中的语句$s$的相应的错误估计值$\tau$。
+$\tau$的值越大，语句$s$是错误的可能性越大。
 具体过程如\autoref{alg:fault-localization}所示。
-对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集；
 
-当匹配
+\begin{equation}
+\begin{aligned}
+\tau(s) = E[Y=1|T=1] - E [Y=0|T=0] 
+\end{aligned}
+\label{equ:expectEquation} 
+\end{equation}
 
-例如，在
+\begin{scriptsize}
+	注：$E[Y=1|T=1]$：实验组执行失败的期望， $E[Y=0|T=0]$：对照组执行通过的期望。
+\end{scriptsize}
+
+\begin{equation}
+\begin{aligned}
+Y =\alpha +\tau T+\beta X 
+\end{aligned}
+\label{equ:linearEquation} 
+\end{equation}
+\begin{scriptsize}
+	注：其中$Y$表示测试用例是否执行失败（1为执行失败，0为执行通过），
+	$T$和$X$分别为语句$s$和$Pred(s)$中各语句的覆盖情况 ，
+	$\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计算的定值。
+	
+\end{scriptsize}
+
+
 
 \begin{algorithm}[!ht]
 	
@@ -341,42 +366,57 @@ $\tau$的值越大，语句$s$越有可能是错误。
 			
 			计算语句$s$在程序$P$中前驱节点集合$Pred(s) $;
 			
-			根据$Mdata(s)$的覆盖率情况$CoverageInfo(s)$  筛选 $\gets$  Match on Pred($s$) in $CoverageInfo$;
+			根据$Pred(s) $的覆盖率情况筛选待计算的数据$Mdata(s)$;
 			
-			\eIf{\emph{Mdata($s$) 为 $\emptyset$	}}{
-				根据公式Compute $\tau(s)$ from $Mdata(s)$ using Equation $\tau(s) = E[Y^1] - E [Y^0]$;}
-			{
-				%				  Y = α + τT + βX + ε
-				%			$\tau(s) = NA$;
-				
-				使用公式 $Y =\alpha +\tau T+\beta X+\varepsilon $计算 $\tau(s)$ ;
+			\eIf{\emph{$Mdata(s)$ 为 $\emptyset$	}}{
+				使用$Mdata(s)$根据\autoref{equ:expectEquation}计算 $\tau(s)$ ;			
+			}{
+				根据\autoref{equ:linearEquation}计算 $\tau(s)$ ;
 			}
 			
-		}
-		$sorted\_\tau$ = sort $\tau$ in descending order;
+		} 
 		
+		对各语句按照$\tau$ 逆向排序得到	$sorted\_\tau$；
 		
 		\KwRet{$sorted\_\tau$};
-		
 		
 	}
 	
 \end{algorithm}
 
-为了比较有和没有RunDroid提供的动态调用图的因果影响模型的有效性，我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型（没有RunDroid）作为基线，并比较 他们的计算\textit{因果效应估计}。
+
+对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
+匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
+（实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
+如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
+匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。
+当$Mdata(s)$为空集，我们将通过线性回归\autoref{equ:linearEquation}公式计算得到关于$T$的斜率$\tau$作为语句$s$的错误估计值$\tau(s)$（第8行）。
+最后，对于所有的语句，按照错误估计值逆向排序输出，算法完毕。
+
+
+以Line. 5为例，\autoref{tab:result}代码中Line. 5的控制依赖语句是Line. 4，数据依赖节点是Line. 2，因此$Pred(Line.  5) = \{ Line. 2, Line. 4\}$。
+测试用例$t_1 \sim t_5$对应的$Mdata(s)$分别表达成$V_{t_1}=\langle1,0\rangle$、$V_{t_2}=\langle1,1\rangle$、 $V_{t_3}=\langle1,1\rangle$、 $V_{t_4}=\langle1,0\rangle$、$V_{t_5}=\langle1,1\rangle$。
+其中，测试用例$t_1$、$t_2$、$t_4$、$t_5$为实验组，$t_3$为对照组。
+由于只有向量$\langle1,1\rangle$同时出现在实验组和对照组，所以测试用例$t_2$、$t_3$、$t_5$保留到$Mdata(Line. 5)$中。
+根据\autoref{equ:expectEquation}计算可得$\tau(Line. 5) = \frac{0+0}{2}-\frac{1}{1}=-1$。
+而对于Line. 2，该语句并没有前驱节点，匹配完的集合$Mdata(Line. 2)$为空集，因此通过\autoref{equ:linearEquation}对所有测试用例的数据进行计算。
+由于结算结果中回归直线斜率不存在，所以$\tau(Line. 2)= \text{NA}$。
+
+
+
 \eat{
 To compare the effectiveness of causal influence model with and without the dynamic call graphs provided by RunDroid, we follow the experiment setup at~\cite{baah2010causal,baah2011mitigating}, use the original causal influence model (without RunDroid) as a baseline, and compare their computed \textit{causal-effect estimates}.
 }
 
-\subsection{结果分析}
+\subsection{有效性验证}
+为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
+我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
+相关数据如\autoref{tab:result}中列$\tau$和$\tau'$所示。
+列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
+
 在\autoref{tab:result}中，我们在第13行显示了一个错误的语句示例。
 而是直接传递，如果在传入方法之前它是一个正值，则应检查第13行的方法loadData（int）的参数。
-第一列显示了与每个语句关联的行号的程序。
-第2列到第6列分别代表测试用例t1-t5。
-每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值。
-测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖。
-底行显示每个测试用例执行的结果，“1”表示执行失败，“0”表示通过测试。
-假设我们使用因果影响模型计算程序的失效原因，我们能够计算列“结果”中显示的估计数。第4,9和13行都是估计的，得分最高为0.67。
+第一列显示了与每个语句关联的行号的程序假设我们使用因果影响模型计算程序的失效原因，我们能够计算列“结果”中显示的估计数。第4,9和13行都是估计的，得分最高为0.67。
 
 \eat{
 	
@@ -395,15 +435,17 @@ To compare the effectiveness of causal influence model with and without the dyna
 \begin{table}[h]
 	
 	\caption{结果对比}
+	\footnotesize		
 	
 	\label{tab:result}
-	
+	\centering{
 	\begin{tabular}{rl*{5} {|c}|c|c}
 		
 		
 		
-		&                    & $t_1$ & $t_2$ & $t_3$ & $t_4$ & $t_5$ &  $\tau$ &  $\tau'$ \\
-		
+		&                    & $t_1$ & $t_2$ & $t_3$ & $t_4$ & $t_5$ & ~&  ~\\
+		&v &btn0& btn1& btn1& btn2 &btn1 & $\tau$ &  $\tau'$  \\
+		&num&   - & - 1& 0& -& -2& \\
 		\hline
 		
 		1&void onClick(View v) \{                       &   &   &   &   &   &         \\
@@ -441,39 +483,51 @@ To compare the effectiveness of causal influence model with and without the dyna
 		&                                                  & 0 & 1 & 0 & 0 & 1 &            \\
 		
 	\end{tabular}
+}
+\scriptsize
+          	\\ 注：
+		\begin{tablenotes}
+		
+		\item  第2列到第6列分别代表测试用例$t_1\sim t_5$；
+		\todo{ \item 每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；}
+		\item	测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；
+		\item    底行显示每个测试用例执行的结果，“1”表示执行失败（$Y=1$），“0”表示通过测试（$Y=0$）。
+		
+		
+		\end{tablenotes}
 	
 \end{table}
+\eat{
 因果影响模型以及许多其他故障定位技术考虑了动态程序依赖的影响，因为依赖信息不仅有助于触发故障的影响，而且还将它们传播到程序输出。
 不幸的是，由于Android的特定编程范例，在显示的示例中无法捕获第8行和第11行之间的控制依赖性。
 并且，丢失适当的控制流导致计算报告具有相同最高分的三个语句，从而使得故障定位技术在Android中不那么有效。
 因此，为了改进Android应用程序的故障定位技术，RunDroid旨在通过运行时信息和执行期间的动态调用图来恢复非常需要的控制流依赖性。
-\eat{
-	Causal influence model, as well as many other fault localization techniques, considers the effects of dynamic program dependence, as dependence information contributes greatly to not only triggering the effects of faults, but also propagating them to program output. 
-	Unfortunately, due to Android's specific programming paradigm, the control dependency between Line 8 and Line 11 cannot be captured in the the example showed. 
-	And, losing appropriate control flows causes the computation to report three statements having the same highest score, rendering the fault location techniques less effective in Android.
-	Therefore, to improve the fault localization techniques for Android apps, RunDroid aims to recover the very much needed control-flow dependencies through the runtime information and the dynamic call graphs during the executions.
-	
+
 }
 
 
 
 \begin{figure}[!h]
-	\includegraphics[width=\textwidth]{./Figures/treatment.png}
+	\includegraphics[width=0.1\textwidth]{./Figures/treatment.png}
 	\caption{Units in treatment group and control group with their covariate values}
 	\label{fig:motivationResultTreatment}
 \end{figure}
+{
+
 我们将激励性的例子作为主题计划。
 因果影响模型在很大程度上依赖于陈述之间的依赖关系。
 使用RunDroid，捕获了第9行\code{t.start()}和第11行\code{TaskThread.run()}之间的异步触发关系，因此第13行的前导是行$ \{ $ 5,8,9,13 $ \} $，而不仅仅是第13行，这是原始因果影响模型的情况。
-	\autoref {fig:motivationResultTreatment}显示治疗单位和控制单位及其相关的第13行测试用例。
-	具体来说，\autoref {fig:motivationResultTreatment} - (a)代表没有RunDroid的情况，而\autoref {fig:motivationResultTreatment} - （b）代表RunDroid的情况。
-	治疗单位是第13行的测试用例，分别为$ t_2 $，$ t_3 $和$ t_5 $;控制单元是不包括第13行的测试用例，是$ t_1 $和$ t_4 $。
-	对于目标语句，我们使用协变量向量在测试用例中显示其前任语句的封面信息。
-	显示了由测试用例生成的协变量值的向量。
-	在\autoref {fig:motivationResultTreatment} - (b)中，向量$ \langle $ 0,1,1,1 $ \rangle $表示对于测试用例$ t_2 $，只包含第5行，其他三个前任语句（第8,9,12行）都包括在内。
-	使用来自因果推理模型的相同方程，后一种情况的因果效应估计（来自RunDroid的依赖信息）的结果不同。
-	第13行的估计是$ \frac {(1 + 1)} {2} - \frac {(0 + 0)} {2} = 1.0 $。其他陈述的估计数见最右列表2。
-	
+\autoref {fig:motivationResultTreatment}显示治疗单位和控制单位及其相关的第13行测试用例。
+具体来说，\autoref {fig:motivationResultTreatment} - (a)代表没有RunDroid的情况，而\autoref {fig:motivationResultTreatment} - （b）代表RunDroid的情况。
+治疗单位是第13行的测试用例，分别为$ t_2 $，$ t_3 $和$ t_5 $;控制单元是不包括第13行的测试用例，是$ t_1 $和$ t_4 $。
+对于目标语句，我们使用协变量向量在测试用例中显示其前任语句的封面信息。
+显示了由测试用例生成的协变量值的向量。
+在\autoref {fig:motivationResultTreatment} - (b)中，向量$ \langle $ 0,1,1,1 $ \rangle $表示对于测试用例$ t_2 $，只包含第5行，其他三个前任语句（第8,9,12行）都包括在内。
+使用来自因果推理模型的相同方程，后一种情况的因果效应估计（来自RunDroid的依赖信息）的结果不同。
+第13行的估计是$ \frac {(1 + 1)} {2} - \frac {(0 + 0)} {2} = 1.0 $。其他陈述的估计数见最右列表2。
+
+
+}
 	\eat{
 		
 		We take the motivating example as the subject program.
