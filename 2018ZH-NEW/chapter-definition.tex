@@ -75,6 +75,7 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 以多线程中的Thread为例，方法\code{Thread.start()}（记为$m_{start}$）执行会使JVM / Dalvik虚拟机创建一个新的线程。
 最终在这个线程中，虚拟机会在新的线程中回调该Thread对象的方法\code{Thread.run()}（记为$m_{run}$）。
 上述描述可以表示成$m_{start} \hookrightarrow m_{run}$。由于这个触发关系和多线程相关，也可以记作$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $。
+同样的，触发关系也适用于Ui事件注册与响应、基于Handler的多线程交互。
 
 
 \important{在系统源代码的层面上}，对于方法$m_a$ ,$m_b$ ,$m_c$ ，
@@ -147,7 +148,7 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 因此，$m_{send} \hookrightarrow m_{handle}$或$m_{send} \lhook\joinrel\xrightarrow{Handler}  m_{handle} $。
 
 
-\section{本章小结}
+\section{本章总结}
 
 本章从方法和对象的关系、方法间关系、调用图等几个方面对方法关系、方法执行、调用关系、触发关系、函数调用图、拓展调用图等概念做了符号化的定义，
 并结合第二章的Handler例子简单阐述了上述概念。

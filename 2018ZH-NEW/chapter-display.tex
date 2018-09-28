@@ -199,7 +199,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 在WorkerThread的方法run()中，我们通过Handler进行了异步UI操作，触发了方法\code{MainActivity\$1.handleMessage(Message)}的执行。
 在构建拓展调用图过程中，RunDroid充分挖掘了这些方法和对应的方法对象的关联关系，进而补全方法\code{Handler.sendMessage()}和\code{MainActivity\$1.handleMessage(Message)}之间的触发关系。
-因此，在RunDroid展示的结果中，上述两个方法之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此，编译后的类名为\code{MainActivity\$1}}。
+因此，在RunDroid展示的结果中，上述两个方法之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此编译后的类名为\code{MainActivity\$1}。}。
 但是，FlowDroid分析相关代码时，由于缺少运行时上下文的基本信息，无法分析出\code{WorkerThread.run()}中handler的具体类型，因此，无法将Handler相关的两个方法连接起来。
 
 
@@ -216,22 +216,110 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 
 
-%\section{RunDroid和FlowDroid的对比总结}
-\section{RunDroid在错误定位领域的应用}
 
+\section{实验效果评估}
 
-\subsection{原理介绍}
-
-
-
-
-\todo{解释原理公式}
+相比其他分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
+为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid中随机抽取了10个应用，并针对挑选不同的使用场景进行测试。
+我们利用RunDroid构建各应用运行执行情况的函数调用图，统计调用图中的出现函数触发关系数量，结果如\autoref{table:app_results}所示。
+我们对表格中的数据逐个进行人工确认，发现实验数据不存在错误。
+\todo{从\autoref{table:app_results}中，我们发现对大部分使用场景，应用程序执行过程对应的函数调用图均存在函数触发关系，只是在数量上存在差异。}
+由此，我们可以看出函数触发关系在Android应用中的普遍性，也从一个角度验证了第\ref{chp:background}章提到的Android特性：Android应用中存在部分逻辑实现依赖于回调函数和多线程通信。
+\begin{table*}[!ht]
+	\centering
+	{
+		\caption{各应用运行过程中的涉及函数触发关系数量}
+		\label{table:app_results}
+		\begin{tabular}{ |c|c|c|c|c|c|c| }
+			\hline
+			\multirow{2}*{应用 }& \multirow{2}*{方法总数 }&\multirow{2}{2cm}{\centering 函数调用关系总数}& \multicolumn{4}{c|}{函数触发关系} \\ 
+			\cline{4-7}	~ & ~ & ~ & Ui事件& Thread相关& Handler& 总数 \\ 				
+			\hline
+			~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+		\end{tabular}
+	}
+\end{table*}
 \eat{
-control group 一般译为对照组，直译是控制组，因此不难理解对照组就是控制住变量的组，在实验中control group的组的实验操作是固定的，作用就是对照变化的实验组。
-treatment group 就是实验组，也就是在做实验的时候，实验组如果有许多的变量，须通过“控制变量法”来进行研究。进行多次的实验，而对照组就是一组不变的实验。
+	
+	\begin{table*}[!ht]
+		\centering
+		{
+			\caption{各应用运行过程中的涉及函数触发关系数量}
+			\label{table:case_study_results}
+			\begin{tabular}{ |c|c|c|c|c|c| }
+				\hline
+				\multirow{2}*{应用名}&\multicolumn{5}{c|}{函数触发关系的数目}\\% &\multirow{2}*{\#DC} &\multirow{2}*{\#CS} &\multirow{2}*{DCR(\%)} & \multicolumn{4}{|c|}{State dependency probabilistic model} & \multicolumn{4}{|c|}{Expected model} \\
+				\cline{2-6}% \cline{10-13} \cline{14-17}
+				~&TC1&TC2&TC3&TC4&TC5\\%&~&~&~ & Susp & Susp$'$ & Rank & Rank$'$ & Susp & Susp$'$ & Rank & Rank$'$ \\
+				\hline
+				AnyMemo/m1&34&22& 31& 35& 35\\%& 256&955&26.81 & 1& 3 & 17 & 10& NA& 0.67&467&3  \\
+				\hline
+				Archwiki Viewer/m2&102& 9& 37& 60& 57\\%& 42& 175&24.00& 1& 3 & 12 & 6 & NA& 0.67&87&15 \\
+				\hline
+				Archwiki Viewer/m3&31& 10& 16& 69& 23\\%& 37& 166&22.29& 1& 3& 23& 6& NA& 0.67& 87& 15 \\
+				\hline
+				Archwiki Viewer/m4&32& 9& 21& 56& 21\\%& 37& 166&22.29& 1& 3& 22& 6& NA& 0.67& 87& 15  \\
+				\hline
+				Chanu/m5&26& 21& 20& 22& 19\\%& 358& 862&41.53& 1&    $\infty$ & 14& 1& NA& 1& 379& 1 \\
+				\hline
+				Microphone/m6&14& 5& 8& 5& 3\\%& 52\\%& 124&41.94& 1& 1.5& 16& 6& NA& 0.5& 29& 1    \\
+				\hline
+				%			Microphone/m7&5& 10& 8& 5& 3\\%& 52& 124&41.94& 1& 3& 8& 1& NA& 0.5& 29& 1    \\
+				%			\hline
+				%			OSMTracker/m8&2& 0& 2& 2& 0\\%& 233& 827&28.17& 1& 3& 67& 6& NA& 0.67& 426& 1    \\
+				%			\hline
+				%			OSMTracker/m9&2& 0& 2& 3& 0\\%& 231& 824&28.03& 1& 3& 42& 1& NA& 0.67& 425 &1    \\
+				%			\hline
+				%			OSMTracker/m10 &2& 0& 0& 0& 0\\%& 231& 824& 28.03&1&    $\infty$ & 65& 1& NA& 1& 425& 1    \\
+				%			\hline
+				%			OSMTracker/m11&2& 0& 0& 0& 0\\%& 231& 824& 28.03& 1&    $\infty$ & 68& 1& NA& 1& 425& 1 \\
+				%			\hline
+				%			Quran/m12&10&6& 4& 10& 4\\%& 138&581&23.75& 1& 3& 25& 10& NA& 0.67&271&1    \\
+				%			\hline
+				%			ReGeX/m13&6& 0& 5& 6& 0\\%& 59& 238& 24.79& 1& 3& 24& 1& NA& 0.67& 104& 1 \\
+				%			\hline
+				%			ReGeX/m14&10& 2& 4& 4& 0\\%& 60& 275& 21.82& 1& 3& 24& 1& NA& 0.5& 128& 60 \\
+				%			\hline
+				%			ReGeX/m15&3& 0& 6& 8& 0\\%& 60& 268&22.39& 1& 3& 28& 5& NA& 0.67& 128& 1 \\
+				%			\hline
+				%			Screen Cam/m16&4& 1& 1& 4& 4\\%& 105& 418& 25.12& 1& 3& 12& 1& NA& 0.67& 150& 1 \\
+				%			\hline
+				%			Screen Cam/m17&6& 4& 4& 6& 5\\%& 107& 433& 24.71& 1& 3& 8& 3& NA& 0.67& 175& 1 \\
+				%			\hline
+				%			Screen Cam/m18&5& 2& 6& 6& 4\\%& 119& 436& 27.29& 1& 1.5& 12& 8& NA& 0.5& 152& 9 \\
+				%			\hline
+				%			Screen Cam/m19&5& 2& 6& 6& 4\\%& 108& 391& 27.62& 1& 1.5& 5& 1& NA& 0.5& 127& 1 \\
+				%			\hline
+				%			UPM/m20&10& 8& 7& 8& 5\\%& 134& 233& 57.51& 1& 3& 20& 6& NA& 0.67& 41& 1 \\
+				%			\hline
+				%			UPM/m21&9& 8& 6& 7& 7\\%& 134& 233& 57.51& 1& 3& 9& 6& NA& 0.67& 41& 1  \\
+				%			\hline
+				%			UPM/m22&10& 8& 5& 7& 6\\%& 134& 233& 57.51& 1& 3& 8& 6& NA& 0.67& 41& 1 \\
+				%			\hline
+				%			World Weather/m23&0& 1& 1& 0& 1\\%& 28& 195& 14.36& 1& 3& 13& 1& NA& 0.67& 89& 1 \\
+				%			\hline
+				%   		World Weather/m24&6& 8& 4& 0& 3\\%& 33& 226& 14.60& 1& 3& 13& 1& NA& 0.67& 89& 1 \\
+				%		   \hline
+				%	 	   World Weather/m25&3& 8& 4& 0& 3\\%& 33& 226& 14.60& 1& 3& 13& 1& NA& 0.67& 89& 1 \\
+				% 		  \hline
+			\end{tabular}
+		}
+	\end{table*}
+	
 }
+\section{RunDroid在错误定位领域的应用}
+在本节中，我们将采用因果关联模型\cite{baah2010causal,baah2011mitigating}作为错误定位技术。
+相比传统错误定位技术（基于频谱的错误定位）只考虑了程序语句的覆盖情况，基于因果关联模型的错误定位技术还考虑程序在执行过程中的程序依赖（即控制依赖和数据依赖），分析的准确度较高。
+基于因果关联模型的错误定位技术，以程序本身$P$和程序在一组测试用例下的覆盖率信息作为输入，
+通过计算程序$P$中的语句$s$的相应的错误估计值$\tau$。
+$\tau$的值越大，语句$s$越有可能是错误。
+具体过程如\autoref{alg:fault-localization}所示。
+对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集；
 
+当匹配
 
+例如，在
 
 \begin{algorithm}[!ht]
 	
@@ -250,44 +338,57 @@ treatment group 就是实验组，也就是在做实验的时候，实验组如�
 	\Fn{FaultLocazilation($P$,$CoverageInfo$)}{
 		
 		\For{$s \in P$ }{
-		
-			Model($s$) = Compute causal model of $s$;
 			
-			 Pred($s$) = Compute predecessors of s from Model($s$);
+			计算语句$s$在程序$P$中前驱节点集合$Pred(s) $;
 			
-			  Mdata($s$) = Match on Pred($s$) in $CoverageInfo$;
-			  
-			\eIf{\emph{Mdata($s$) = $\emptyset$	}}{
-				  Compute $\tau(s)$ from Mdata($s$) using Equation $\tau(s) = E[Y^1] - E [Y^0]$;}
-			  {
-%				  Y = α + τT + βX + ε
-%				$\tau(s) = NA$;
+			根据$Mdata(s)$的覆盖率情况$CoverageInfo(s)$  筛选 $\gets$  Match on Pred($s$) in $CoverageInfo$;
+			
+			\eIf{\emph{Mdata($s$) 为 $\emptyset$	}}{
+				根据公式Compute $\tau(s)$ from $Mdata(s)$ using Equation $\tau(s) = E[Y^1] - E [Y^0]$;}
+			{
+				%				  Y = α + τT + βX + ε
+				%			$\tau(s) = NA$;
 				
-			  Compute $\tau(s)$ using Equation $\tau(s) =\alpha +\tau T+\beta X+\varepsilon $;
-			 }
+				使用公式 $Y =\alpha +\tau T+\beta X+\varepsilon $计算 $\tau(s)$ ;
+			}
 			
 		}
-	$sorted\_\tau$ = sort $\tau$ in descending order;
+		$sorted\_\tau$ = sort $\tau$ in descending order;
 		
 		
 		\KwRet{$sorted\_\tau$};
 		
 		
 	}
-
+	
 \end{algorithm}
 
+为了比较有和没有RunDroid提供的动态调用图的因果影响模型的有效性，我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型（没有RunDroid）作为基线，并比较 他们的计算\textit{因果效应估计}。
+\eat{
 To compare the effectiveness of causal influence model with and without the dynamic call graphs provided by RunDroid, we follow the experiment setup at~\cite{baah2010causal,baah2011mitigating}, use the original causal influence model (without RunDroid) as a baseline, and compare their computed \textit{causal-effect estimates}.
+}
 
 \subsection{结果分析}
-In Table 1, we show an example faulty program with a faulty statement at Line 13. 
-Instead being passed directly, the parameter of method loadData(int) at Line 13 should be checked if it is a positive value before passing into the method. 
-The first column shows the program with line numbers associated with each of its statements.
-Columns 2 through 6 represent test cases t1-t5, respectively. 
-The header of each test case column shows the values of v and num that are used at Lines 1 and 2, respectively. 
-The values for a test case column indicate whether the corresponding program statement is exercised by the test case, 1 for covered and 0 for not covered. 
-The bottom row shows the outcome of each test case execution, with “1” indicating a failing execution and “0” indicating a passing one.
-Suppose we compute the failure-causing effect of the program using the causal influence model [7, 8], we are able to compute the estimate numbers shown in Column “result”. Lines 4, 9, and 13 are all estimated with the highest score 0.67.
+在\autoref{tab:result}中，我们在第13行显示了一个错误的语句示例。
+而是直接传递，如果在传入方法之前它是一个正值，则应检查第13行的方法loadData（int）的参数。
+第一列显示了与每个语句关联的行号的程序。
+第2列到第6列分别代表测试用例t1-t5。
+每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值。
+测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖。
+底行显示每个测试用例执行的结果，“1”表示执行失败，“0”表示通过测试。
+假设我们使用因果影响模型计算程序的失效原因，我们能够计算列“结果”中显示的估计数。第4,9和13行都是估计的，得分最高为0.67。
+
+\eat{
+	
+	In Table 1, we show an example faulty program with a faulty statement at Line 13. 
+	Instead being passed directly, the parameter of method loadData(int) at Line 13 should be checked if it is a positive value before passing into the method. 
+	The first column shows the program with line numbers associated with each of its statements.
+	Columns 2 through 6 represent test cases t1-t5, respectively. 
+	The header of each test case column shows the values of v and num that are used at Lines 1 and 2, respectively. 
+	The values for a test case column indicate whether the corresponding program statement is exercised by the test case, 1 for covered and 0 for not covered. 
+	The bottom row shows the outcome of each test case execution, with “1” indicating a failing execution and “0” indicating a passing one.
+	Suppose we compute the failure-causing effect of the program using the causal influence model [7, 8], we are able to compute the estimate numbers shown in Column “result”. Lines 4, 9, and 13 are all estimated with the highest score 0.67.
+}
 
 
 
@@ -342,46 +443,57 @@ Suppose we compute the failure-causing effect of the program using the causal in
 	\end{tabular}
 	
 \end{table}
+因果影响模型以及许多其他故障定位技术考虑了动态程序依赖的影响，因为依赖信息不仅有助于触发故障的影响，而且还将它们传播到程序输出。
+不幸的是，由于Android的特定编程范例，在显示的示例中无法捕获第8行和第11行之间的控制依赖性。
+并且，丢失适当的控制流导致计算报告具有相同最高分的三个语句，从而使得故障定位技术在Android中不那么有效。
+因此，为了改进Android应用程序的故障定位技术，RunDroid旨在通过运行时信息和执行期间的动态调用图来恢复非常需要的控制流依赖性。
+\eat{
+	Causal influence model, as well as many other fault localization techniques, considers the effects of dynamic program dependence, as dependence information contributes greatly to not only triggering the effects of faults, but also propagating them to program output. 
+	Unfortunately, due to Android's specific programming paradigm, the control dependency between Line 8 and Line 11 cannot be captured in the the example showed. 
+	And, losing appropriate control flows causes the computation to report three statements having the same highest score, rendering the fault location techniques less effective in Android.
+	Therefore, to improve the fault localization techniques for Android apps, RunDroid aims to recover the very much needed control-flow dependencies through the runtime information and the dynamic call graphs during the executions.
+	
+}
 
-Causal influence model, as well as many other fault localization techniques, considers the effects of dynamic program dependence, as dependence information contributes greatly to not only triggering the effects of faults, but also propagating them to program output. 
-Unfortunately, due to Android's specific programming paradigm, the control dependency between Line 8 and Line 11 cannot be captured in the the example showed. 
-And, losing appropriate control flows causes the computation to report three statements having the same highest score, rendering the fault location techniques less effective in Android.
-Therefore, to improve the fault localization techniques for Android apps, RunDroid aims to recover the very much needed control-flow dependencies through the runtime information and the dynamic call graphs during the executions.
 
 
-
-
-\begin{figure}[h]
+\begin{figure}[!h]
 	\includegraphics[width=\textwidth]{./Figures/treatment.png}
 	\caption{Units in treatment group and control group with their covariate values}
 	\label{fig:motivationResultTreatment}
 \end{figure}
-
-
-
-
-We take the motivating example as the subject program.
-Causal influence model relies heavily on dependence relationship among statements.
-With RunDroid, the asynchronized trigger relation between Line 9 \textit{t.start()} and Line 11 \textit{TaskThread.run()}, is captured, hence the predecessors of Line 13 are Lines ${\{}$5, 8, 9, 13$\}$, instead of Line 13 only, which is the case of original causal influence model.
-\autoref{fig:motivationResultTreatment} shows the treatment units and the control units with their associated test cases for Line 13.
-Specifically, \autoref{fig:motivationResultTreatment}-(a) represents the case of without RunDroid, and \autoref{fig:motivationResultTreatment}-(b) represents the case with RunDroid.
-The treatment units, which are test cases that cover Line 13 are $t_2$, $t_3$, and $t_5$; the control units, which are test cases that do not cover Line 13 are $t_1$ and $t_4$.
-For target statement, we use the vector of covariate to present the cover information of its predecessor statements in a test case.
-The vector of covariate values generated by the test cases is shown.
-In \autoref{fig:motivationResultTreatment}-(b), the vector $\langle$0,1,1,1$\rangle$ means that for test case $t_2$, only Line 5 is not covered, the other three predecessor statements (Lines 8, 9, 12) are all covered.
-Using the same equation from causal inference model, the causal-effect estimates for the latter case (with dependence information from RunDroid) are resulted differently. 
-The estimate for Line 13 is $\frac{(1+1)}{2}-\frac{(0+0)}{2} = 1.0$. The estimates for the other statements are shown in Table 2, in the far right column.
-
-
-
+我们将激励性的例子作为主题计划。
+因果影响模型在很大程度上依赖于陈述之间的依赖关系。
+使用RunDroid，捕获了第9行\code{t.start()}和第11行\code{TaskThread.run()}之间的异步触发关系，因此第13行的前导是行$ \{ $ 5,8,9,13 $ \} $，而不仅仅是第13行，这是原始因果影响模型的情况。
+	\autoref {fig:motivationResultTreatment}显示治疗单位和控制单位及其相关的第13行测试用例。
+	具体来说，\autoref {fig:motivationResultTreatment} - (a)代表没有RunDroid的情况，而\autoref {fig:motivationResultTreatment} - （b）代表RunDroid的情况。
+	治疗单位是第13行的测试用例，分别为$ t_2 $，$ t_3 $和$ t_5 $;控制单元是不包括第13行的测试用例，是$ t_1 $和$ t_4 $。
+	对于目标语句，我们使用协变量向量在测试用例中显示其前任语句的封面信息。
+	显示了由测试用例生成的协变量值的向量。
+	在\autoref {fig:motivationResultTreatment} - (b)中，向量$ \langle $ 0,1,1,1 $ \rangle $表示对于测试用例$ t_2 $，只包含第5行，其他三个前任语句（第8,9,12行）都包括在内。
+	使用来自因果推理模型的相同方程，后一种情况的因果效应估计（来自RunDroid的依赖信息）的结果不同。
+	第13行的估计是$ \frac {(1 + 1)} {2} - \frac {(0 + 0)} {2} = 1.0 $。其他陈述的估计数见最右列表2。
+	
+	\eat{
+		
+		We take the motivating example as the subject program.
+		Causal influence model relies heavily on dependence relationship among statements.
+		With RunDroid, the asynchronized trigger relation between Line 9 \textit{t.start()} and Line 11 \textit{TaskThread.run()}, is captured, hence the predecessors of Line 13 are Lines ${\{}$5, 8, 9, 13$\}$, instead of Line 13 only, which is the case of original causal influence model.
+		\autoref{fig:motivationResultTreatment} shows the treatment units and the control units with their associated test cases for Line 13.
+		Specifically, \autoref{fig:motivationResultTreatment}-(a) represents the case of without RunDroid, and \autoref{fig:motivationResultTreatment}-(b) represents the case with RunDroid.
+		The treatment units, which are test cases that cover Line 13 are $t_2$, $t_3$, and $t_5$; the control units, which are test cases that do not cover Line 13 are $t_1$ and $t_4$.
+		For target statement, we use the vector of covariate to present the cover information of its predecessor statements in a test case.
+		The vector of covariate values generated by the test cases is shown.
+		In \autoref{fig:motivationResultTreatment}-(b), the vector $\langle$0,1,1,1$\rangle$ means that for test case $t_2$, only Line 5 is not covered, the other three predecessor statements (Lines 8, 9, 12) are all covered.
+		Using the same equation from causal inference model, the causal-effect estimates for the latter case (with dependence information from RunDroid) are resulted differently. 
+		The estimate for Line 13 is $\frac{(1+1)}{2}-\frac{(0+0)}{2} = 1.0$. The estimates for the other statements are shown in Table 2, in the far right column.
+		
+	}
+	
+	
+	\section{本章总结}
 	
 
-
-
-
-
-
-\section{本章小结}
 
 % 本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估，并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
  

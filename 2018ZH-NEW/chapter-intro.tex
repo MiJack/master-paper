@@ -159,7 +159,7 @@ mobile app tagging ~\cite{chen2016mobile}
 
 \section{论文研究内容}
 
-\todo{解释本文的主要研究内容是那几点，为什么}
+\eat{解释本文的主要研究内容是那几点，为什么}
 \eat{
 本文提出的基于GUI的自动化性能测试技术，整合了性能测试技术和传统的自动化测试的技术，并针对性能测试的挑战，针对性地设计了自动化测试技术。
 本文主要有以下几点贡献：
@@ -175,13 +175,14 @@ mobile app tagging ~\cite{chen2016mobile}
 	\setlength{\itemsep}{1pt}
 	\setlength{\parskip}{0pt}
 	\setlength{\parsep}{0pt}
-	\item 本文调研最近几年Android应用分析领域的静动态分析工具，了解各项工具的优劣以及相关的应用案例。
-	\item 本文深入Android系统的平台特性，在传统调用图的方法调用关系的基础上，提出了函数触发关系的观念。
-	\item 本文提出并实现Android动态函数调用图构建系统RunDroid。
-	RunDroid生成的函数调用图不仅体现了传统调用图的方法调用关系，还展示方法执行过程相关的对象信息和函数间的触发关系，反映Android平台相关的特性。
-	\item 
-	
-	将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
+%	\item 本文调研最近几年Android应用分析领域的静动态分析工具，了解各项工具的优劣以及相关的应用案例。
+%	\item 本文深入Android系统的平台特性，在传统调用图的方法调用关系的基础上，提出了函数触发关系的观念。
+%	\item 本文提出并实现Android动态函数调用图构建系统RunDroid。RunDroid生成的函数调用图不仅体现了传统调用图的方法调用关系，还展示方法执行过程相关的对象信息和函数间的触发关系，反映Android平台相关的特性。
+%	\item   将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
+	\item  Android动态函数调用图构建系统RunDroid的设计与实现：
+	除了传统调用图的方法调用关系，RunDroid生成的函数调用图还展示方法执行过程相关的对象信息和方法间的触发关系（例如多线程），反映Android平台相关的特性（Activity组件生命周期和事件回调）。
+	\item 静动态分析技术效果对比：详细展示和说明RunDroid产生的调用图，并就Activity 生命周期及事件回调、多线程触发关系等角度和与传统静态分析工具FlowDroid产生的静态调用图做了对比分析，并分析两种技术的优劣。
+	\item RunDroid系统的应用：利用RunDroid用于开源Android应用的过程分析，反映方法间触发关系在Android系统上的常见性。另外， RunDroid与错误定位技术结合的实验说明RunDroid提供的信息，可以提供更多程序依赖信息，有助于提高错误定位技术技术结果的准确性。
 \end{itemize}
 
 %\todo{对上述系统设计对应的实验方案，评估对应的实验效果。}

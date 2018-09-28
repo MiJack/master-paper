@@ -318,12 +318,14 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 
 
 
-\subsection{构建Activity的生命周期}
+\subsection{构建Activity的生命周期和事件回调}
+
+\point{构建Activity的生命周期}
 
 Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联起来，利用的是\code{Activity}生命周期方法的签名的不变性。
 
 \begin{algorithm}[!ht]
-	\caption{构建Activity的生命周期} 
+	\caption{构建Activity的生命周期和事件回调} 
 	\label{alg:buildActivityLifecycle}
 	\KwIn{ $manifestFile$，AndroidManifest文件}
 	\KwIn{ $cg$，函数调用图}	
@@ -333,7 +335,20 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	
 	\SetKwProg{Fn}{Function}{:}{}
 	
-	\Fn{patchActivityLifecycle($cg$)}{
+		\Fn{patchActivityLifecycleAndUiEvent($cg$)}{
+		
+		patchActivityLifecycle($cg$,$manifestFile$);
+		
+		patchUiEvent($cg$);
+		
+		
+		$cg' \gets cg$;
+
+		\KwRet{$cg'$};
+	}
+	
+	
+	\Fn{patchActivityLifecycle($cg$,$manifestFile$)}{
 		
 		
 		$lifecycleList \gets$ new   $ List()$;
@@ -363,11 +378,16 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 		
 		linkItemsByTime($lifecycleList$,$cg$);
 		
-		$cg' \gets cg$;
-		
-		\KwRet{$cg'$};
 	}
-	
+	% $o_p \stackrel{parameter}{\longrightarrow} m$
+	\Fn{patchUiEvent($cg$)} {
+		\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node ,$o \in$ $cg \}$} }{
+			\If{ {$ \left\langle m_{register}\joinrel\xrightarrow{instance} o_{listener}\right\rangle \in cg$ } \\\qquad 
+				and   {$\left\langle m_{click} \joinrel\xrightarrow{instance}   o_{listener}\right\rangle  \in cg$ }}{
+				$cg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
+			}
+		}
+	}		
 \end{algorithm}
 
 整个过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加表示Activity生命周期的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
@@ -381,6 +401,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 （3）方法$m$在调用图$cg$中不在调用者，即在调用图$cg$中不存在方法$m' \in cg$，使得$m' \to m $成立。
 
 
+\point{\todo{Andoid事件回调的触发关系}}
 
 
 
@@ -556,7 +577,7 @@ RETURN p,method,enqueue,dispatch
 
 
 
- \section{本章小结}
+ \section{本章总结}
 
 本章详细介绍了RunDroid的设计。
 首先，本章简要介绍了RunDroid实现的基本功能，并通过一个简单的例子介绍了RunDroid的整体运行框架。
