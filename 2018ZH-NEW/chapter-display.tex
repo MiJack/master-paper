@@ -409,10 +409,77 @@ To compare the effectiveness of causal influence model with and without the dyna
 }
 
 \subsection{有效性验证}
+
+\begin{table}[!ht]
+	
+	\caption{结果对比}
+	\footnotesize		
+	
+	\label{tab:result}
+	\begin{center}
+		
+		
+		
+		
+		\begin{tabular}{rl*{5} {|c}|c|c}
+			
+			
+			
+			&                    & $t_1$ & $t_2$ & $t_3$ & $t_4$ & $t_5$ & ~&  ~\\
+			&v &btn0& btn1& btn1& btn2 &btn1 & $\tau$ &  $\tau'$  \\
+			&num&   - & - 1& 0& -& -2& \\
+			\hline
+			
+			1&void onClick(View v) \{                       &   &   &   &   &   &         \\
+			
+			2&\quad num = getNumber();                   & 1 & 1 & 1 & 1 & 1 &  NA  &  NA    \\
+			
+			3&\quad if(v.getId() == R.id.btn1) \{           & 1 & 1 & 1 & 1 & 1 &  NA    &  NA \\
+			
+			4&\quad \quad if( num == 0 ) \{                    & 0 & 1 & 1 & 0 & 1 & 0.67   & 0.67 \\
+			
+			5&\quad \quad \quad num=1;                         & 0 & 0 & 1 & 0 & 0 & -1.0  &-1.0\\
+			
+			6&\quad \quad \}                                   &   &   &   &   &   &             \\
+			
+			7&\quad   \}                                       &   &   &   &   &   &            \\
+			
+			8&\quad Thread t = createThread(v.getId());          & 1 & 1 & 1 & 1 & 1 & NA&  NA  \\
+			
+			9&\quad t.start();                                 & 1 & 1 & 1 & 1 & 1 & 0.67   & 0.67 \\
+			
+			10&\}                                              &   &   &   &   &   &             \\
+			
+			11&TaskThread.run() \{                             &   &   &   &   &   &       \\
+			
+			12&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & 0.67 \\
+			
+			13&\quad \quad \textbf{loadData(num); /* FAULT */} & 0 & 1 & 1 & 0 & 1 & 0.67    & 1.0  \\
+			
+			14&\quad\}                                         &   &   &   &   &   &            \\
+			
+			15&\}                                              &   &   &   &   &   &           \\
+			
+			\hline
+			
+			&                                                  & 0 & 1 & 0 & 0 & 1 &            \\
+			
+		\end{tabular}
+	\end{center}
+	\scriptsize
+	注： 第2列到第6列分别代表测试用例$t_1\sim t_5$；
+	每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；
+	测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；   
+	底行显示每个测试用例执行的结果，“1”表示执行失败（$Y=1$），“0”表示通过测试（$Y=0$）。
+	
+	
+\end{table}
+
 为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
 我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
 相关数据如\autoref{tab:result}中列$\tau$和$\tau'$所示。
 列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
+
 
 在\autoref{tab:result}中，我们在第13行显示了一个错误的语句示例。
 而是直接传递，如果在传入方法之前它是一个正值，则应检查第13行的方法loadData（int）的参数。
@@ -432,71 +499,6 @@ To compare the effectiveness of causal influence model with and without the dyna
 
 
 
-\begin{table}[h]
-	
-	\caption{结果对比}
-	\footnotesize		
-	
-	\label{tab:result}
-	\centering{
-	\begin{tabular}{rl*{5} {|c}|c|c}
-		
-		
-		
-		&                    & $t_1$ & $t_2$ & $t_3$ & $t_4$ & $t_5$ & ~&  ~\\
-		&v &btn0& btn1& btn1& btn2 &btn1 & $\tau$ &  $\tau'$  \\
-		&num&   - & - 1& 0& -& -2& \\
-		\hline
-		
-		1&void onClick(View v) \{                       &   &   &   &   &   &         \\
-		
-		2&\quad num = getNumber();                   & 1 & 1 & 1 & 1 & 1 &  NA  &  NA    \\
-		
-		3&\quad if(v.getId() == R.id.btn1) \{           & 1 & 1 & 1 & 1 & 1 &  NA    &  NA \\
-		
-		4&\quad \quad if( num == 0 ) \{                    & 0 & 1 & 1 & 0 & 1 & 0.67   & 0.67 \\
-		
-		5&\quad \quad \quad num=1;                         & 0 & 0 & 1 & 0 & 0 & -1.0  &-1.0\\
-		
-		6&\quad \quad \}                                   &   &   &   &   &   &             \\
-		
-		7&\quad   \}                                       &   &   &   &   &   &            \\
-		
-		8&\quad Thread t = createThread(v.getId());          & 1 & 1 & 1 & 1 & 1 & NA&  NA  \\
-		
-		9&\quad t.start();                                 & 1 & 1 & 1 & 1 & 1 & 0.67   & 0.67 \\
-		
-		10&\}                                              &   &   &   &   &   &             \\
-		
-		11&TaskThread.run() \{                             &   &   &   &   &   &       \\
-		
-		12&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & 0.67 \\
-		
-		13&\quad \quad \textbf{loadData(num); /* FAULT */} & 0 & 1 & 1 & 0 & 1 & 0.67    & 1.0  \\
-		
-		14&\quad\}                                         &   &   &   &   &   &            \\
-		
-		15&\}                                              &   &   &   &   &   &           \\
-		
-		\hline
-		
-		&                                                  & 0 & 1 & 0 & 0 & 1 &            \\
-		
-	\end{tabular}
-}
-\scriptsize
-          	\\ 注：
-		\begin{tablenotes}
-		
-		\item  第2列到第6列分别代表测试用例$t_1\sim t_5$；
-		\todo{ \item 每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；}
-		\item	测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；
-		\item    底行显示每个测试用例执行的结果，“1”表示执行失败（$Y=1$），“0”表示通过测试（$Y=0$）。
-		
-		
-		\end{tablenotes}
-	
-\end{table}
 \eat{
 因果影响模型以及许多其他故障定位技术考虑了动态程序依赖的影响，因为依赖信息不仅有助于触发故障的影响，而且还将它们传播到程序输出。
 不幸的是，由于Android的特定编程范例，在显示的示例中无法捕获第8行和第11行之间的控制依赖性。
