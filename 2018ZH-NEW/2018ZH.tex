@@ -37,6 +37,8 @@
 
 \renewcommand*{\algorithmcfname}{算法}
 
+\newcommand{\clearPaperPage}{\clearpage}
+
 
 
 
@@ -219,14 +221,14 @@
 
 \begin{document}
 \input{A1-COVER-1.tex}
-
+\clearPaperPage
 
 \input{A2-COVER-E.tex}
 
-
+\clearPaperPage
 \input {A3-COPYRIGHT.tex}
 
-
+\clearPaperPage
 
 \input{A4-MEMBERLIST.tex}
 
@@ -239,19 +241,31 @@
 
 \input {B1-ABSTRACT.tex}
 
-
+\clearPaperPage
 \input {B2-ABSTRACT-E.tex}
+\clearPaperPage
 
-
-%\clearpage{\pagestyle{plain}\cleardoublepage}
+%\clearpage{\pagestyle{plain}\clearPaperPage}
 %\textcolor[rgb]{1,1,1}{文本} 
-\clearpage
+
 
 \input {B2-TOC.tex}
 
+\clearPaperPage
+
+\input {B3-Figure.tex}
+\clearPaperPage
+\input {B4-Table.tex}
+\clearPaperPage
+\input {B5-Algorithms.tex}
 
 
-\newpage
+
+
+
+
+
+\clearPaperPage
 \pagenumbering{arabic}
 \pagestyle{fancy}
 \fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
@@ -277,39 +291,38 @@
 
 \raggedbottom
 %\banxiaosi
-%\xiaosi
-\fontsize{12.8pt}{19pt}
-\selectfont
+\xiaosi
+\clearPaperPage
 
 \input {chapter-intro.tex}
-
+\clearPaperPage
 
 
 \input {chapter-background.tex}
+\clearPaperPage
 
 \input{chapter-definition.tex}
 
-
+\clearPaperPage
 \input {chapter-design.tex}
-
+\clearPaperPage
 \input {chapter-implement.tex}
-
+\clearPaperPage
 \input {chapter-testing.tex}
-
+\clearPaperPage
 \input{chapter-application.tex}
 
-
-
+\clearPaperPage
 
 \input {chapter-future.tex}
 
-\clearpage
+\clearPaperPage
 	\addcontentsline{toc}{chapter}{参考文献}
 	\bibliographystyle{GBT7714-2005}
 	\bibliography{bib/tex}
 
  
-\clearpage
+\clearPaperPage
 
 \fancypagestyle{plain}{%
 	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
@@ -321,7 +334,7 @@
 
 \input {D2-ACHNOWLEDGEMENT.tex}
 
-\clearpage
+\clearPaperPage
 
 
 \fancypagestyle{plain}{%

@@ -1,6 +1,6 @@
 \section{应用结果展示}  
 %\label{chp:display}
-在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid做对比，比较两个工具的产出结果，分析各自的优劣。
+在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid的产出结果进行对比，分析各自的优劣。
 
 我们研究的APK的主体代码如\autoref{fig:code_demo}所示。
 在\autoref{fig:code_demo}中，我们声明了有Activity\code{MainActivity}，他是应用层的主Activity，该Activity界面主要有3个按钮组成，
@@ -17,9 +17,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	Button button1,button2,button3;
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			if (msg.what == 1)    {
+			if (msg.what == 1)   
 			      Toast.makeText(MainActivity.this, "handle", Toast.LENGTH_SHORT).show();
-			}
 		}
 	};
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +29,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	}
 	public void onClick(View view) {
 		switch (view.getId()) {
-			case R.id.button1:
-				doHandleButton1();
-				return;				 	// button2、button3进行相同的操作，此处省略
+			case R.id.button1:		doHandleButton1();		return;				 	
+				// button2、button3进行相同的操作，此处省略
 		}
 	}
 	public void doHandleButton1() {
@@ -84,13 +82,13 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有9个，即在运行过程中，\code{doFibonacci()}被调用了9次。
 由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点，该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
 另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
-因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，在一定程度上可以反映程序执行的具体过程。
+因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，在一定程度上反映了程序执行的具体过程。
 
 
 
 其次，方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，而FlowDroid给出的结果却有展现：
 而在运行过程中，我们却可以看到Toast提示。
-经过分析，原因如下：\code{Toast.makeText(Context,CharSequence,int)}属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应的函数。
+经过分析，原因如下：该方法属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应的函数。
 这也从一个方面反映了RunDroid的劣势：系统函数运行时信息的捕获需要提前将相应的方法告知运行时拦截器，生成的调用图才会包括相应的方法。
 这使得调用图只包含研究人员关心的方法的执行信息，但也在一定程度上导致部分方法的缺失和调用图的局部不完整。
 
@@ -144,11 +142,13 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 在这点上，FlowDroid的处理方式恰恰相反，考虑到在未重写系统类方法时的类行为表现基本保持一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
 
 
-{观察\autoref{fig:rundroid-result-lifecycle}中生命周期方法归属的Activity，我们发现，在应用启动\code{NewActivity}过程中，
-\code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
-而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后面一种情况。
-相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，更适合反映应用的状态变化。
-}
+
+
+	观察\autoref{fig:rundroid-result-lifecycle}中生命周期方法归属的Activity，我们发现，在应用启动\code{NewActivity}过程中，
+	\code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
+	而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后面一种情况。
+	相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，更适合反映应用的状态变化。
+
 
 \subsection{多线程触发关系效果展示}
 
@@ -172,12 +172,6 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 
 
-\begin{figure*}[ht]
-	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/FlowDroid-handler.png}
-	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
-	\label{fig:flowdroid-result-handler}
-\end{figure*}
 
 
 \point{Java API多线程的触发方式}
@@ -193,13 +187,19 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 当方法\code{Thread.start()}和\code{WorkerThread.run()}同时在同一个函数中被调用，FlowDroid在调用图上无法将这两个方法间的调用关系和触发关系区分开。
 而RunDroid针对性地标识了函数间的关系是普通调用关系还是基于线程的触发关系，所以不会在方法关系展现上遇到类似的问题。
 
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./Figures/FlowDroid-handler.png}
+	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
+	\label{fig:flowdroid-result-handler}
+\end{figure*}
 
 \point{基于Handler的多线程触发方式}
 
 在WorkerThread的方法run()中，我们通过Handler进行了异步UI操作，触发了方法\code{MainActivity\$1.handleMessage(Message)}的执行。
 在构建拓展调用图过程中，RunDroid充分挖掘了这些方法和对应的方法对象的关联关系，进而补全方法\code{Handler.sendMessage()}和\code{MainActivity\$1.handleMessage(Message)}之间的触发关系。
 因此，在RunDroid展示的结果中，上述两个方法之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此编译后的类名为\code{MainActivity\$1}。}。
-但是，FlowDroid分析相关代码时，由于缺少运行时上下文的基本信息，无法分析出\code{WorkerThread.run()}中handler的具体类型，因此，无法将Handler相关的两个方法连接起来。
+但是，FlowDroid分析相关代码时，由于缺少运行时上下文信息，无法分析出\code{WorkerThread.run()}中handler的具体类型，因此无法将这两个方法连接起来。
 
 
 
@@ -326,9 +326,8 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 \end{aligned}
 \label{equ:expectEquation} 
 \end{equation}
-
 \begin{scriptsize}
-	注：$E[Y=1|T=1]$：实验组执行失败的期望， $E[Y=0|T=0]$：对照组执行通过的期望。
+注：$E[Y=1|T=1]$：实验组执行失败的期望， $E[Y=0|T=0]$：对照组执行通过的期望。
 \end{scriptsize}
 
 \begin{equation}
@@ -338,15 +337,14 @@ Y =\alpha +\tau T+\beta X
 \label{equ:linearEquation} 
 \end{equation}
 \begin{scriptsize}
-	注：其中$Y$表示测试用例是否执行失败（1为执行失败，0为执行通过），
-	$T$和$X$分别为语句$s$和$Pred(s)$中各语句的覆盖情况 ，
-	$\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计算的定值。
-	
+注：其中$Y$表示测试用例是否执行失败（1为执行失败，0为执行通过），
+$T$和$X$分别为语句$s$和$Pred(s)$中各语句的覆盖情况 ，
+$\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计算的定值。
 \end{scriptsize}
 
 
-
-\begin{algorithm}[!ht]
+对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
+\begin{algorithm}[hb]
 	
 	
 	\caption{错误定位的计算方法} 
@@ -383,9 +381,6 @@ Y =\alpha +\tau T+\beta X
 	}
 	
 \end{algorithm}
-
-
-对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
 匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
 （实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
 如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
@@ -412,23 +407,14 @@ Y =\alpha +\tau T+\beta X
 
 \subsection{结果分析}
 
-
-为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
-我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
-我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数），
-编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
-列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
-
-
-
-\begin{table}[ht]
+\begin{table}[hb]
 	
 	\caption{结果对比}
-	\footnotesize		
+
 	
 	\label{tab:result}
 	\begin{center}
-		\footnotesize	
+		\scriptsize	
 		
 		
 		
@@ -477,7 +463,7 @@ Y =\alpha +\tau T+\beta X
 									\hline
 		\end{tabular}
 	\end{center}
-	\scriptsize
+\tiny
 	注： 第2列到第6列分别代表测试用例$t_1\sim t_5$；
 	每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；
 	测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；   
@@ -485,6 +471,11 @@ Y =\alpha +\tau T+\beta X
 	
 \end{table}
 
+为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
+我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
+我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数）。
+在编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
+列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
 
 
 在$\tau$的结果中，分数最高包括\Line{4}、\Line{7}和\Line{13}，均为0.67；
@@ -508,7 +499,7 @@ Y =\alpha +\tau T+\beta X
 		\begin{center}
 	\includegraphics[width=0.8\textwidth]{./Figures/treatment.png}
 \end{center}
-	\caption{语句Line.8 Units in treatment group and control group with their covariate values}
+	\caption{待命名}
 	\label{fig:motivationResultTreatment}
 \end{figure}
 
@@ -584,11 +575,10 @@ Y =\alpha +\tau T+\beta X
 
 % 本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估，并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
  
-本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
-同时，我们还对比分析在相同场景下静态分析工具FlowDroid的运行结果。
-我们发现，RunDroid生成的调用图的完整性依赖于源代码处理以及待拦截的目标系统方法列表的完整程度，而FlowDroid的分析对象是Android应用程序APK文件，调用图的完整性受到自身算法实现的限制。
-另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
-前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。
-综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
-
+ 	本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
+ 	同时，我们还对比分析在相同场景下静态分析工具FlowDroid的运行结果。
+ 	我们发现，RunDroid生成的调用图的完整性依赖于源代码处理以及待拦截的目标系统方法列表的完整程度，而FlowDroid的分析对象是Android应用程序APK文件，调用图的完整性受到自身算法实现的限制。
+ 	另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
+ 	前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。
+ 	综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
 

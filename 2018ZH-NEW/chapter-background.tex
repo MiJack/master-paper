@@ -51,7 +51,9 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
+	%\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
+		\includegraphics[width=\textwidth]{./Figures/Activity-lifecycle-Landscape.png}
+
 	\caption{Activity的生命周期}
 	\label{fig:Activity-lifecycle}
 \end{figure*}
@@ -77,8 +79,8 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 
 
 Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
-Android \code{Activity}提供的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、\code{ onRestart()}、 \code{ onStoped()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
-对应的\code{Activity}的生命周期具体如~\autoref{fig:Activity-lifecycle}所示：
+\code{Activity}提供的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、\code{ onRestart()}、 \code{ onStoped()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
+\code{Activity}的生命周期如\autoref{fig:Activity-lifecycle}所示：
 
 
 
@@ -88,8 +90,8 @@ Android \code{Activity}提供的方法包括\code{onCreate()}、 \code{onStart()
 当用户点击“返回键”返回到桌面时，Activity会失去焦点，在用户的视野中消失，直至被系统回收，
 对应的状态也从运行态经暂停态、停止态，变为终止态变，期间\code{onPause()}、\code{onStop()}、\code{onDestroy()}等方法被回调；
 
-当用户从一个界面回到原来的界面时，原有的Activity从停止态重启，先后出现在设备界面上，获得和用户交互的焦点，
-期间\code{onRestart()}、\code{onStart()}、\code{onResume()}等方法被回调；
+当用户从一个界面回到原来的界面时，原来的Activity从停止态重启，出现在设备界面上，获得交互焦点，
+\code{onRestart()}、\code{onStart()}、\code{onResume()}等方法被回调；
 
 当一个Activity长期处于停止态，但由于内存原因被系统回收时，用户尝试启动它时，系统会像启动一个新的Activity一样启动它。
 
@@ -175,19 +177,17 @@ Looper负责消息的分发。
 Handler在整个过程中承担着消息的发送者和消费者两个身份，负责将消息发送到对应的MessageQueue中以及消费来自Looper分发下来的Message。
 %在一个应用中，Handler可以存在多个对象，一个Handler对象也可以同时扮演生产者和消费者两个角色。
 %\end{enumerate}
-
-\begin{figure*}[!hb]
-	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/Handler-framework.png}
-	\caption{ Handler机制中各组成部分的相互关系}
-	\label{fig:handler-framework}
-\end{figure*}
-
 Handler机制中各组成部分的相互关系如\autoref{fig:handler-framework}所示。
 当用户要通过Handler传递消息时，用户将调用系统提供的Handler API，
 该API会将通过分发\code{Handler enqueueMessage(MessageQueue, Message, long)}将消息投递到消息队列MessageQueue中；
 当Looper从MessageQueue中读取该Message对象，分发给对应的Handler对象，调用该对象的方法\code{Handler.dispatchMessage(Message)}；%使得业务可以在对应恰当的线程上被处理
 最终，Handler对象会调用\code{Handler.handleMessage(Message)}按照Message对象进行业务逻辑处理。
+\begin{figure*}[!ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./Figures/Handler-framework.png}
+	\caption{ Handler机制中各组成部分的相互关系}
+	\label{fig:handler-framework}
+\end{figure*}
 
 基于Handler的多线程消息调度，充分利用了Android的事件驱动架构，将业务逻辑抽象出Message对象，借助消息队列在线程间传递Message，达到了Android多线程交互的目的。
 Handler机制，不仅帮助开发人员实现业务逻辑在主线程和工作线程间的自由转移，而且其灵活的API设计降低应用的设计复杂程度，提升了系统架构的可拓展性。

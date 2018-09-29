@@ -47,13 +47,14 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 % 从函数调用图的构建过程可以看出，程序的执行过程就是对函数调用图自上而下的深度优先遍历过程。由此可见，若要还原出图 6-右中的函数调用图，本文采用的基本思路是以日志方式输出对右图中的函数调用图的深度优先遍历序列，并基于得到的遍历序列还原出函数调用图。
 % 由于Android是由面向对象编程语言Java开发的系统，系统还需要考虑面向对象编程的特性——多态性（即同一个行为在不同的对象下的表现可以不同）。为此，RunDroid还会在函数调用图将函数执行和对应的对象进行关联，更好地体现面向对象编程的函数调用关系。基于上述的函数调用关系的信息，RunDroid根据函数调用之间的关系进一步挖掘，进一步挖掘Android系统中的特性（例如组件Activity的生命周期、多线程的交互方式）。
 %\section{总体框架}
+\eat{
 
 
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Figures/rundroid-overview.png}
 	\caption{ RunDroid的工作流程}
-	\label{fig:rundroid_overview}
+%	\label{fig:rundroid_overview}
 \end{figure*}
 
 在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分，对应的工作流程如\autoref{fig:rundroid_overview}所示。
@@ -64,6 +65,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 %并非所有的方法都是进行日志代码织入的。RunDroid可以接触到用户方法（开发者在应用层面定义的方法）的源代码，而对于前者，
 在应用运行时，日志记录器会以日志的形式将用户方法和系统方法对应的执行信息记录下来。
 最后，调用图构建器会根据应用程序运行时输出的日志，构建拓展函数调用图。
+}
 
 
 
@@ -155,8 +157,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 在目标方法执行前和执行后，对应的回调函数会被执行，进而通过日志记录器记录下这些方法执行的相关信息。
 在RunDroid中，运行时拦截器可以弥补预处理器无法提供系统方法执行信息的不足，填补调用图缺失的系统方法执行，进而还原出应用层和系统层之间以及系统内部的方法调用，使得产生的调用图更加完整。
 
-
-
+{
 \begin{table*}[!ht]
 	%	\centering
 	\footnotesize		
@@ -217,7 +218,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 		\end{threeparttable}
 	}
 \end{table*}
-
+}
 \section{扩展函数调用图的构建过程}
 
 调用图构建器构建拓展函数调用图的过程分为如下几个阶段：
@@ -403,7 +404,14 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 
 \point{\todo{Andoid事件回调的触发关系}}
+{
 
+
+\foreach \t in {1,...,5} {
+	\todo{补充内容 \t }\newline
+}
+
+}
 
 
  \subsection{构建多线程触发关系}
