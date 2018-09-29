@@ -48,6 +48,14 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 % 由于Android是由面向对象编程语言Java开发的系统，系统还需要考虑面向对象编程的特性——多态性（即同一个行为在不同的对象下的表现可以不同）。为此，RunDroid还会在函数调用图将函数执行和对应的对象进行关联，更好地体现面向对象编程的函数调用关系。基于上述的函数调用关系的信息，RunDroid根据函数调用之间的关系进一步挖掘，进一步挖掘Android系统中的特性（例如组件Activity的生命周期、多线程的交互方式）。
 %\section{总体框架}
 
+
+\begin{figure*}[!ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./Figures/rundroid-overview.png}
+	\caption{ RunDroid的工作流程}
+	\label{fig:rundroid_overview}
+\end{figure*}
+
 在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分，对应的工作流程如\autoref{fig:rundroid_overview}所示。
 从功能上，预处理器和运行时拦截器两者的作用是一致的：在程序运行过程中，当相关方法执行时，触发日志记录器记录相应的信息。
 预处理器通过源代码插桩技术实现在用户方法运行时触发用户方法的信息记录，而运行时拦截器则是通过方法劫持技术实现对系统方法执行的拦截，进而触发日志记录。
@@ -59,13 +67,6 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 
 
 
-
-\begin{figure*}[!ht]
-	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/rundroid-overview.png}
-	\caption{ RunDroid的工作流程}
-	\label{fig:rundroid_overview}
-\end{figure*}
 
 
 

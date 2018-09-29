@@ -345,15 +345,6 @@ Y =\alpha +\tau T+\beta X
 \end{scriptsize}
 
 
-对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
-匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
-（实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
-如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
-匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。
-当$Mdata(s)$为空集，我们将通过线性回归\autoref{equ:linearEquation}公式计算得到关于$T$的斜率$\tau$作为语句$s$的错误估计值$\tau(s)$（第8行）。
-最后，对于所有的语句，按照错误估计值逆向排序输出，算法完毕。
-
-
 
 \begin{algorithm}[!ht]
 	
@@ -394,6 +385,16 @@ Y =\alpha +\tau T+\beta X
 \end{algorithm}
 
 
+对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
+匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
+（实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
+如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
+匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。
+当$Mdata(s)$为空集，我们将通过线性回归\autoref{equ:linearEquation}公式计算得到关于$T$的斜率$\tau$作为语句$s$的错误估计值$\tau(s)$（第8行）。
+最后，对于所有的语句，按照错误估计值逆向排序输出，算法完毕。
+
+
+
 \eat{
 
 
@@ -408,14 +409,19 @@ Y =\alpha +\tau T+\beta X
 }
 
 
-\eat{
-To compare the effectiveness of causal influence model with and without the dynamic call graphs provided by RunDroid, we follow the experiment setup at~\cite{baah2010causal,baah2011mitigating}, use the original causal influence model (without RunDroid) as a baseline, and compare their computed \textit{causal-effect estimates}.
-}
 
 \subsection{结果分析}
-\eat{
 
-\begin{table}[hb]
+
+为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
+我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
+我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数），
+编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
+列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
+
+
+
+\begin{table}[ht]
 	
 	\caption{结果对比}
 	\footnotesize		
@@ -479,15 +485,6 @@ To compare the effectiveness of causal influence model with and without the dyna
 	
 \end{table}
 
-}
-\eat{
-为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
-我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
-我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数），
-编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
-列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
-
-
 
 
 在$\tau$的结果中，分数最高包括\Line{4}、\Line{7}和\Line{13}，均为0.67；
@@ -496,14 +493,14 @@ To compare the effectiveness of causal influence model with and without the dyna
 从结果上看，$\tau'$的结果比结果$\tau$更好。
 理由是，在RunDroid接入后，错误语句的分数有所提高，同时错误语句与非错误语句得到区分。
 \Line{13} 分数提高的原因如下：
-在接入RunDroid前，方法\code{onClick(View)}和\code{TaskThread.run()}没有任何关系（此处指的调用关系）。
+在接入RunDroid前，方法\code{onClick(View)}和\code{TaskThread.run()}没有任何调用关系。
 因此，\Line{13}的前驱节点集合中只包括控制依赖语句\Line{12} ，实验组和对照组的\code{Mdata(\Line{13})}数据如\autoref{fig:motivationResultTreatment}-(a)所示，所有的测试用例参与计算：$\tau= \frac{1+1+0	}{3} - \frac{0+0}{2} = 0.67$。
 而接入RunDroid后，方法\code{onClick(View)}和\code{TaskThread.run()}产生关联（即触发关系），
-方法\code{onClick(View)}中\code{TaskThread.run()}
-\Line{13}的前驱节点增加了\Line{2}，\Line{5}和\Line{9}，实验组和对照组的\code{Mdata(\Line{13)}数据如\autoref{fig:motivationResultTreatment}-(b)所示。
-
-}
-
+%方法\code{onClick(View)}中\code{TaskThread.run()}
+进而形成数据依赖关系。
+\Line{13}的前驱节点增加了\Line{2}、\Line{5}和\Line{9}，实验组和对照组的\code{Mdata(\Line{13})}如\autoref{fig:motivationResultTreatment}-(b)所示。
+实验组中的测试用例$t_3$在对照组中找不到对应的测试用例，因此不参与计算。
+最后，根据测试用例$t_1$、$t_2$、$t_4$、$t_5$得到\Line{13}的错误估计值：$\tau =  \frac{1+1	}{2} - \frac{0+0}{2} = 1$。
 对于其他语句，前驱节点的信息并没有发生变化，因此数值保持不变。
 
 
@@ -578,7 +575,10 @@ To compare the effectiveness of causal influence model with and without the dyna
 	}
 	
 	
-	\section{本章总结}
+
+
+
+\section{本章总结}
 	
 
 
@@ -590,4 +590,5 @@ To compare the effectiveness of causal influence model with and without the dyna
 另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
 前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。
 综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
+
 

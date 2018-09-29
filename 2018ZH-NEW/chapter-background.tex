@@ -47,6 +47,16 @@ Android程序中较为常见的是组件（Component，例如Activity、Service�
 由于Android应用程序在架构选型上采用了事件驱动模型，为了便于协调应用内部状态的管理，Android组件通常有生命周期的概念，Activity也不例外。
 
 Android系统根据Activity 在运行时和用户的反馈将其状态分为以下四种：
+
+
+\begin{figure*}[!ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
+	\caption{Activity的生命周期}
+	\label{fig:Activity-lifecycle}
+\end{figure*}
+
+
 \begin{itemize}
 		\setlength{\itemsep}{-5pt}
 		
@@ -64,14 +74,6 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 	\item 终止态：当Activity处于暂停态或者停止态时，系统由于内存原因可能会将上述两种Activity杀死回收。
 	处于该状态下的Activity将不能直接恢复。
 \end{itemize}
-
-
-\begin{figure*}
-	\centering
-	\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
-	\caption{Activity的生命周期}
-	\label{fig:Activity-lifecycle}
-\end{figure*}
 
 
 Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
@@ -149,11 +151,10 @@ Handler在主线程中收到了该\code{Message}对象时，会根据逻辑代�
 \end{figure*}
 
 
-除了示例中的调用方式，Android SDK提供的API\cite{HandlerA26:online}还提供多种API，同时支持基于\code{Runnable}的消息调度和基于逻辑代码的消息调度：
-开发人员可以通过\code{post(Runnable)}，\code{postAtTime(Runnable，long)}，\code{sendMessage(Message)}，
- \code{sendMessageDelayed(Message，long)}，\code{sendMessageAtTime(Message，long)}和\code{sendEmptyMessage(int)}等多种API形式实现消息调度。
- 通过分析Android系统相关源代码，我们发现上述Handler相关的API关系如~\autoref{fig:handler-apis}所示。
-从~\autoref{fig:handler-apis}中，我们可以发现所有的API最后就会调用到\code{Handler enqueueMessage(MessageQueue, Message, long)}方法。
+除了示例中的调用方式，Android SDK提供的API\cite{HandlerA26:online}还提供多种API（如\autoref{fig:handler-apis}所示），同时支持基于\code{Runnable}的消息调度和基于逻辑代码的消息调度：
+%开发人员可以通过\code{post(Runnable)}，\code{postAtTime(Runnable，long)}，\code{sendMessage(Message)}，\code{sendMessageDelayed(Message，long)}，\code{sendMessageAtTime(Message，long)}和\code{sendEmptyMessage(int)}等多种API形式实现消息调度。
+ 通过分析Android系统相关源代码，我们发现上述Handler相关的API关系如\autoref{fig:handler-apis}所示。
+从\autoref{fig:handler-apis}中，我们可以发现所有的API最后就会调用到\code{Handler enqueueMessage(MessageQueue, Message, long)}方法。
 
 
 Handler机制主要由Handler、Looper、MessageQueue、Message等若干部分组成。
