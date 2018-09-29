@@ -345,6 +345,15 @@ Y =\alpha +\tau T+\beta X
 \end{scriptsize}
 
 
+对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
+匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
+（实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
+如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
+匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。
+当$Mdata(s)$为空集，我们将通过线性回归\autoref{equ:linearEquation}公式计算得到关于$T$的斜率$\tau$作为语句$s$的错误估计值$\tau(s)$（第8行）。
+最后，对于所有的语句，按照错误估计值逆向排序输出，算法完毕。
+
+
 
 \begin{algorithm}[!ht]
 	
@@ -385,106 +394,133 @@ Y =\alpha +\tau T+\beta X
 \end{algorithm}
 
 
-对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
-匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
-（实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
-如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
-匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。
-当$Mdata(s)$为空集，我们将通过线性回归\autoref{equ:linearEquation}公式计算得到关于$T$的斜率$\tau$作为语句$s$的错误估计值$\tau(s)$（第8行）。
-最后，对于所有的语句，按照错误估计值逆向排序输出，算法完毕。
+\eat{
 
 
-以Line. 5为例，\autoref{tab:result}代码中Line. 5的控制依赖语句是Line. 4，数据依赖节点是Line. 2，因此$Pred(Line.  5) = \{ Line. 2, Line. 4\}$。
+
+以\Line{5}为例，\autoref{tab:result}代码中\Line{5}的控制依赖语句是\Line{4}，数据依赖节点是\Line{2}，因此$Pred(\Line{5}) = \{ \Line{2}, \Line{4}\}$。
 测试用例$t_1 \sim t_5$对应的$Mdata(s)$分别表达成$V_{t_1}=\langle1,0\rangle$、$V_{t_2}=\langle1,1\rangle$、 $V_{t_3}=\langle1,1\rangle$、 $V_{t_4}=\langle1,0\rangle$、$V_{t_5}=\langle1,1\rangle$。
 其中，测试用例$t_1$、$t_2$、$t_4$、$t_5$为实验组，$t_3$为对照组。
-由于只有向量$\langle1,1\rangle$同时出现在实验组和对照组，所以测试用例$t_2$、$t_3$、$t_5$保留到$Mdata(Line. 5)$中。
-根据\autoref{equ:expectEquation}计算可得$\tau(Line. 5) = \frac{0+0}{2}-\frac{1}{1}=-1$。
-而对于Line. 2，该语句并没有前驱节点，匹配完的集合$Mdata(Line. 2)$为空集，因此通过\autoref{equ:linearEquation}对所有测试用例的数据进行计算。
-由于结算结果中回归直线斜率不存在，所以$\tau(Line. 2)= \text{NA}$。
-
+由于只有向量$\langle1,1\rangle$同时出现在实验组和对照组，所以测试用例$t_2$、$t_3$、$t_5$保留到$Mdata(\Line{5})$中。
+根据\autoref{equ:expectEquation}计算可得$\tau(\Line{5}) = \frac{0+0}{2}-\frac{1}{1}=-1$。
+而对于\Line{2}，该语句并没有前驱节点，匹配完的集合$Mdata(\Line{2})$为空集，因此通过\autoref{equ:linearEquation}对所有测试用例的数据进行计算。
+由于结算结果中回归直线斜率不存在，所以$\tau(\Line{2})= \text{NA}$。
+}
 
 
 \eat{
 To compare the effectiveness of causal influence model with and without the dynamic call graphs provided by RunDroid, we follow the experiment setup at~\cite{baah2010causal,baah2011mitigating}, use the original causal influence model (without RunDroid) as a baseline, and compare their computed \textit{causal-effect estimates}.
 }
 
-\subsection{有效性验证}
+\subsection{结果分析}
+\eat{
 
-\begin{table}[!ht]
+\begin{table}[hb]
 	
 	\caption{结果对比}
 	\footnotesize		
 	
 	\label{tab:result}
 	\begin{center}
+		\footnotesize	
 		
 		
 		
-		
-		\begin{tabular}{rl*{5} {|c}|c|c}
+		\begin{tabular}{|rl*{5} {|c}|c|c|}
 			
-			
+						\hline
 			
 			&                    & $t_1$ & $t_2$ & $t_3$ & $t_4$ & $t_5$ & ~&  ~\\
-			&v &btn0& btn1& btn1& btn2 &btn1 & $\tau$ &  $\tau'$  \\
-			&num&   - & - 1& 0& -& -2& \\
+			&v &btn0& btn1& btn1& btn2 &btn1 & $\tau$ &  $\tau'$   \\
+			&num&   - & - 1& 0& -& -2& &\\
 			\hline
 			
-			1&void onClick(View v) \{                       &   &   &   &   &   &         \\
+			\Line{~1}&void onClick(View v) \{                       &   &   &   &   &   &      &         \\
 			
-			2&\quad num = getNumber();                   & 1 & 1 & 1 & 1 & 1 &  NA  &  NA    \\
+			\Line{~2}&\quad num = getNumber();                   & 1 & 1 & 1 & 1 & 1 &  NA  &  NA    \\
 			
-			3&\quad if(v.getId() == R.id.btn1) \{           & 1 & 1 & 1 & 1 & 1 &  NA    &  NA \\
+			\Line{~3}&\quad if(v.getId() == R.id.btn1) \{           & 1 & 1 & 1 & 1 & 1 &  NA    &  NA \\
 			
-			4&\quad \quad if( num == 0 ) \{                    & 0 & 1 & 1 & 0 & 1 & 0.67   & 0.67 \\
+			\Line{~4}&\quad \quad if( num == 0 ) \{                    & 0 & 1 & 1 & 0 & 1 & 0.67   & 0.67 \\
 			
-			5&\quad \quad \quad num=1;                         & 0 & 0 & 1 & 0 & 0 & -1.0  &-1.0\\
+			\Line{~5}&\quad \quad \quad num=1;                         & 0 & 0 & 1 & 0 & 0 & -1.0  &-1.0\\
 			
-			6&\quad \quad \}                                   &   &   &   &   &   &             \\
+			\Line{~6}&\quad \quad \}                                   &   &   &   &   &   &       &            \\
 			
-			7&\quad   \}                                       &   &   &   &   &   &            \\
+			\Line{~7}&\quad   \}                                       &   &   &   &   &   &      &            \\
 			
-			8&\quad Thread t = createThread(v.getId());          & 1 & 1 & 1 & 1 & 1 & NA&  NA  \\
+			\Line{~8}&\quad Thread t = createThread(v.getId());          & 1 & 1 & 1 & 1 & 1 & NA&  NA  \\
 			
-			9&\quad t.start();                                 & 1 & 1 & 1 & 1 & 1 & 0.67   & 0.67 \\
+			\Line{~9}&\quad t.start();                                 & 1 & 1 & 1 & 1 & 1 & 0.67   & 0.67 \\
 			
-			10&\}                                              &   &   &   &   &   &             \\
+			\Line{10}&\}                                              &   &   &   &   &   &      &             \\
 			
-			11&TaskThread.run() \{                             &   &   &   &   &   &       \\
+			\Line{11}&TaskThread.run() \{                             &   &   &   &   &   &      &       \\
 			
-			12&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & 0.67 \\
+			\Line{12}&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & 0.67 \\
 			
-			13&\quad \quad \textbf{loadData(num); /* FAULT */} & 0 & 1 & 1 & 0 & 1 & 0.67    & 1.0  \\
+			\Line{13}&\quad \quad \textbf{loadData(num); /* FAULT */} & 0 & 1 & 1 & 0 & 1 & 0.67    & 1.0  \\
 			
-			14&\quad\}                                         &   &   &   &   &   &            \\
+			\Line{14}&\quad\}                                         &   &   &   &   &   &  &                \\
 			
-			15&\}                                              &   &   &   &   &   &           \\
+			\Line{15}&\}                                              &   &   &   &   &   &   &              \\
 			
 			\hline
 			
-			&                                                  & 0 & 1 & 0 & 0 & 1 &            \\
-			
+			&                                                  & 0 & 1 & 0 & 0 & 1 &   &               \\
+									\hline
 		\end{tabular}
 	\end{center}
 	\scriptsize
 	注： 第2列到第6列分别代表测试用例$t_1\sim t_5$；
 	每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；
 	测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；   
-	底行显示每个测试用例执行的结果，“1”表示执行失败（$Y=1$），“0”表示通过测试（$Y=0$）。
-	
+	最后一行表示各个测试用例的执行结果，“1”表示测试未通过（$Y=1$），“0”表示测试通过（$Y=0$）。
 	
 \end{table}
 
+}
+\eat{
 为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
 我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
-相关数据如\autoref{tab:result}中列$\tau$和$\tau'$所示。
+我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数），
+编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
 列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
 
+
+
+
+在$\tau$的结果中，分数最高包括\Line{4}、\Line{7}和\Line{13}，均为0.67；
+%在$\tau'$的结果中，分数最高只有\Line{13}，分数从0.67提升到1。
+而对于其他行，分数保持不变。
+从结果上看，$\tau'$的结果比结果$\tau$更好。
+理由是，在RunDroid接入后，错误语句的分数有所提高，同时错误语句与非错误语句得到区分。
+\Line{13} 分数提高的原因如下：
+在接入RunDroid前，方法\code{onClick(View)}和\code{TaskThread.run()}没有任何关系（此处指的调用关系）。
+因此，\Line{13}的前驱节点集合中只包括控制依赖语句\Line{12} ，实验组和对照组的\code{Mdata(\Line{13})}数据如\autoref{fig:motivationResultTreatment}-(a)所示，所有的测试用例参与计算：$\tau= \frac{1+1+0	}{3} - \frac{0+0}{2} = 0.67$。
+而接入RunDroid后，方法\code{onClick(View)}和\code{TaskThread.run()}产生关联（即触发关系），
+方法\code{onClick(View)}中\code{TaskThread.run()}
+\Line{13}的前驱节点增加了\Line{2}，\Line{5}和\Line{9}，实验组和对照组的\code{Mdata(\Line{13)}数据如\autoref{fig:motivationResultTreatment}-(b)所示。
+
+}
+
+对于其他语句，前驱节点的信息并没有发生变化，因此数值保持不变。
+
+
+\begin{figure}[!h]
+		\begin{center}
+	\includegraphics[width=0.8\textwidth]{./Figures/treatment.png}
+\end{center}
+	\caption{语句Line.8 Units in treatment group and control group with their covariate values}
+	\label{fig:motivationResultTreatment}
+\end{figure}
+
+\eat{
 
 在\autoref{tab:result}中，我们在第13行显示了一个错误的语句示例。
 而是直接传递，如果在传入方法之前它是一个正值，则应检查第13行的方法loadData（int）的参数。
 第一列显示了与每个语句关联的行号的程序假设我们使用因果影响模型计算程序的失效原因，我们能够计算列“结果”中显示的估计数。第4,9和13行都是估计的，得分最高为0.67。
-
+}
 \eat{
 	
 	In Table 1, we show an example faulty program with a faulty statement at Line 13. 
@@ -507,14 +543,9 @@ To compare the effectiveness of causal influence model with and without the dyna
 
 }
 
+\eat{
 
 
-\begin{figure}[!h]
-	\includegraphics[width=0.1\textwidth]{./Figures/treatment.png}
-	\caption{Units in treatment group and control group with their covariate values}
-	\label{fig:motivationResultTreatment}
-\end{figure}
-{
 
 我们将激励性的例子作为主题计划。
 因果影响模型在很大程度上依赖于陈述之间的依赖关系。
