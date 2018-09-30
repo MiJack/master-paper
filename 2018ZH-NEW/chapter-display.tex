@@ -67,7 +67,7 @@ RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 如果两个方法执行之间存在调用关系，则他们之间会通过从调用发起方指向被调用方的有向边进行连接。
 
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
-通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为4时，对应的结果为5。
+通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为5时，对应的结果为5。
 FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示。
 通过比较\autoref{fig:rundroid-result-Fibonacci}和\autoref{fig:flowdroid-result-Fibonacci}，我们可以发现以下有趣的结论：
 
