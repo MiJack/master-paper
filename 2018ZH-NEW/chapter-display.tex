@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		}
 	}
 	public void doHandleButton1() {
-		int fibonacci = doFibonacci(4);
+		int fibonacci = doFibonacci(5);
 		Toast.makeText(this, "fibonacci: " + fibonacci, Toast.LENGTH_SHORT).show();
 	}
 	private int doFibonacci(int i) {
@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 \subsection{函数调用图的构建结果展示}
 
-在应用程序运行时，点击按钮button1，应用会计算斐波拉契数列中的第5项，并将这个数以Toast的形式展示给用户。
+在应用程序运行时，点击按钮button1，应用会计算斐波拉契数列中的第4项，并将这个数以Toast的形式展示给用户。
 上述过程中，方法调用同时涉及到普通方法调用、递归函数调用。
 RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 每一个红色节点对应的是一次方法执行，每一个绿色节点对应是一个对象；
@@ -67,14 +67,14 @@ RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 如果两个方法执行之间存在调用关系，则他们之间会通过从调用发起方指向被调用方的有向边进行连接。
 
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
-通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为5时，对应的结果为5。
+通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为4时，对应的结果为5。
 FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示。
 通过比较\autoref{fig:rundroid-result-Fibonacci}和\autoref{fig:flowdroid-result-Fibonacci}，我们可以发现以下有趣的结论：
 
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/empty.png}
+	\includegraphics[width=\textwidth]{./Figures/doFibonacci-rundroid.png}
 	\caption{斐波拉契数列-RunDroid生成的调用图（局部）}
 	\label{fig:rundroid-result-Fibonacci}
 \end{figure*}
@@ -117,7 +117,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/empty.png}
+	\includegraphics[width=\textwidth]{./Figures/android-lifecycle-rundroid.png}
 	\caption{Activity部分-RunDroid生成的调用图（局部）}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
@@ -164,7 +164,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/empty.png}
+	\includegraphics[width=\textwidth]{./Figures/android-handler-rundroid.png}
 	\caption{多线程触发关系-RunDroid生成的调用图（局部）}
 	\label{fig:rundroid-result-handler}
 \end{figure*}
@@ -225,17 +225,22 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 我们对表格中的数据逐个进行人工确认，发现实验数据不存在错误。
 \todo{从\autoref{table:app_results}中，我们发现对大部分使用场景，应用程序执行过程对应的函数调用图均存在函数触发关系，只是在数量上存在差异。}
 由此，我们可以看出函数触发关系在Android应用中的普遍性，也从一个角度验证了第\ref{chp:background}章提到的Android特性：Android应用中存在部分逻辑实现依赖于回调函数和多线程通信。
+
 \begin{table*}[!ht]
 	\centering
 	{
+		\scriptsize
 		\caption{各应用运行过程中的涉及函数触发关系数量}
 		\label{table:app_results}
-		\begin{tabular}{ |c |c|c|c|c|c|c|c| }
+		\begin{tabular}{ |c |c|c|c|c|c|c|c|}
 			\hline
-		\multirow{2}*{序号 }& \multirow{2}*{应用 }& \multirow{2}*{方法总数 }&\multirow{2}{2cm}{\centering 函数调用关系总数}& \multicolumn{4}{c|}{函数触发关系} \\ 
-			\cline{5-8}	~ & ~ & ~ & ~ & Ui事件& Thread相关& Handler& 总数 \\ 				
+		\multirow{3}*{序号 }& \multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}*{\centering 函数调用关系总数}& \multicolumn{3}{c|}{函数触发关系} \\ 
+			\cline{6-8}	
+			~ & ~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
+			~ & ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
 			\hline
-			1 &~ & ~ & ~ & ~& ~& ~& ~ \\ 	
+		%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
+			1 &示例 & 19 & 27(700) & 21& 3&1&1(114) \\ 				
 			\hline			
 			2 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
 			\hline	
@@ -258,6 +263,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 		\end{tabular}
 	}
 \end{table*}
+
 \eat{
 	
 	\begin{table*}[!ht]
