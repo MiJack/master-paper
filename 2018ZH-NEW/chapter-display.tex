@@ -220,7 +220,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 \section{实验效果评估}
 
 相比其他分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
-为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid中随机抽取了10个应用，并针对挑选不同的使用场景进行测试。
+为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid\cite{FDroidFr21:online}中随机抽取了10个应用，并针对挑选不同的使用场景进行测试。
 我们利用RunDroid构建各应用运行执行情况的函数调用图，统计调用图中的出现函数触发关系数量，结果如\autoref{table:app_results}所示。
 我们对表格中的数据逐个进行人工确认，发现实验数据不存在错误。
 \todo{从\autoref{table:app_results}中，我们发现对大部分使用场景，应用程序执行过程对应的函数调用图均存在函数触发关系，只是在数量上存在差异。}
@@ -405,15 +405,15 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。
 当$Mdata(s)$为空集，我们将通过线性回归\autoref{equ:linearEquation}公式计算得到关于$T$的斜率$\tau$作为语句$s$的错误估计值$\tau(s)$（第8行）。
 最后，对于所有的语句，按照错误估计值逆向排序输出，算法完毕。
-\begin{comment}
-以\Line{5}为例，\autoref{tab:result}代码中\Line{5}的控制依赖语句是\Line{4}，数据依赖节点是\Line{2}，因此$Pred(\Line{5}) = \{ \Line{2}, \Line{4}\}$。
-测试用例$t_1 \sim t_5$对应的$Mdata(s)$分别表达成$V_{t_1}=\langle1,0\rangle$、$V_{t_2}=\langle1,1\rangle$、 $V_{t_3}=\langle1,1\rangle$、 $V_{t_4}=\langle1,0\rangle$、$V_{t_5}=\langle1,1\rangle$。
-其中，测试用例$t_1$、$t_2$、$t_4$、$t_5$为实验组，$t_3$为对照组。
-由于只有向量$\langle1,1\rangle$同时出现在实验组和对照组，所以测试用例$t_2$、$t_3$、$t_5$保留到$Mdata(\Line{5})$中。
-根据\autoref{equ:expectEquation}计算可得$\tau(\Line{5}) = \frac{0+0}{2}-\frac{1}{1}=-1$。
-而对于\Line{2}，该语句并没有前驱节点，匹配完的集合$Mdata(\Line{2})$为空集，因此通过\autoref{equ:linearEquation}对所有测试用例的数据进行计算。
-由于结算结果中回归直线斜率不存在，所以$\tau(\Line{2})= \text{NA}$。
-\end{comment}
+
+%以\Line{5}为例，\autoref{tab:result}代码中\Line{5}的控制依赖语句是\Line{4}，数据依赖节点是\Line{2}，因此$Pred(\Line{5}) = \{ \Line{2}, \Line{4}\}$。
+%测试用例$t_1 \sim t_5$对应的$Mdata(s)$分别表达成$V_{t_1}=\langle1,0\rangle$、$V_{t_2}=\langle1,1\rangle$、 $V_{t_3}=\langle1,1\rangle$、 $V_{t_4}=\langle1,0\rangle$、$V_{t_5}=\langle1,1\rangle$。
+%其中，测试用例$t_1$、$t_2$、$t_4$、$t_5$为实验组，$t_3$为对照组。
+%由于只有向量$\langle1,1\rangle$同时出现在实验组和对照组，所以测试用例$t_2$、$t_3$、$t_5$保留到$Mdata(\Line{5})$中。
+%根据\autoref{equ:expectEquation}计算可得$\tau(\Line{5}) = \frac{0+0}{2}-\frac{1}{1}=-1$。
+%而对于\Line{2}，该语句并没有前驱节点，匹配完的集合$Mdata(\Line{2})$为空集，因此通过\autoref{equ:linearEquation}对所有测试用例的数据进行计算。
+%由于结算结果中回归直线斜率不存在，所以$\tau(\Line{2})= \text{NA}$。
+
 \subsection{结果分析}
 
 \begin{table}[!ht]

@@ -7,7 +7,7 @@
 每天，人们只需要打开手机上的应用，就可以完成几乎所有的生活需求，
 从出行打车到在线订餐，从网上购物到房屋租赁。
 移动应用已经深入到人们生活的方方面面。
-以移动系统Android为例，根据著名网站statista的统计~\cite{GoogleP55:online}显示，Android官方应用平台 Google Play Store在2009年12月至2018年6月期间的应用数量变化如~\autoref{fig:app_number}所示。
+以移动系统Android为例，根据著名网站statista的统计\cite{GoogleP55:online}显示，Android官方应用平台 Google Play Store在2009年12月至2018年6月期间的应用数量变化如~\autoref{fig:app_number}所示。
 Google Play Store于2008年8月上线，截止2018年3月，在Google Play Store 上架的应用已经超过330 万。
 这个数字在2013年7月才刚刚突破100万。这也从一个侧面反映出最近几年移动应用迅猛的增长趋势。
 
@@ -51,9 +51,10 @@ Android应用程序的特性（例如，基于事件驱动的基础架构、面�
 通常的，软件分析技术主要分为静态分析技术和动态分析技术两类。
 
 \subsection{静态分析技术}
-\todo{缩减此处，再添加3$\sim$5篇文献}
+
 在不执行应用程序的情况下，静态分析技术通过对应用程序的源代码或者执行文件进行控制流分析和数据流分析，进而推断应用程序在运行过程中可能产生的行为。
-这方面相关工具包括Soot\cite{vallee1999soot}、FlowDroid\cite{arzt2014flowdroid}、AmanDroid\cite{AmanDroid}、IccTA\cite{iccta}、AndroGuard\cite{androguard:online}等。
+这方面相关工具包括\cite{vallee1999soot,arzt2014flowdroid,AmanDroid,iccta,androguard:online,pxb1988d85,javadeco45,iBotPeac46,maaaazan93}。
+%Soot\cite{vallee1999soot}、FlowDroid\cite{arzt2014flowdroid}、AmanDroid\cite{AmanDroid}、IccTA\cite{iccta}、AndroGuard\cite{androguard:online}、Dex2Jar \cite{pxb1988d85}、JD-GUI\cite{javadeco45}、APKTool\cite{iBotPeac46}、AndroWarn\cite{maaaazan93}等。
 Soot\cite{vallee1999soot}是传统的静态分析工具，其思路是将所有的Java字节码文件转化成一种中间语言Jimple，并在Jimple的基础上进行常规的控制流分析、数据流分析，理论上适用于所有可以在Java虚拟机上运行的语言（例如Scala、Groovy等等）的分析。
 由于Android程序本身的字节码Davlik和Java字节码在格式上保持一致，因此，Soot也支持Android应用程序的静态分析。
 但是，Soot在分析过程中没有考虑一些Android的特性难免会出现一些问题。
@@ -75,7 +76,7 @@ Yang等人~\cite{yang2015static}，利用静态分析技术，并将回调函数
 
 
 \subsection{动态分析技术}
-\todo{缩减此处，再添加3$\sim$5篇文献}
+
 % 为了解决这一问题，研究人员提出了动态分析技术。
 和静态分析技术相对应，动态分析技术通过执行应用程序，获取程序运行过程的相关信息，从而实现对应的研究目的。
 动态分析技术往往需要对运行环境做适当的修改或者调用特殊的系统接口，记录应用程序运行过程的关键信息，结合数据流追踪等技术，已记录应用程序的运行时行为。
@@ -88,17 +89,22 @@ DroidBox\cite{droidbox:online}在TaintDroid基础上，对Android Framework的�
 和TaintDroid不同，TraceDroid\cite{van2013dynamic}采用的是另一种思路，利用字节码插装技术AspectJ，使得方法在执行时输出相应的日志信息。根据这些信息TraceDroid可以还原函数调用图，得到分析结果。
 由于Aspect在进行字节码编织时引入的新的方法会导致方法数65K限制问题（即构建APK文件的过程中，方法总数超过65536，进而使得APK文件无法成功构建~\cite{Configur27}），因此该方案存在不稳定的情况。
 
+AppAudit\cite{xia2015effective}
 
-另外，研究人员还用动态分析技术查找Android应用程序在运行时性能瓶颈。Android官方性能检测工具SimplePref~\cite{simpleperf:online}就是其中的一个代表。
-SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时获取到性能监视单元的相关信息（例如cpu周期数、执行的指令数、缓存失效次数等）。
-利用这些信息，SimplePref可以得到对应时刻的CPU状态，还原出各个方法的执行时间和对应的执行路径。
-根据方法执行时间的长短和对应的执行路径，开发人员可以发现程序的性能瓶颈，进而通过对程序代码做出调整，提升程序的运行性能。
-但是，该方法受到系统接口回调周期的影响，过于频繁的调度周期会使系统产生过大的开销，影响原有程序的执行；反之，则会丢失部分方法的执行信息。
-而且，Android程序关心的性能瓶颈一般都位于主线程，而SimplePref会输出所有线程的执行信息，实际开销较大。
-为此，Uber的Nanoscope~\cite{ubernanoscope:online}采用追踪（Trace）技术在定制化的系统Nanoscope OS中运行，在虚拟机解释执行目标方法前后输出相关Trace日志，进而得到性能报告。
-相比SimplePref，Nanoscope只输出主线程相关的方法数据信息，大大减低了性能上的开销。
-但是，nanoscope的局限性在于构建成本较高，需要配合特定的系统使用。
+Inspeckage\cite{acpmInsp34}
 
+
+
+另外，研究人员还用动态分析技术查找Android应用程序在运行时性能瓶颈。
+通过方法执行时间的长短和执行路径，开发人员可以发现程序的性能瓶颈，进而通过对程序代码做出调整，提升程序的运行性能。
+Android官方性能检测工具SimplePref~\cite{simpleperf:online}就是其中的一个代表：
+SimplePref\eat{利用了系统接口pref\_event\_open，}以采样（Sample）的方式获取到CPU性能监视单元的状态\eat{（例如cpu周期数、执行的指令数、缓存失效次数等）}，进而得到程序执行数据\eat{方法执行时间}，辅助性能瓶颈的查找。
+%利用这些信息，SimplePref可以得到对应时刻的CPU状态，还原出各个方法的执行时间和对应的执行路径。
+受到技术方案的限制，不合理的采样频率会影响实验效果：过快的采样频率会导致过大的系统开销，影响原有程序的执行；反之，过低的采样频率则会丢失部分方法的执行信息。
+为此，Uber的Nanoscope\cite{ubernanoscope:online}采用追踪（Trace）技术在定制化的系统Nanoscope OS中运行，在虚拟机解释执行目标方法前后输出相关Trace日志，进而得到性能报告。
+相比SimplePref输出所有线程的执行信息，Nanoscope只输出主线程相关的方法数据信息，避免了不必要性能开销。
+但是，Nanoscope的局限性在于构建成本较高，需要配合特定的系统使用。
+%而且，Android程序关心的性能瓶颈一般都位于主线程，而SimplePref会，实际开销较大。
 
 
 
@@ -109,23 +115,23 @@ SimplePref利用了Linux提供的系统接口\textit{pref\_event\_open}，定时
 \point{安全性分析：}
 
 安全性分析包括隐私泄露、权限机制研究、恶意软件排查等。
-
-%IOS Detecting privacy leaks in ios applications
-\todo{缩减此处，再添加3$\sim$5篇文献}
-为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout~\cite{au2012pscout}利用Soot对Android系统程序进行静态分析，
+为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout\cite{au2012pscout}利用Soot对Android系统程序进行静态分析，
 构建出Android系统的函数调用图，在调用图中标识权限相关的Binder跨进程调用，结合逆向可达性分析技术得出相关API接口以及对应调用路径上的所有权限检查的映射关系。
 %相比其他类似工作，由于考虑了Android系统特性，PScout分析的到结果更加完整，但受到可达性分析的精度限制，存在部分错误的映射关系。
 %此外，该团队对Android 2.1 $\sim$  4.0等四个版本的系统源代码进行了广泛的分析，就权限设计的冗余性、无文档说明API的权限要求、权限在Android系统升级的演变等多个研究问题进行深入的探讨。
-在PScout的基础上，Rahul Pandita等人将目光聚焦到应用市场上，他们开发的\textsc{WhyPer}~\cite{pandita2013whyper}将自然语言处理技术（NLP）和传统静态分析技术相结合，
+在PScout的基础上，Rahul Pandita等人将目光聚焦到应用市场上，他们开发的\textsc{WhyPer}\cite{pandita2013whyper}将自然语言处理技术（NLP）和传统静态分析技术相结合，
 可以帮人们找出那些应用描述和实际使用到的权限不符的应用。
 Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为以防止被安全机构识别出来。%，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
 不同的是恶意软件的行为一般在特定条件下（例如深夜）运行。
-为此，Wei Yang等人提出了一种基于静态分析技术的解决方案AppContext~\cite{yang2015appcontext}：
+为此，Wei Yang等人提出了一种基于静态分析技术的解决方案AppContext\cite{yang2015appcontext}：
 在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件形成ICFG，提取出安全敏感行为的上下文，并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
 实验结果显示，AppContext的准确率和召回率分别达到了87.7\%和95\%，这从一个侧面反映了安全敏感行为的恶意性与该行为的意图(通过上下文反映)更密切相关，验证之前提到的问题。
-Zhemin Yang等人的AppIntent~\cite{yang2013appintent}利用静态分析技术提取应用程序的时间约束条件，再结合符号执行技术，最后得到一串可以导致用户信息泄露的序列。
-Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket~\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。
+Zhemin Yang等人的AppIntent\cite{yang2013appintent}利用静态分析技术提取应用程序的时间约束条件，再结合符号执行技术，最后得到一串可以导致用户信息泄露的序列。
+Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。
 
+marvin \cite{lindorfer2015marvin}
+
+PATDroid\cite{sadeghi2017patdroid}动静态结合
 
 
 \point{质量保障}
@@ -133,7 +139,7 @@ Android应用程序中存在着大量的网络交互，因此，也有一部分�
 伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。
 %传统测试观点认为，在测试过程中，如果源代码的覆盖率可以维持在一个较高的水平，可在一定程度上可以覆盖
 %其中，提高代码的覆盖率就是非常重要的一个方面。
-这方面的工作包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、程序错误的定位、分析与修复\cite{mirzaei2015exception,machado2013mzoltar,tan2018repairing,QingGaoASE15}以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}等。
+这方面的工作包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、错误定位\cite{mirzaei2015exception,machado2013mzoltar}、错误修复分析\cite{tan2018repairing,QingGaoASE15}以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}等。
 %t, most GUI testing techniques, e.g., random testing [39, 57], search-based testing [58, 60], and model-based testing [2, 3, 8, 78, 85]
 工作\cite{azim2013targeted}利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
 Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，在深度优先算法的基础上，使得程序在当前状态无可再遍历状态的情况下进行回溯。
@@ -142,15 +148,15 @@ Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，�
 基于该模型，Stoat进行模型变异、测试用例生成与执行、模型迭代，使得应用程序的覆盖率相比之前工作\cite{hao2014puma,amalfitano2015mobiguitar}提升了17$\sim$31\%。
 工作\cite{mirzaei2015exception,machado2013mzoltar}等将传统软件的错误定位技术——基于频谱的错误定位技术（spectrum-based fault location，SBFL）运用在Android应用上，取得了不错的成绩。
 工作\cite{tan2018repairing,QingGaoASE15}等主要聚焦如何在Android应用程序出现问题时，根据异常的堆栈信息结合软件变异技术或者问答网站生成补丁代码，实现程序的自动修复。
-Lingling Fan等人的工作~\cite{fan2018large}通过开源社区中应用的issue解析分析，从异常种类（应用异常、系统异常、库（Library）异常）、系统异常分类、错误检查工具以及错误修复方式等若干方面进行较为深入的分析、探讨和总结。
+Lingling Fan等人的工作\cite{fan2018large}通过开源社区中应用的issue解析分析，从异常种类（应用异常、系统异常、库（Library）异常）、系统异常分类、错误检查工具以及错误修复方式等若干方面进行较为深入的分析、探讨和总结。
 
 \eat{
 
 \point{应用分类：}
 
-Simapp~\cite{chen2015simapp}
+Simapp\cite{chen2015simapp}
 
-mobile app tagging ~\cite{chen2016mobile}
+mobile app tagging \cite{chen2016mobile}
 
 }
 
@@ -180,9 +186,14 @@ mobile app tagging ~\cite{chen2016mobile}
 %	\item 本文提出并实现Android动态函数调用图构建系统RunDroid。RunDroid生成的函数调用图不仅体现了传统调用图的方法调用关系，还展示方法执行过程相关的对象信息和函数间的触发关系，反映Android平台相关的特性。
 %	\item   将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
 	\item  Android动态函数调用图构建系统RunDroid的设计与实现：
+	\\
 	除了传统调用图的方法调用关系，RunDroid生成的函数调用图还展示方法执行过程相关的对象信息和方法间的触发关系（例如多线程），反映Android平台相关的特性（Activity组件生命周期和事件回调）。
-	\item 静动态分析技术效果对比：详细展示和说明RunDroid产生的调用图，并就Activity 生命周期及事件回调、多线程触发关系等角度和与传统静态分析工具FlowDroid产生的静态调用图做了对比分析，并分析两种技术的优劣。
-	\item RunDroid系统的应用：利用RunDroid用于开源Android应用的过程分析，反映方法间触发关系在Android系统上的常见性。另外， RunDroid与错误定位技术结合的实验说明RunDroid提供的信息，可以提供更多程序依赖信息，有助于提高错误定位技术技术结果的准确性。
+	\item 静动态分析技术效果对比：
+	\\
+	详细展示和说明RunDroid产生的调用图，并就Activity 生命周期及事件回调、多线程触发关系等角度和与传统静态分析工具FlowDroid产生的静态调用图做了对比分析，并分析两种技术的优劣。
+	\item RunDroid系统的应用：
+	\\
+	利用RunDroid用于开源Android应用的过程分析，反映方法间触发关系在Android系统上的常见性。另外， RunDroid与错误定位技术结合的实验说明RunDroid提供的信息，可以提供更多程序依赖信息，有助于提高错误定位技术技术结果的准确性。
 \end{itemize}
 
 %\todo{对上述系统设计对应的实验方案，评估对应的实验效果。}
