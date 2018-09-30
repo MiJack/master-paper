@@ -49,15 +49,6 @@ Android程序中较为常见的是组件（Component，例如Activity、Service�
 Android系统根据Activity 在运行时和用户的反馈将其状态分为以下四种：
 
 
-\begin{figure*}[!ht]
-	\centering
-	%\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
-		\includegraphics[width=\textwidth]{./Figures/Activity-lifecycle-Landscape.png}
-
-	\caption{Activity的生命周期}
-	\label{fig:Activity-lifecycle}
-\end{figure*}
-
 
 \begin{itemize}
 		\setlength{\itemsep}{-5pt}
@@ -78,6 +69,16 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 \end{itemize}
 
 
+
+\begin{figure*}[!ht]
+	\centering
+	%\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
+	\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle-Landscape.png}
+	
+	\caption{Activity的生命周期}
+	\label{fig:Activity-lifecycle}
+\end{figure*}
+
 Activity的生命周期就是以上状态之间的跳转，受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
 \code{Activity}提供的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、\code{ onRestart()}、 \code{ onStoped()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
 \code{Activity}的生命周期如\autoref{fig:Activity-lifecycle}所示：
@@ -88,10 +89,12 @@ Activity的生命周期就是以上状态之间的跳转，受到Activity在运�
 在这个过程中，\code{onCreate()}、\code{onStart()}、\code{onResume()}等方法被回调，Activity最终处于运行态；
 
 当用户点击“返回键”返回到桌面时，Activity会失去焦点，在用户的视野中消失，直至被系统回收，
-对应的状态也从运行态经暂停态、停止态，变为终止态变，期间\code{onPause()}、\code{onStop()}、\code{onDestroy()}等方法被回调；
+对应的状态也从运行态经暂停态、停止态，变为终止态，期间\code{onPause()}、\code{onStop()}、\code{onDestroy()}等方法被回调；
 
+\eat{
 当用户从一个界面回到原来的界面时，原来的Activity从停止态重启，出现在设备界面上，获得交互焦点，
 \code{onRestart()}、\code{onStart()}、\code{onResume()}等方法被回调；
+}
 
 当一个Activity长期处于停止态，但由于内存原因被系统回收时，用户尝试启动它时，系统会像启动一个新的Activity一样启动它。
 
@@ -125,7 +128,7 @@ Android系统架构中的单线程消息队列以及主线程的非阻塞性，�
 
 \begin{figure*}[h]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/handler-code.png}
+	\includegraphics[width=0.9\textwidth]{./Figures/handler-code.png}
 	\caption{Handler的使用实例}
 	\label{fig:handler-code}
 \end{figure*}
@@ -156,7 +159,7 @@ Handler在主线程中收到了该\code{Message}对象时，会根据逻辑代�
 除了示例中的调用方式，Android SDK提供的API\cite{HandlerA26:online}还提供多种API（如\autoref{fig:handler-apis}所示），同时支持基于\code{Runnable}的消息调度和基于逻辑代码的消息调度：
 %开发人员可以通过\code{post(Runnable)}，\code{postAtTime(Runnable，long)}，\code{sendMessage(Message)}，\code{sendMessageDelayed(Message，long)}，\code{sendMessageAtTime(Message，long)}和\code{sendEmptyMessage(int)}等多种API形式实现消息调度。
  通过分析Android系统相关源代码，我们发现上述Handler相关的API关系如\autoref{fig:handler-apis}所示。
-从\autoref{fig:handler-apis}中，我们可以发现所有的API最后就会调用到\code{Handler enqueueMessage(MessageQueue, Message, long)}方法。
+从\autoref{fig:handler-apis}中，我们可以发现所有的API最后就会调用到\code{Handler.enqueueMessage( MessageQueue, Message, long)}方法。
 
 
 Handler机制主要由Handler、Looper、MessageQueue、Message等若干部分组成。

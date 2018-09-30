@@ -215,7 +215,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 
 
-\eat{
+
 
 \section{实验效果评估}
 
@@ -230,12 +230,30 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 	{
 		\caption{各应用运行过程中的涉及函数触发关系数量}
 		\label{table:app_results}
-		\begin{tabular}{ |c|c|c|c|c|c|c| }
+		\begin{tabular}{ |c |c|c|c|c|c|c|c| }
 			\hline
-			\multirow{2}*{应用 }& \multirow{2}*{方法总数 }&\multirow{2}{2cm}{\centering 函数调用关系总数}& \multicolumn{4}{c|}{函数触发关系} \\ 
-			\cline{4-7}	~ & ~ & ~ & Ui事件& Thread相关& Handler& 总数 \\ 				
+		\multirow{2}*{序号 }& \multirow{2}*{应用 }& \multirow{2}*{方法总数 }&\multirow{2}{2cm}{\centering 函数调用关系总数}& \multicolumn{4}{c|}{函数触发关系} \\ 
+			\cline{5-8}	~ & ~ & ~ & ~ & Ui事件& Thread相关& Handler& 总数 \\ 				
 			\hline
-			~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			1 &~ & ~ & ~ & ~& ~& ~& ~ \\ 	
+			\hline			
+			2 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			3 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			4 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			5 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			6 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			7 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			8 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			9 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			\hline	
+			10 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
 			\hline	
 		\end{tabular}
 	}
@@ -308,7 +326,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 	\end{table*}
 	
 }
-}
+
 \section{RunDroid在错误定位领域的应用}
 在本节中，我们将采用因果关联模型\cite{baah2010causal,baah2011mitigating}作为错误定位技术。
 相比传统错误定位技术（基于频谱的错误定位）只考虑了程序语句的覆盖情况，基于因果关联模型的错误定位技术还考虑程序在执行过程中的程序依赖（即控制依赖和数据依赖），分析的准确度较高。
@@ -387,13 +405,7 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。
 当$Mdata(s)$为空集，我们将通过线性回归\autoref{equ:linearEquation}公式计算得到关于$T$的斜率$\tau$作为语句$s$的错误估计值$\tau(s)$（第8行）。
 最后，对于所有的语句，按照错误估计值逆向排序输出，算法完毕。
-
-
-
-\eat{
-
-
-
+\begin{comment}
 以\Line{5}为例，\autoref{tab:result}代码中\Line{5}的控制依赖语句是\Line{4}，数据依赖节点是\Line{2}，因此$Pred(\Line{5}) = \{ \Line{2}, \Line{4}\}$。
 测试用例$t_1 \sim t_5$对应的$Mdata(s)$分别表达成$V_{t_1}=\langle1,0\rangle$、$V_{t_2}=\langle1,1\rangle$、 $V_{t_3}=\langle1,1\rangle$、 $V_{t_4}=\langle1,0\rangle$、$V_{t_5}=\langle1,1\rangle$。
 其中，测试用例$t_1$、$t_2$、$t_4$、$t_5$为实验组，$t_3$为对照组。
@@ -401,13 +413,10 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 根据\autoref{equ:expectEquation}计算可得$\tau(\Line{5}) = \frac{0+0}{2}-\frac{1}{1}=-1$。
 而对于\Line{2}，该语句并没有前驱节点，匹配完的集合$Mdata(\Line{2})$为空集，因此通过\autoref{equ:linearEquation}对所有测试用例的数据进行计算。
 由于结算结果中回归直线斜率不存在，所以$\tau(\Line{2})= \text{NA}$。
-}
-
-
-
+\end{comment}
 \subsection{结果分析}
 
-\begin{table}[hb]
+\begin{table}[!ht]
 	
 	\caption{结果对比}
 
@@ -574,11 +583,16 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 
 
 % 本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估，并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
- 
- 	本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
- 	同时，我们还对比分析在相同场景下静态分析工具FlowDroid的运行结果。
- 	我们发现，RunDroid生成的调用图的完整性依赖于源代码处理以及待拦截的目标系统方法列表的完整程度，而FlowDroid的分析对象是Android应用程序APK文件，调用图的完整性受到自身算法实现的限制。
- 	另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
- 	前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。
- 	综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
+
+本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
+同时，我们还对比分析在相同场景下静态分析工具FlowDroid的运行结果。
+我们发现，RunDroid生成的调用图的完整性依赖于源代码处理以及待拦截的目标系统方法列表的完整程度，而FlowDroid的分析对象是Android应用程序APK文件，调用图的完整性受到自身算法实现的限制。
+另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
+前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。
+综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
+
+同时，我们将RunDroid和错误定位技术结合，进行了尝试性的实验。
+相关实验结果显示，RunDroid生成的调用图中的方法触发关系可以将异步方法调用（例如Java 多线程和Handler）关联起来，补全函数间的控制依赖和数据依赖关系。
+在RunDroid提供的信息的帮助下，基于因果模型的错误定位技术相关实验结果得到一定的提升，提高了实验结果的准确度。
+
 
