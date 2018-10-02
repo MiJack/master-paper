@@ -62,7 +62,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 在应用程序运行时，点击按钮button1，应用会计算斐波拉契数列中的第4项，并将这个数以Toast的形式展示给用户。
 上述过程中，方法调用同时涉及到普通方法调用、递归函数调用。
 RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
-每一个红色节点对应的是一次方法执行，每一个绿色节点对应是一个对象；
+每一个红色节点对应的是用户方法执行，每一个绿色节点对应的是系统方法执行，每一个绿色节点对应是一个对象；
 如果对象是方法执行的方法对象，则在图中会有一条边从方法指向该对象，并在边上标识两种之间的关系（参数关系、返回值关系、实例关系等）；
 如果两个方法执行之间存在调用关系，则他们之间会通过从调用发起方指向被调用方的有向边进行连接。
 
@@ -80,16 +80,16 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 \end{figure*}
 
 首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有9个，即在运行过程中，\code{doFibonacci()}被调用了9次。
-由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点，该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
-另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
+由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点。该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
+%另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
 因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，在一定程度上反映了程序执行的具体过程。
 
 
 
-其次，方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，而FlowDroid给出的结果却有展现：
-而在运行过程中，我们却可以看到Toast提示。
-经过分析，原因如下：该方法属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应的函数。
-这也从一个方面反映了RunDroid的劣势：系统函数运行时信息的捕获需要提前将相应的方法告知运行时拦截器，生成的调用图才会包括相应的方法。
+其次，方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，却出现在FlowDroid给出的结果：
+但是，在运行过程中，应用弹出Toast提示，因此该方法在实际运行过程中有所执行，但是RunDroid未在调用图中给出相应的节点对应。
+出现这个现象的原因如下：该方法属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应的函数。
+这也从一个方面反映了RunDroid的劣势：关于系统函数的运行时信息的捕获需要提前将相应的方法告知运行时拦截器，生成的调用图才会包括相应的方法。
 这使得调用图只包含研究人员关心的方法的执行信息，但也在一定程度上导致部分方法的缺失和调用图的局部不完整。
 
 
@@ -126,7 +126,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 我们可以发现RunDroid和FlowDroid在组件生命周期和事件回调上的设计思想上是不同的：
 RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际执行，因此，RunDroid对于上述行为的展现主要是按照时间的先后顺序将这些方法节点串联起来，形成完整的事件序列。
 而FlowDroid在生成函数\code{dummyMainMethod()}时，会为AndroidManifest.xml文件中定义的每一个Activity单独创建包含生命周期方法和事件回调方法的状态迁移图
-（\autoref{fig:flowdroid-result-lifecycle}中的虚线框部分表示Activity的整体状态迁移，灰色部分为\code{MainActivity}中的UI事件响应方法），
+（\autoref{fig:flowdroid-result-lifecycle}中的虚线框部分表示每个Activity各自的整体状态迁移，灰色部分为\code{MainActivity}中的UI事件响应方法），
 最后将这些Activity的状态迁移串联起来，并将Action为\code{android.intent.action.MAIN}并且category为\code{android.intent.category.LAUNCHER}的Activity组件作为结果的默认启动的Activity，最终形成方法\code{dummyMainMethod()}。
 
 
@@ -137,17 +137,18 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 	\label{fig:flowdroid-result-lifecycle}
 \end{figure*}
 
-在结果展现上，RunDroid倾向于将和Activity生命周期相关的所有方法都关联起来。
-例如，虽然开发人员在源代码中没有定义\code{onResume()}等方法，但在运行过程中，\code{MainActivity}的父类方法\code{onResume()}被调用了，便会在结果中呈现出来。
-在这点上，FlowDroid的处理方式恰恰相反，考虑到在未重写系统类方法时的类行为表现基本保持一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
+在结果展现上，RunDroid倾向于展现所有和Activity生命周期相关的方法。
+例如，虽然开发人员在源代码中没有定义\code{onResume()}等方法，但在运行过程中，\code{MainActivity}的父类方法\code{onResume()}被调用了，便会出现在RunDroid的结果中。
+而FlowDroid在这点上的处理方式恰恰相反：FlowDroid认为一个父类方法未被重写，则该方法运行行为表现保持一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
 
 
 
-
-	观察\autoref{fig:rundroid-result-lifecycle}中生命周期方法归属的Activity，我们发现，在应用启动\code{NewActivity}过程中，
-	\code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
-	而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后面一种情况。
-	相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，更适合反映应用的状态变化。
+另外，我们发现在应用从\code{MainActivity}切换到\code{NewActivity}过程中，
+对应的生命周期变化为\code{MainActivity.onPause()} $\to$\code{NewActivity.onCreate()}$\to$\code{NewActivity.onStart()}$\to$\code{NewActivity.onResume()}$\to$ \code{MainActivity.onStop()}，
+\code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，
+并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
+而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后面一种情况。
+相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，更适合反映应用的状态变化。
 
 
 \subsection{多线程触发关系效果展示}
@@ -220,7 +221,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 \section{实验效果评估}
 
 相比其他分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
-为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid\cite{FDroidFr21:online}中随机抽取了10个应用，并针对挑选不同的使用场景进行测试。
+为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid\cite{FDroidFr21:online}中随机抽取了9个应用，并针对挑选不同的使用场景进行测试。
 我们利用RunDroid构建各应用运行执行情况的函数调用图，统计调用图中的出现函数触发关系数量，结果如\autoref{table:app_results}所示。
 我们对表格中的数据逐个进行人工确认，发现实验数据不存在错误。
 \todo{从\autoref{table:app_results}中，我们发现对大部分使用场景，应用程序执行过程对应的函数调用图均存在函数触发关系，只是在数量上存在差异。}
@@ -234,32 +235,32 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 		\label{table:app_results}
 		\begin{tabular}{ |c |c|c|c|c|c|c|c|}
 			\hline
-		\multirow{3}*{序号 }& \multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}*{\centering 函数调用关系总数}& \multicolumn{3}{c|}{函数触发关系} \\ 
+		\multirow{3}*{序号 }& \multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}{1.3cm}{\centering 函数调用关系}& \multicolumn{3}{c|}{函数触发关系} \\ 
 			\cline{6-8}	
 			~ & ~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
 			~ & ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
 			\hline
 		%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
-			1 &示例 & 19 & 27(700) & 21& 3&1&1(114) \\ 				
+			0 &示例             & 19     & 27(700)     & 21                & 3&1&1(114) \\ 				
 			\hline			
-			2 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			1 &AnyMemo & 1021 & 322(2731) & 1105(3487)& 3& 0& 35(425) \\ 				
 			\hline	
-			3 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			2 &archwiki-viewer & 3699 & 3504 & 310(3342)& 0& 0& 680(21332) \\ 				
 			\hline	
-			4 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			3 &chanu & 1086& 353(3917) & 397(4817)& 0& 1& 33(43439) \\ 				
 			\hline	
-			5 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			4 &Microphone & 31 & 230(1531) & 161(1334)&4& 6&21 (261)\\ 				
 			\hline	
-			6 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			5 &osmtracker-android & 997& 328(2483) & 1162(2453)& 0& 0& 3(368) \\ 				
 			\hline	
-			7 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			6 &Quran For My Android & 156 & 204(3930) & (3831)& 5& 2+2& 26(655) \\ 				
 			\hline	
-			8 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			7 &ReGeX & 1415 &95 (987) & 1323(2311)& 0& 4& 35(166)\\ 				
 			\hline	
-			9 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
+			8 &screenrecorder& 1301 & 320(3278) &879 (4539)& 1& 2& 4(24863)\\ 				
 			\hline	
-			10 &~ & ~ & ~ & ~& ~& ~& ~ \\ 				
-			\hline	
+			9 &upm-android & 118& 337( 3097)& 355(2918)& 2& 0+4& 19(489) \\ 		
+			\hline
 		\end{tabular}
 	}
 \end{table*}
