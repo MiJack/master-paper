@@ -75,7 +75,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/doFibonacci-rundroid.png}
-	\caption{斐波拉契数列-RunDroid生成的调用图（局部）}
+	\caption{斐波拉契数列相关的RunDroid调用图（局部）}
 	\label{fig:rundroid-result-Fibonacci}
 \end{figure*}
 
@@ -95,8 +95,8 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 \begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/FlowDroid-Fibonacci.png}
-	\caption{斐波拉契数列-FlowDroid生成的调用图（局部）}
+	\includegraphics[width=\textwidth]{./Figures/FlowDroid-Fibonacci.png}
+	\caption{斐波拉契数列相关的FlowDroid调用图（局部）}
 	\label{fig:flowdroid-result-Fibonacci}
 \end{figure*}
 
@@ -118,7 +118,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-lifecycle-rundroid.png}
-	\caption{Activity部分-RunDroid生成的调用图（局部）}
+	\caption{Activity生命周期和事件回调的调用图（局部）}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
 
@@ -132,8 +132,8 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/flowdroid-dummyMainMethod.png}
-	\caption{dummyMainMethod-FlowDroid生成的调用图}
+	\includegraphics[width=\textwidth]{./Figures/flowdroid-dummyMainMethod.png}
+	\caption{FlowDroid生成的函数dummyMainMethod()的调用图}
 	\label{fig:flowdroid-result-lifecycle}
 \end{figure*}
 
@@ -166,7 +166,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-handler-rundroid.png}
-	\caption{多线程触发关系-RunDroid生成的调用图（局部）}
+	\caption{多线程触发关系相关的调用图（局部）}
 	\label{fig:rundroid-result-handler}
 \end{figure*}
 
@@ -368,7 +368,7 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 \end{scriptsize}
 
 
-对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
+
 \begin{algorithm}[hb]
 	
 	
@@ -406,6 +406,9 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 	}
 	
 \end{algorithm}
+
+
+对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
 匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
 （实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
 如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
@@ -515,7 +518,7 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 		\begin{center}
 	\includegraphics[width=0.8\textwidth]{./Figures/treatment.png}
 \end{center}
-	\caption{待命名}
+	\caption{使用RunDroid前后关于语句\Line{13}的测试用例匹配的对比}
 	\label{fig:motivationResultTreatment}
 \end{figure}
 

@@ -1,4 +1,4 @@
-\chapter{Android系统相关背景介绍 }  
+\chapter{Android系统背景介绍 }  
 \label{chp:background}
 
 
@@ -7,6 +7,8 @@
 \section{Android系统结构介绍}
 
 Android是基于Linux内核开发的的开源操作系统，隶属于Google公司，主要用于触屏移动设备如智能手机、平板电脑与其他便携式设备，是目前世界上最流行的移动终端操作系统之一。
+
+
 在系统架构上，Android自下到上，可以分为四层：Kernel层、Library和Android Runtime(Dalvik/ART)、Framework、Application等，如~\autoref{fig:Android-Framework}所示。
 Kernel层是硬件和软件层之间的抽象层，主要是设备的驱动程序，例如：显示驱动、音频驱动、蓝牙驱动、Binder IPC驱动等。
 Library和Android Runtime(Dalvik/ART): Library，顾名思义就是向上层提供各种这样的基础功能，例如SQLite数据库引擎，Surface Manager显示系统管理库。
@@ -30,8 +32,8 @@ Framework层主要是系统管理类库，包括Activity的管理，消息通知
 %这也使得Android应用程序的分发文件（即APK文件）相对较小。
 
 \textbf{面向组件的开发方式：}
-Android程序中较为常见的是组件（Component，例如Activity、Service、Content Provider、Broadcast Receiver），它是应用程序运行的最小单元，受到Android Framework的直接调度。
-开发人员通过继承这些组件，重写对应的生命周期函数，已实现对应的业务需求（界面的布局、页面状态的保存等），而这些组件的生命周期由Framework调度完成。
+Android程序中较为常见的是组件（例如Activity、Service、Content Provider、Broadcast Receiver），它是应用程序运行的最小单元，受到Android Framework的直接调度。
+开发人员通过继承这些组件，重写对应的生命周期函数，已实现对应的业务需求（界面的布局、页面状态的保存等），而这些组件的生命周期由Framework直接调度完成。
 
 \textbf{大量逻辑实现依赖于回调函数和多线程通信：}
 由于Android应用程序采用的是基于单线程消息队列的事件驱动架构，因此，界面相关的操作只允许出现在主线程（UI Thread）中，耗时操作只能在工作线程（Worker Thread）中进行。
@@ -53,18 +55,17 @@ Android系统根据Activity 在运行时和用户的反馈将其状态分为以�
 		\setlength{\itemsep}{-5pt}
 		
 	\item 运行态：在该状态下， Activity处于页面最前端时，用户可以与Activity进行交互。
-	一般的，我们看到Activity均处于这个状态。
+	一般的，用户可见并可以进行交互的Activity均处于这个状态。
 	
 	\item 暂停态：在该状态，Activity仍然可见，但是失去了窗口的焦点。
-	当一个Activity之上出现非全屏的窗体（例如对话框）时，Activity就处于这个状态。
+	当一个Activity之上出现非全屏的窗体（例如对话框）但未被完全遮挡时，Activity就处于这个状态。
 	处于暂停状态的Activity仍处于存活状态，保存着所有的内存数据。%，只有当系统内存极度紧张时，才有可能被系统杀死回收。
 	
-	\item 停止态：当一个Activity被其他的Activity遮挡时，处于这个状态。
-	处于该状态的Activity仍然可以保留所有的状态，只是对用户不可见。
+	\item 停止态：当一个Activity被其他的Activity完全遮挡时，处于这个状态。
+	处于该状态的Activity仍然可以保留所有的内存数据，只是对用户不可见。
 	系统在需要内存的情况下，可以采用相应的策略对Activity进行杀死回收操作。
 	
-	\item 终止态：当Activity处于暂停态或者停止态时，系统由于内存原因可能会将上述两种Activity杀死回收。
-	处于该状态下的Activity将不能直接恢复。
+	\item 终止态：当用户自动退出Activity时，Activity将进入该状态；当Activity处于暂停态或者停止态时，系统由于内存原因可能会将上述两种Activity杀死回收。
 \end{itemize}
 
 
@@ -202,31 +203,8 @@ Handler机制，不仅帮助开发人员实现业务逻辑在主线程和工作�
 正因如此，在Android开发过程中，基于Handler消息调度的多线程交互十分常见。
 
 
-\section{本文遇到的困难与挑战}
-
-
-本文解决的关键问题有如下几点：
-
-1)	如何获取应用程序中各个函数的执行信息？
-
-获取应用程序在执行过程中各函数执行信息是本文的基础。从函数分类上，用户定义的方法和系统预定义的方法。
-对于前者，我们可以通过修改程序源代码实现；但对于后者，由于我们无法直接修改系统程序的源代码或者构建一个符合本文业务需求的系统的成本较高，
-为此，我们需要寻找对应的解决方案以帮助我们获取系统方法的执行信息。
-
-2)	如何根据程序中各函数的的执行信息，还原应用程序的函数调用图？
-
-基于第一点，我们可以获取程序在运行过程中的执行信息。
-但仅仅依靠这些执行信息是不够的，我们还需要将这些执行信息组织起来，挖掘执行信息之间的关联关系，从而才能还原成应用程序的函数调用图。
-这将是本文研究的重点之一。
-
-3)	如何在生成的函数调用图中体现Android特性？
-
-正如上文所提的，Android系统中有很多常规应用中不具备的特性，例如Activity的生命周期、基于多线程调用的触发关系。
-若要在生成的函数调用图上体现上述特性，需要对Android系统源代码有一定的了解熟悉，并基于图中的相关信息创建与特性相对应的关系。
-这既是本文研究的重点，也是本文的创新点。
-
 \section{本章总结}
 
 本章主要介绍了Android系统的相关背景知识，较为详细的阐述了Android的系统结构，详细介绍了Android四大组件之一的Activity生命周期。
 同时，本章还介绍了基于Runnable/Thread、Handler消息调度两种不同的多线程交互方式，详细地分析了Handler的运行机制，为下文基于函数调用图的多线程触发关系生成做了铺垫。
-最后，本章还介绍了系统在实现上可能遇到的困难。
+%最后，本章还介绍了系统在实现上可能遇到的困难。
