@@ -234,113 +234,111 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 \begin{table*}[!ht]
 	\centering
 	{
-		\scriptsize
 		\caption{各应用运行过程中的涉及函数触发关系数量}
 		\label{table:app_results}
-		\begin{tabular}{ |c |c|c|c|c|c|c|c|}
+		\begin{tabular}{ |c |c|c|c|c|c|}
 			\hline
-			 \multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}{2cm}{\centering 函数调用关系}& \multicolumn{3}{c|}{函数触发关系} \\ 
-			\cline{5-7}	
-			~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
-			 ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
+			应用 &用户方法&系统方法&函数调用关系&函数触发关系\\ 
+		%	\cline{5-7}	
+		%	~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
+		%	 ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
 			\hline
 		%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
-		本章示例             & 19     & 27(700)     & 21                & 3&1&1(114) \\ 				
+		本章示例             & 19     & 27(700)     & 21                &5(119) \\ 				
 			\hline			
-			AnyMemo & 1021 & 322(2731) & 1105(3487)& 3& 0& 35(425) \\ 				
+			AnyMemo & 1021 & 322(2731) & 1105(3487)& 38(428) \\ 				
 			\hline	
-			archwiki-viewer & 3699 & 3504 & 310(3342)& 0& 0& 680(21332) \\ 				
+			archwiki-viewer & 3699 & 3504 & 310(3342)& 680(21332) \\ 				
 			\hline	
-			chanu & 1086& 353(3917) & 397(4817)& 0& 1& 33(43439) \\ 				
+			chanu & 1086& 353(3917) & 397(4817)& 34(43440) \\ 				
 			\hline	
-			Microphone & 31 & 230(1531) & 161(1334)&4& 6&21 (261)\\ 				
+			Microphone & 31 & 230(1531) & 161(1334)&31 (271)\\ 				
 			\hline	
-			osmtracker-android & 997& 328(2483) & 1162(2453)& 0& 0& 3(368) \\ 				
+			osmtracker-android & 997& 328(2483) & 1162(2453)& 3(368) \\ 				
 			\hline	
-			Quran For My Android & 156 & 204(3930) & (3831)& 5& 2+2& 26(655) \\ 				
+			Quran For My Android & 156 & 204(3930) & (3831)&  35(664) \\ 				
 			\hline	
-			ReGeX & 1415 &95 (987) & 1323(2311)& 0& 4& 35(166)\\ 				
+			ReGeX & 1415 &95 (987) & 1323(2311)& 39(170)\\ 				
 			\hline	
-			screenrecorder& 1301 & 320(3278) &879 (4539)& 1& 2& 4(24863)\\ 				
+			screenrecorder& 1301 & 320(3278) &879 (4539)& 10(24869)\\ 				
 			\hline	
-			upm-android & 118& 337( 3097)& 355(2918)& 2& 0+4& 19(489) \\ 		
+			upm-android & 118& 337( 3097)& 355(2918)&  25(486) \\ 		
 			\hline
 		\end{tabular}
 	}
 \end{table*}
+
 
 \eat{
 	
 	\begin{table*}[!ht]
 		\centering
 		{
+			\scriptsize
 			\caption{各应用运行过程中的涉及函数触发关系数量}
-			\label{table:case_study_results}
-			\begin{tabular}{ |c|c|c|c|c|c| }
+
+			\begin{tabular}{ |c |c|c|c|c|c|c|c|}
 				\hline
-				\multirow{2}*{应用名}&\multicolumn{5}{c|}{函数触发关系的数目}\\% &\multirow{2}*{\#DC} &\multirow{2}*{\#CS} &\multirow{2}*{DCR(\%)} & \multicolumn{4}{|c|}{State dependency probabilistic model} & \multicolumn{4}{|c|}{Expected model} \\
-				\cline{2-6}% \cline{10-13} \cline{14-17}
-				~&TC1&TC2&TC3&TC4&TC5\\%&~&~&~ & Susp & Susp$'$ & Rank & Rank$'$ & Susp & Susp$'$ & Rank & Rank$'$ \\
+				\multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}{2cm}{\centering 函数调用关系}& \multicolumn{3}{c|}{函数触发关系} \\ 
+				\cline{5-7}	
+				~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
+				~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
 				\hline
-				AnyMemo/m1&34&22& 31& 35& 35\\%& 256&955&26.81 & 1& 3 & 17 & 10& NA& 0.67&467&3  \\
+				%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
+				本章示例             & 19     & 27(700)     & 21                & 3&1&1(114) \\ 				
+				\hline			
+				AnyMemo & 1021 & 322(2731) & 1105(3487)& 3& 0& 35(425) \\ 				
+				\hline	
+				archwiki-viewer & 3699 & 3504 & 310(3342)& 0& 0& 680(21332) \\ 				
+				\hline	
+				chanu & 1086& 353(3917) & 397(4817)& 0& 1& 33(43439) \\ 				
+				\hline	
+				Microphone & 31 & 230(1531) & 161(1334)&4& 6&21 (261)\\ 				
+				\hline	
+				osmtracker-android & 997& 328(2483) & 1162(2453)& 0& 0& 3(368) \\ 				
+				\hline	
+				Quran For My Android & 156 & 204(3930) & (3831)& 5& 2+2& 26(655) \\ 				
+				\hline	
+				ReGeX & 1415 &95 (987) & 1323(2311)& 0& 4& 35(166)\\ 				
+				\hline	
+				screenrecorder& 1301 & 320(3278) &879 (4539)& 1& 2& 4(24863)\\ 				
+				\hline	
+				upm-android & 118& 337( 3097)& 355(2918)& 2& 0+4& 19(489) \\ 		
 				\hline
-				Archwiki Viewer/m2&102& 9& 37& 60& 57\\%& 42& 175&24.00& 1& 3 & 12 & 6 & NA& 0.67&87&15 \\
-				\hline
-				Archwiki Viewer/m3&31& 10& 16& 69& 23\\%& 37& 166&22.29& 1& 3& 23& 6& NA& 0.67& 87& 15 \\
-				\hline
-				Archwiki Viewer/m4&32& 9& 21& 56& 21\\%& 37& 166&22.29& 1& 3& 22& 6& NA& 0.67& 87& 15  \\
-				\hline
-				Chanu/m5&26& 21& 20& 22& 19\\%& 358& 862&41.53& 1&    $\infty$ & 14& 1& NA& 1& 379& 1 \\
-				\hline
-				Microphone/m6&14& 5& 8& 5& 3\\%& 52\\%& 124&41.94& 1& 1.5& 16& 6& NA& 0.5& 29& 1    \\
-				\hline
-				%			Microphone/m7&5& 10& 8& 5& 3\\%& 52& 124&41.94& 1& 3& 8& 1& NA& 0.5& 29& 1    \\
-				%			\hline
-				%			OSMTracker/m8&2& 0& 2& 2& 0\\%& 233& 827&28.17& 1& 3& 67& 6& NA& 0.67& 426& 1    \\
-				%			\hline
-				%			OSMTracker/m9&2& 0& 2& 3& 0\\%& 231& 824&28.03& 1& 3& 42& 1& NA& 0.67& 425 &1    \\
-				%			\hline
-				%			OSMTracker/m10 &2& 0& 0& 0& 0\\%& 231& 824& 28.03&1&    $\infty$ & 65& 1& NA& 1& 425& 1    \\
-				%			\hline
-				%			OSMTracker/m11&2& 0& 0& 0& 0\\%& 231& 824& 28.03& 1&    $\infty$ & 68& 1& NA& 1& 425& 1 \\
-				%			\hline
-				%			Quran/m12&10&6& 4& 10& 4\\%& 138&581&23.75& 1& 3& 25& 10& NA& 0.67&271&1    \\
-				%			\hline
-				%			ReGeX/m13&6& 0& 5& 6& 0\\%& 59& 238& 24.79& 1& 3& 24& 1& NA& 0.67& 104& 1 \\
-				%			\hline
-				%			ReGeX/m14&10& 2& 4& 4& 0\\%& 60& 275& 21.82& 1& 3& 24& 1& NA& 0.5& 128& 60 \\
-				%			\hline
-				%			ReGeX/m15&3& 0& 6& 8& 0\\%& 60& 268&22.39& 1& 3& 28& 5& NA& 0.67& 128& 1 \\
-				%			\hline
-				%			Screen Cam/m16&4& 1& 1& 4& 4\\%& 105& 418& 25.12& 1& 3& 12& 1& NA& 0.67& 150& 1 \\
-				%			\hline
-				%			Screen Cam/m17&6& 4& 4& 6& 5\\%& 107& 433& 24.71& 1& 3& 8& 3& NA& 0.67& 175& 1 \\
-				%			\hline
-				%			Screen Cam/m18&5& 2& 6& 6& 4\\%& 119& 436& 27.29& 1& 1.5& 12& 8& NA& 0.5& 152& 9 \\
-				%			\hline
-				%			Screen Cam/m19&5& 2& 6& 6& 4\\%& 108& 391& 27.62& 1& 1.5& 5& 1& NA& 0.5& 127& 1 \\
-				%			\hline
-				%			UPM/m20&10& 8& 7& 8& 5\\%& 134& 233& 57.51& 1& 3& 20& 6& NA& 0.67& 41& 1 \\
-				%			\hline
-				%			UPM/m21&9& 8& 6& 7& 7\\%& 134& 233& 57.51& 1& 3& 9& 6& NA& 0.67& 41& 1  \\
-				%			\hline
-				%			UPM/m22&10& 8& 5& 7& 6\\%& 134& 233& 57.51& 1& 3& 8& 6& NA& 0.67& 41& 1 \\
-				%			\hline
-				%			World Weather/m23&0& 1& 1& 0& 1\\%& 28& 195& 14.36& 1& 3& 13& 1& NA& 0.67& 89& 1 \\
-				%			\hline
-				%   		World Weather/m24&6& 8& 4& 0& 3\\%& 33& 226& 14.60& 1& 3& 13& 1& NA& 0.67& 89& 1 \\
-				%		   \hline
-				%	 	   World Weather/m25&3& 8& 4& 0& 3\\%& 33& 226& 14.60& 1& 3& 13& 1& NA& 0.67& 89& 1 \\
-				% 		  \hline
 			\end{tabular}
 		}
 	\end{table*}
-	
 }
 
 \section{RunDroid在错误定位领域的应用}
 在本节中，我们将采用因果关联模型\cite{baah2010causal,baah2011mitigating}作为错误定位技术。
 相比传统错误定位技术（基于频谱的错误定位）只考虑了程序语句的覆盖情况，基于因果关联模型的错误定位技术还考虑程序在执行过程中的程序依赖（即控制依赖和数据依赖），分析的准确度较高。
+
+
+
+\begin{equation}
+\begin{aligned}
+\tau(s) = E[Y=1|T=1] - E [Y=0|T=0] 
+\end{aligned}
+\label{equ:expectEquation} 
+\end{equation}
+\begin{scriptsize}
+	注：$E[Y=1|T=1]$：实验组执行失败的期望， $E[Y=0|T=0]$：对照组执行通过的期望。
+\end{scriptsize}
+
+
+\begin{equation}
+\begin{aligned}
+Y =\alpha +\tau T+\beta X 
+\end{aligned}
+\label{equ:linearEquation} 
+\end{equation}
+\begin{scriptsize}
+	注：其中$Y$表示测试用例是否执行失败（1为执行失败，0为执行通过），
+	$T$和$X$分别为语句$s$和$Pred(s)$中各语句的覆盖情况 ，
+	$\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计算的定值。  \par
+	
+\end{scriptsize}
 
 \subsection{原理简介}
 
@@ -391,28 +389,6 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 
 
 
-\begin{equation}
-\begin{aligned}
-\tau(s) = E[Y=1|T=1] - E [Y=0|T=0] 
-\end{aligned}
-\label{equ:expectEquation} 
-\end{equation}
-\begin{scriptsize}
-	注：$E[Y=1|T=1]$：实验组执行失败的期望， $E[Y=0|T=0]$：对照组执行通过的期望。
-\end{scriptsize}
-
-\begin{equation}
-\begin{aligned}
-Y =\alpha +\tau T+\beta X 
-\end{aligned}
-\label{equ:linearEquation} 
-\end{equation}
-\begin{scriptsize}
-	注：其中$Y$表示测试用例是否执行失败（1为执行失败，0为执行通过），
-	$T$和$X$分别为语句$s$和$Pred(s)$中各语句的覆盖情况 ，
-	$\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计算的定值。
-\end{scriptsize}
-
 
 
 对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
@@ -433,7 +409,7 @@ Y =\alpha +\tau T+\beta X
 
 
 
-\begin{table}[!ht]
+\begin{table}[!hb]
 	
 	\caption{结果对比}
 
@@ -493,7 +469,8 @@ Y =\alpha +\tau T+\beta X
 	注： 第2列到第6列分别代表测试用例$t_1\sim t_5$；
 	每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；
 	测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；   
-	最后一行表示各个测试用例的执行结果，“1”表示测试未通过（$Y=1$），“0”表示测试通过（$Y=0$）。
+	最后一行表示各个测试用例的执行结果，“1”表示测试未通过（$Y=1$），“0”表示测试通过（$Y=0$）。  \par
+	
 	
 \end{table}
 
@@ -614,10 +591,5 @@ Y =\alpha +\tau T+\beta X
 综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
 
 同时，我们将RunDroid和错误定位技术结合，进行了尝试性的实验。
-相关实验结果显示，RunDroid生成的调用图中的方法触发关系可以将异步方法调用（例如Java 多线程和Handler）关联起来，补全函数间的控制依赖和数据依赖关系。
+实验结果显示，RunDroid生成的调用图中的方法触发关系可以将异步方法调用（例如Java 多线程和Handler）关联起来，补全函数间的控制依赖和数据依赖关系。
 在RunDroid提供的信息的帮助下，基于因果模型的错误定位技术相关实验结果得到一定的提升，提高了实验结果的准确度。
-
-
-\foreach \t in {1,...,15} {
-\t \newline
-}
