@@ -1,4 +1,4 @@
-\chapter{RunDroid的系统设计}
+\chapter{系统设计}
 \label{chp:design}
 
 
@@ -11,14 +11,14 @@ RunDroid利用源程序代码插桩和运行时方法拦截的相结合的方式
 RunDroid提供的函数调用图从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地刻画了Android应用程序的执行过程，可以为应用程序分析提供更为多样、准确的信息。
 
 
-\section{整体设计思路}
+\section{整体设计}
 
 
 
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Figures/code-sample.png}
-	\caption{RunDroid的基本思路}
+	\caption{RunDroid的处理流程}
 	\label{fig:code_sample}
 \end{figure*}
 
@@ -382,10 +382,15 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	}
 	% $o_p \stackrel{parameter}{\longrightarrow} m$
 	\Fn{patchUiEvent($cg$)} {
-		\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node ,$o \in$ $cg \}$} }{
-			\If{ {$ \left\langle m_{register}\joinrel\xrightarrow{instance} o_{listener}\right\rangle \in cg$ } \\\qquad 
-				and   {$\left\langle m_{click} \joinrel\xrightarrow{instance}   o_{listener}\right\rangle  \in cg$ }}{
-				$cg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
+		\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node ,$o \in$ $cg \}$} }{		
+			\For{\emph{$o_{view} \in \{ o \mid o $  is the $View$ object node ,$o \in$ $cg \}$} }{
+				\If{ {$ \left\langle m_{register}\joinrel\xrightarrow{instance} o_{view}\right\rangle \in cg$ } \\\qquad 
+					and   {$\left\langle m_{register} \joinrel\xrightarrow{parameter}   o_{listener}\right\rangle  \in cg$ }			 \\\qquad 
+							and   {$\left\langle m_{click} \joinrel\xrightarrow{parameter}   o_{view}\right\rangle  \in cg$ }	 \\\qquad 					
+								and   {$\left\langle m_{click} \joinrel\xrightarrow{instance}   o_{listener}\right\rangle  \in cg$ }
+					}{
+					$cg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
+				}
 			}
 		}
 	}		
@@ -402,14 +407,18 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 （3）方法$m$在调用图$cg$中不在调用者，即在调用图$cg$中不存在方法$m' \in cg$，使得$m' \to m $成立。
 
 
-\point{\todo{Andoid事件回调的触发关系}}
-{
+\point{构建Andoid事件回调的触发关系}
 
+Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
+根据第\ref{chp:definition}章中方法触发关系的相关定义，$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $ 成立。
+我们观察发现：方法$m_{register}$的实例对象$o_{view}$是方法$m_{click}$的参数对象，而方法$m_{register}$的参数对象$o_{listener}$是方法$m_{click}$的实例对象。
+因此，在构建Andoid事件回调的触发关系过程中，当方法$m_{register} $、$m_{click} $满足第19$\sim$22行的条件时，这两个方法之间存在触发关系，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第23行）。
 
-\foreach \t in {1,...,5} {
-	\todo{补充内容 \t }\newline
-}
-
+\eat{
+基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
+因此，对于方法\code{Thread.start()}，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$（第8 $\sim$10行）。
+同样的，对于方法\code{Activity.runOnUiThread(Runnable)}，也存在类似的关系：
+如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{runOnUiThread} \hookrightarrow m_{run}$（第11 $\sim$13行）。
 }
 
 

@@ -9,6 +9,7 @@
 
 
 \begin{figure}[!h]
+%	\vspace{0.3in}
 	\centering
 	\begin{lstlisting}[language=Java]
 package cn.mijack.rundroidtest;
@@ -25,11 +26,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		button1 = findViewById(R.id.button1);
-		button1.setOnClickListener(this);   	// button2、button3进行相同的操作，此处省略
+		button1.setOnClickListener(this);   	
+		// button2、button3进行相同的操作，此处省略
 	}
 	public void onClick(View view) {
 		switch (view.getId()) {
-			case R.id.button1:		doHandleButton1();		return;				 	
+			case R.id.button1:		
+			     doHandleButton1();		
+			     return;				 	
 				// button2、button3进行相同的操作，此处省略
 		}
 	}
@@ -59,12 +63,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 \subsection{函数调用图的构建结果展示}
 
-在应用程序运行时，点击按钮button1，应用会计算斐波拉契数列中的第4项，并将这个数以Toast的形式展示给用户。
+在应用程序运行时，点击按钮button1，应用会计算斐波拉契数列中的第5项，并将这个数以Toast的形式展示给用户。
 上述过程中，方法调用同时涉及到普通方法调用、递归函数调用。
 RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
-每一个红色节点对应的是用户方法执行，每一个绿色节点对应的是系统方法执行，每一个绿色节点对应是一个对象；
-如果对象是方法执行的方法对象，则在图中会有一条边从方法指向该对象，并在边上标识两种之间的关系（参数关系、返回值关系、实例关系等）；
-如果两个方法执行之间存在调用关系，则他们之间会通过从调用发起方指向被调用方的有向边进行连接。
+每一个红色节点对应的是方法执行，\eat{每一个蓝色节点对应的是系统方法执行，}每一个紫色节点对应是一个对象；
+如果对象是方法执行的方法对象，则在图中会有一条边从方法指向该对象，并在边上标识两种之间的关系（蓝色有向边表示参数关系、黄色有向边返回值关系等\footnote{由于所有方法的实例对象都是\code{MainActivity}，所以实例关系在图中不做展示}）；
+如果两个方法执行之间存在调用关系，则他们之间会通过从调用发起方指向被调用方的绿色有向边进行连接。
 
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
 通过观察虚线框中各节点的关系，我们知道，对于方法\code{doFibonacci()}，当参数为5时，对应的结果为5。
@@ -82,14 +86,14 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有9个，即在运行过程中，\code{doFibonacci()}被调用了9次。
 由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点。该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
 %另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
-因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，在一定程度上反映了程序执行的具体过程。
+因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，反映了程序执行的具体过程。
 
 
 
-其次，方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，却出现在FlowDroid给出的结果：
-但是，在运行过程中，应用弹出Toast提示，因此该方法在实际运行过程中有所执行，但是RunDroid未在调用图中给出相应的节点对应。
+其次，在运行过程中，斐波拉契数列的计算结果最终以Toast的形式展现在界面上。
+但方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，却出现在FlowDroid给出的结果：
 出现这个现象的原因如下：该方法属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应的函数。
-这也从一个方面反映了RunDroid的劣势：关于系统函数的运行时信息的捕获需要提前将相应的方法告知运行时拦截器，生成的调用图才会包括相应的方法。
+这也反映了RunDroid的不足：关于系统函数的运行时信息的捕获需要提前将相应的方法告知运行时拦截器，生成的调用图才会包括相应的方法。
 这使得调用图只包含研究人员关心的方法的执行信息，但也在一定程度上导致部分方法的缺失和调用图的局部不完整。
 
 
@@ -104,7 +108,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 最后，FlowDroid给出的结果中包括了大量和\code{StringBuilder}相关的方法，而RunDroid的结果并不包括这些方法：
 对比源码发现，源程序并未直接使用\code{StringBuilder}。
 通过查阅文献\cite{gosling2000java}，我们发现出于提高字符串串联性能的考虑，Java编译器可以使用类\code{StringBuilder}等技术通过源代码做适当等价的修改，以避免表达式求值过程中产生过多的字符串数量。
-由于上述过程发生在Java程序编译阶段并最后以字节码的形式不存在APK文件中，而FlowDroid恰好从字节码层面对应用进行分析，因此FlowDroid的分析结果会包含该方法。
+由于上述过程发生在Java程序编译阶段并最后以字节码的形式保存在APK文件中，而FlowDroid从字节码层面对应用进行分析，因此FlowDroid的分析结果会包含该方法。
 对于RunDroid，上述方法既在源代码中未出现相关方法定义（无法进行日志代码编织），又不在运行时拦截器的目标方法列表中，所以RunDroid给出的调用图自然也不会包括\code{StringBuilder}相关的方法。
 
 
@@ -190,7 +194,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/FlowDroid-handler.png}
+	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
 	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
 	\label{fig:flowdroid-result-handler}
 \end{figure*}
@@ -235,31 +239,31 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 		\label{table:app_results}
 		\begin{tabular}{ |c |c|c|c|c|c|c|c|}
 			\hline
-		\multirow{3}*{序号 }& \multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}{1.3cm}{\centering 函数调用关系}& \multicolumn{3}{c|}{函数触发关系} \\ 
-			\cline{6-8}	
-			~ & ~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
-			~ & ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
+			 \multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}{2cm}{\centering 函数调用关系}& \multicolumn{3}{c|}{函数触发关系} \\ 
+			\cline{5-7}	
+			~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
+			 ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
 			\hline
 		%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
-			0 &示例             & 19     & 27(700)     & 21                & 3&1&1(114) \\ 				
+		本章示例             & 19     & 27(700)     & 21                & 3&1&1(114) \\ 				
 			\hline			
-			1 &AnyMemo & 1021 & 322(2731) & 1105(3487)& 3& 0& 35(425) \\ 				
+			AnyMemo & 1021 & 322(2731) & 1105(3487)& 3& 0& 35(425) \\ 				
 			\hline	
-			2 &archwiki-viewer & 3699 & 3504 & 310(3342)& 0& 0& 680(21332) \\ 				
+			archwiki-viewer & 3699 & 3504 & 310(3342)& 0& 0& 680(21332) \\ 				
 			\hline	
-			3 &chanu & 1086& 353(3917) & 397(4817)& 0& 1& 33(43439) \\ 				
+			chanu & 1086& 353(3917) & 397(4817)& 0& 1& 33(43439) \\ 				
 			\hline	
-			4 &Microphone & 31 & 230(1531) & 161(1334)&4& 6&21 (261)\\ 				
+			Microphone & 31 & 230(1531) & 161(1334)&4& 6&21 (261)\\ 				
 			\hline	
-			5 &osmtracker-android & 997& 328(2483) & 1162(2453)& 0& 0& 3(368) \\ 				
+			osmtracker-android & 997& 328(2483) & 1162(2453)& 0& 0& 3(368) \\ 				
 			\hline	
-			6 &Quran For My Android & 156 & 204(3930) & (3831)& 5& 2+2& 26(655) \\ 				
+			Quran For My Android & 156 & 204(3930) & (3831)& 5& 2+2& 26(655) \\ 				
 			\hline	
-			7 &ReGeX & 1415 &95 (987) & 1323(2311)& 0& 4& 35(166)\\ 				
+			ReGeX & 1415 &95 (987) & 1323(2311)& 0& 4& 35(166)\\ 				
 			\hline	
-			8 &screenrecorder& 1301 & 320(3278) &879 (4539)& 1& 2& 4(24863)\\ 				
+			screenrecorder& 1301 & 320(3278) &879 (4539)& 1& 2& 4(24863)\\ 				
 			\hline	
-			9 &upm-android & 118& 337( 3097)& 355(2918)& 2& 0+4& 19(489) \\ 		
+			upm-android & 118& 337( 3097)& 355(2918)& 2& 0+4& 19(489) \\ 		
 			\hline
 		\end{tabular}
 	}
@@ -345,31 +349,9 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 $\tau$的值越大，语句$s$是错误的可能性越大。
 具体过程如\autoref{alg:fault-localization}所示。
 
-\begin{equation}
-\begin{aligned}
-\tau(s) = E[Y=1|T=1] - E [Y=0|T=0] 
-\end{aligned}
-\label{equ:expectEquation} 
-\end{equation}
-\begin{scriptsize}
-注：$E[Y=1|T=1]$：实验组执行失败的期望， $E[Y=0|T=0]$：对照组执行通过的期望。
-\end{scriptsize}
-
-\begin{equation}
-\begin{aligned}
-Y =\alpha +\tau T+\beta X 
-\end{aligned}
-\label{equ:linearEquation} 
-\end{equation}
-\begin{scriptsize}
-注：其中$Y$表示测试用例是否执行失败（1为执行失败，0为执行通过），
-$T$和$X$分别为语句$s$和$Pred(s)$中各语句的覆盖情况 ，
-$\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计算的定值。
-\end{scriptsize}
 
 
-
-\begin{algorithm}[hb]
+\begin{algorithm}[!ht]
 	
 	
 	\caption{错误定位的计算方法} 
@@ -408,6 +390,31 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 \end{algorithm}
 
 
+
+\begin{equation}
+\begin{aligned}
+\tau(s) = E[Y=1|T=1] - E [Y=0|T=0] 
+\end{aligned}
+\label{equ:expectEquation} 
+\end{equation}
+\begin{scriptsize}
+	注：$E[Y=1|T=1]$：实验组执行失败的期望， $E[Y=0|T=0]$：对照组执行通过的期望。
+\end{scriptsize}
+
+\begin{equation}
+\begin{aligned}
+Y =\alpha +\tau T+\beta X 
+\end{aligned}
+\label{equ:linearEquation} 
+\end{equation}
+\begin{scriptsize}
+	注：其中$Y$表示测试用例是否执行失败（1为执行失败，0为执行通过），
+	$T$和$X$分别为语句$s$和$Pred(s)$中各语句的覆盖情况 ，
+	$\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计算的定值。
+\end{scriptsize}
+
+
+
 对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
 匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
 （实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
@@ -424,7 +431,7 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 %而对于\Line{2}，该语句并没有前驱节点，匹配完的集合$Mdata(\Line{2})$为空集，因此通过\autoref{equ:linearEquation}对所有测试用例的数据进行计算。
 %由于结算结果中回归直线斜率不存在，所以$\tau(\Line{2})= \text{NA}$。
 
-\subsection{结果分析}
+
 
 \begin{table}[!ht]
 	
@@ -490,12 +497,24 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 	
 \end{table}
 
+
+\subsection{结果分析}
+
+
 为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
 我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
 我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数）。
 在编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
 列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
 
+
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{./Figures/treatment.png}
+	\end{center}
+	\caption{使用RunDroid前后关于语句\Line{13}的测试用例匹配的对比}
+	\label{fig:motivationResultTreatment}
+\end{figure}
 
 在$\tau$的结果中，分数最高包括\Line{4}、\Line{7}和\Line{13}，均为0.67；
 %在$\tau'$的结果中，分数最高只有\Line{13}，分数从0.67提升到1。
@@ -514,13 +533,6 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 对于其他语句，前驱节点的信息并没有发生变化，因此数值保持不变。
 
 
-\begin{figure}[!h]
-		\begin{center}
-	\includegraphics[width=0.8\textwidth]{./Figures/treatment.png}
-\end{center}
-	\caption{使用RunDroid前后关于语句\Line{13}的测试用例匹配的对比}
-	\label{fig:motivationResultTreatment}
-\end{figure}
 
 \eat{
 
@@ -606,3 +618,6 @@ $\beta$ 为$Pred(s)$中各语句的错误估计值，$\alpha$ 为公式中待计
 在RunDroid提供的信息的帮助下，基于因果模型的错误定位技术相关实验结果得到一定的提升，提高了实验结果的准确度。
 
 
+\foreach \t in {1,...,15} {
+\t \newline
+}
