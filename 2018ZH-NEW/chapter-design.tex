@@ -232,12 +232,12 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 	\caption{函数调用图的构建过程} 
 	\label{alg:buildCG}
 	\KwIn{ $logs$，应用程序的运行时日志}
-	\KwOut{ $cg$，函数调用图}
+	\KwOut{ $ecg$， 拓展函数调用图}
 	\SetKwProg{Fn}{Function}{:}{}
 	
-	\Fn{buildCallGraph($log$)}{
+	\Fn{buildExtendedCallGraph($log$)}{
 		
-		$cg$ $\gets$ new CallGraph();
+		$ecg$ $\gets$ new ExtendedCallGraph();
 		
 		\For{thread $\in$ $logs.threads$}{
 			
@@ -251,27 +251,27 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 					
 					$m \gets $ generateMethodInfo($log$);
 					
-					$cg$.addMethodNode($m$);
+					$ecg$.addMethodNode($m$);
 					%\Comment 在调用图中提交方法节点 
 					
-					$cg$.addMethodObjectsIfNotExists($ o_p $,$o_i $) 	;							
+					$ecg$.addMethodObjectsIfNotExists($ o_p $,$o_i $) 	;							
 					
-					$cg$.addMethodObjectRels($ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $,$ \left\langle  o_i \joinrel\xrightarrow{instance}   m \right\rangle  $) ;
+					$ecg$.addMethodObjectRels($ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $,$ \left\langle  o_i \joinrel\xrightarrow{instance}   m \right\rangle  $) ;
 					
 					%	\Comment 在调用图中提交方法对象节点 （此处只涉及参数关系和实例关系）
 					
 					\If {  $top \neq null $ }{
 						
-						$cg$.addInvokeRel($ \left\langle  top \to  m \right\rangle  $) ;
+						$ecg$.addInvokeRel($ \left\langle  top \to  m \right\rangle  $) ;
 						
 						$stack$.push($m$);
 					}
 					
 				}{ 
 					
-					$cg$.addMethodObjectIfNotExists($  o_r  $) ;
+					$ecg$.addMethodObjectIfNotExists($  o_r  $) ;
 					
-					$cg$.addMethodObjectRel($ \left\langle   o_r \joinrel\xrightarrow{return}   m \right\rangle  $) ;
+					$ecg$.addMethodObjectRel($ \left\langle   o_r \joinrel\xrightarrow{return}   m \right\rangle  $) ;
 					
 					%		  \Comment 在调用图中提交方法对象节点 （此处只涉及返回值关系）
 					
@@ -283,7 +283,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 				
 			}
 		}
-		\KwRet{ $cg$};
+		\KwRet{ $ecg$};
 	}
 	
 \end{algorithm}
@@ -302,7 +302,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 同时也在调用图中添加方法参数、方法实例对应的对象节点$o_p$、$o_i$以及方法对象和方法的关系$ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $、$ \left\langle   o_i \joinrel\xrightarrow{instance}   m \right\rangle  $（第9$\sim$10行）。
 如果此时当前线程栈$stack$的栈顶方法元素$top$存在，系统会创建从方法$top$到当前方法$m$的调用关系，$\left\langle top \to m \right \rangle  $，并将当前方法$m$压入栈$stack$中（第11$\sim$ 14行）。
 当读取到方法执行的结束日志时，该日志对应的方法必然是栈顶方法$top$，若栈顶方法$top$存在返回对象$o_r$，则只需要将$o_r$和$top$的关系添加到调用图中即可，最后弹出栈顶的$top$即可（第 16$\sim$ 18行）。
-在上述过程中，如果待添加的方法对象在调用图中已经存在时，该对象则无须重新添加，只需添加方法与对象间的关系即可。
+在上述过程中，如果待添加的方法对象在调用图中已经存在时，该对象复用调用图原有的对象节点即可，无须重新添加，只需添加方法与对象间的关系即可。
 
 
 
@@ -329,27 +329,24 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	\caption{构建Activity的生命周期和事件回调} 
 	\label{alg:buildActivityLifecycle}
 	\KwIn{ $manifestFile$，AndroidManifest文件}
-	\KwIn{ $cg$，函数调用图}	
-	\KwOut{ $cg'$，包括Activity生命周期的函数调用图}
+	\KwIn{ $ecg$，函数调用图}	
+	\KwOut{ $ecg$，包括Activity生命周期的函数调用图}
 	
 	
 	
 	\SetKwProg{Fn}{Function}{:}{}
 	
-		\Fn{patchActivityLifecycleAndUiEvent($cg$)}{
+		\Fn{patchActivityLifecycleAndUiEvent($ecg$)}{
 		
-		patchActivityLifecycle($cg$,$manifestFile$);
+		patchActivityLifecycle($ecg$,$manifestFile$);
 		
-		patchUiEvent($cg$);
-		
-		
-		$cg' \gets cg$;
+		patchUiEvent($ecg$);
 
-		\KwRet{$cg'$};
+		\KwRet{$ecg$};
 	}
 	
 	
-	\Fn{patchActivityLifecycle($cg$,$manifestFile$)}{
+	\Fn{patchActivityLifecycle($ecg$,$manifestFile$)}{
 		
 		
 		$lifecycleList \gets$ new   $ List()$;
@@ -359,13 +356,13 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 			
 			
 			
-			\For{ \emph{ $m \in \{ m \mid  m$ is method node in $ cg $   
+			\For{ \emph{ $m \in \{ m \mid  m$ is method node in $ ecg $    \\\qquad
 					and $o_{activity}$ is instance of $m\}$}}{
 				
 				
 				\If{ \emph{ $m$ is the method of Activity's Lifecycle   \\\qquad
 						and  Thread for $m$ is MainThread	  \\\qquad
-						and $  \left\langle  m' \to m \right\rangle  \notin cg$
+						and $  \left\langle  m' \to m \right\rangle  \notin ecg$
 				} }{
 					
 					$lifecycleList$.add($m$);
@@ -377,19 +374,16 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 		
 		sortListByTime($lifecycleList$);
 		
-		linkItemsByTime($lifecycleList$,$cg$);
+		linkItemsByTime($lifecycleList$,$ecg$);
 		
 	}
 	% $o_p \stackrel{parameter}{\longrightarrow} m$
-	\Fn{patchUiEvent($cg$)} {
-		\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node ,$o \in$ $cg \}$} }{		
-			\For{\emph{$o_{view} \in \{ o \mid o $  is the $View$ object node ,$o \in$ $cg \}$} }{
-				\If{ {$ \left\langle m_{register}\joinrel\xrightarrow{instance} o_{view}\right\rangle \in cg$ } \\\qquad 
-					and   {$\left\langle m_{register} \joinrel\xrightarrow{parameter}   o_{listener}\right\rangle  \in cg$ }			 \\\qquad 
-							and   {$\left\langle m_{click} \joinrel\xrightarrow{parameter}   o_{view}\right\rangle  \in cg$ }	 \\\qquad 					
-								and   {$\left\langle m_{click} \joinrel\xrightarrow{instance}   o_{listener}\right\rangle  \in cg$ }
+	\Fn{patchUiEvent($ecg$)} {
+		\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node ,$o \in$ $ecg \}$} }{		
+			\For{\emph{$o_{view} \in \{ o \mid o $  is the $View$ object node ,$o \in$ $ecg \}$} }{
+				\If{ 满足条件 
 					}{
-					$cg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
+					$ecg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
 				}
 			}
 		}
@@ -397,13 +391,16 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 \end{algorithm}
 
 整个过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加表示Activity生命周期的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
-对于AndroidManifest文件中声明的每一个Activity组件$o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
+对于AndroidManifest文件中声明的每一个Activity组件对象 $o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
 若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第3$\sim$8行）。
 最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第9$\sim$10行）。
 
 这三个条件分别为：
+
 （1）方法$m$的方法签名和\autoref{fig:Activity-lifecycle}中的任何一个生命周期方法的签名保持一致；
+
 （2）方法$m$执行时所处的线程为主线程；
+
 （3）方法$m$在调用图$cg$中不在调用者，即在调用图$cg$中不存在方法$m' \in cg$，使得$m' \to m $成立。
 
 
@@ -430,40 +427,29 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \begin{algorithm}[!ht]
 	\caption{扩展函数调用图的构建过程}
 	\label{alg:buildTrigger}
-	\KwIn {	$cg$， 函数调用图} 
-	\KwOut {	$ecg$，拓展函数调用图}
+	\KwIn {	$ecg$， 拓展函数调用图} 
+	\KwOut {	$ecg$，包含触发关系的拓展函数调用图}
 	
 	
 	\SetKwProg{Fn}{Function}{:}{}
-	\Fn{buildExtendedCallGraph($cg$)}{
-		
-		$ecg \gets cg$;
-		
-		addThreadTrigger($ecg$);
-		
-		addHandlerTrigger($ecg$);
-		
-		\KwRet $ecg$;
-	}
+	\Fn{addTriggerRels($ecg$)}{
 	
-	% $o_p \stackrel{parameter}{\longrightarrow} m$
-	\Fn{addThreadTrigger($ecg$)} {
+		\tcp{addThreadTrigger into $ecg$}
+		
+		
 		\For{\emph{$o_r \in \{ o \mid o $  is the $Runnable$ object node ,$o \in$ $ecg \}$} }{
-			\If{ {$ \left\langle m_{start}\joinrel\xrightarrow{instance} o_r \right\rangle \in ecg$ } \\\qquad 
-				and   {$\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$ }}{
+			\If{ 满足条件}{
 				$ecg$.addTriggerRel($m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $)	
 			}
-			\If{ {$ \left\langle m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \right\rangle \in ecg$}  \\\qquad   
-				and  { $\left\langle m_{run} \joinrel\xrightarrow{instance}   o_r\right\rangle  \in ecg$  }}{
+			\If{ 满足条件}{
 				$ecg$.addTriggerRel($m_{runOnUiThread}  \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run} $)	
 			}	
 		}
-	}	
-	\Fn{addHandlerTrigger($ecg$)} {
+				\tcp{addHandlerTrigger into $ecg$}
 		
-		\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node ,$o \in$ $ecg \}$} }{
-			\If{{ $ \left\langle m_{enqueue}\joinrel\xrightarrow{parameter} o_m\right\rangle \in ecg$}  \\\qquad   
-				and  { $\left\langle m_{dispatch}\joinrel\xrightarrow{parameter} o_m\right\rangle  \in ecg$ }}{
+		
+			\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node ,$o \in$ $ecg \}$} }{
+			\If{满足条件}{
 				$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
 				
 				$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
@@ -471,9 +457,12 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 				$ecg$.addTriggerRel($m_{send} \lhook\joinrel\xrightarrow{Handler} m_{handle} $ )	
 			}	
 		}
+		\KwRet $ecg$;
 	}
 	
 \end{algorithm}
+
+
 \point{基于Java 的多线程交互}
 
 基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
@@ -599,3 +588,4 @@ RETURN p,method,enqueue,dispatch
 本章详细介绍了RunDroid的设计。
 首先，本章简要介绍了RunDroid实现的基本功能，并通过一个简单的例子介绍了RunDroid的整体运行框架。
 由此，我们提出了RunDroid技术路线：RunDroid利用源代码插桩和运行时拦截器相结合的方式，将运行时的方法执行信息以日志的形式保存下来，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并在此基础上构建Activity的生命周期，补全方法间的触发关系，形成最终的拓展函数调用图。
+

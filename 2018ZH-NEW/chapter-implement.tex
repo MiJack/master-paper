@@ -12,7 +12,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 
 在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分，对应的工作流程如\autoref{fig:rundroid_overview}所示。
-从功能上，预处理器和运行时拦截器两者的作用是一致的：在程序运行过程中，当相关方法执行时，触发日志记录器记录相应的信息。
+%从功能上，预处理器和运行时拦截器两者的作用是一致的：在程序运行过程中，当相关方法执行时，触发日志记录器记录相应的信息。
 预处理器通过源代码插桩技术实现在用户方法运行时触发用户方法的信息记录，而运行时拦截器则是通过方法劫持技术实现对系统方法执行的拦截，进而触发日志记录。
 %系统方法的执行。
 %由于，用户方法层面的代码已修改，而系统方法的行为难以修改
@@ -22,7 +22,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 \begin{figure*}[!hb]
 	\centering
-	\includegraphics[width=\textwidth]{./Figures/rundroid-overview.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/rundroid-overview.png}
 	\caption{ RunDroid的工作流程}
 	\label{fig:rundroid_overview}
 \end{figure*}
@@ -125,7 +125,7 @@ Neo4j的数据分为节点（Node）和关系（Relationship）两大类型，�
 
 
 对象管理器负责将日志中的对象信息映射成调用图中的节点。
-通常情况下，我们认为一个对象和一个全局ID一一对应，所以，我们将全局ID相同的对象信息映射成调用图中的一个节点。
+通常情况下，我们认为对象和全局ID一一对应，所以，我们将全局ID相同的对象信息映射成调用图中的一个节点。
 但考虑到有些类型（例如Handler机制中的Message）使用对象池技术，我们还在全局ID的基础上引入对象版本号，避免对象在不同生命周期的串用。
 以Message为例，调用图构建过程中，如果对象管理器发现待提交的Message对象$m$是方法\code{Message.obtain()}的返回值，处理逻辑如下：
 如果调用图中不存在一个全局ID和$m$一致的节点，则对象管理器会创建一个全新的节点来表示$m$，设置其对象版本号为1；
@@ -136,10 +136,10 @@ Neo4j的数据分为节点（Node）和关系（Relationship）两大类型，�
 
 触发关系生成器是第\ref{chp:design}章中\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，基于Cypher脚本和Soot完成。
 例如，\autoref{alg:buildTrigger}第16$\sim$17行中，我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$，并建立两者之间的触发关系。
-传统的实现方式需要对图进行遍历，效率较低。而RunDroid在实现上采用了Cypher脚本，如\autoref{fig:cypher_code}所示。
+传统的实现方式需要对图进行遍历，效率较低。而RunDroid采用了Cypher脚本，实现简洁，开发效率高，如\autoref{fig:cypher_code}所示。
 Soot的工作主要是提供应用程序相关的类型查询服务。
 例如，\autoref{alg:buildTrigger}第7行中，我们需要知道所有的Runnable对象，此处便需要通过Soot查询所有的Runnable子类。
-另外，在\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
+另外，在算法\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
 
 
 \begin{figure}[!h]

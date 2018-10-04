@@ -19,15 +19,15 @@
 在本文中，方法对象通常用符号$o$表示。
 	
 
-	对于一个方法执行$m$，对象和方法执行的关系有如下几种：
+	对于一个方法执行$m$，对象和方法执行的关系（简称为方法对象关系）有如下几种：
 	\begin{itemize}
 %				\setlength{\itemsep}{-5pt}
 				\setlength{\itemsep}{1pt}
 				\setlength{\parskip}{0pt}
 				\setlength{\parsep}{0pt}
-		\item 参数关系：若对象$o_p$是这个方法$m$的参数，记为$m \joinrel\xrightarrow{parameter} o_p$;%，或者 $ rel(m,o_p) = parameter$，或者三元组$\left\langle m, o_p, parameter\right\rangle $；
-		\item 返回值关系：若对象$o_r$是这个方法$m$的返回值，记为$m \joinrel\xrightarrow{return} o_r$;%，或者 $ rel(m,o_r) = return$，或者三元组$\left\langle m, o_p, return\right\rangle $；
-		\item 实例关系：若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$m \joinrel\xrightarrow{instance} o_i$。%，或者 $ rel(m,o_i) = instance$，或者三元组$\left\langle m, o_p, instance\right\rangle $；
+		\item 参数关系：若对象$o_p$是这个方法$m$的参数，记为$m \joinrel\xrightarrow{parameter} o_p$；%，或者 $ rel(m,o_p) = parameter$；%，或者三元组$\left\langle m, o_p, parameter\right\rangle $；
+		\item 返回值关系：若对象$o_r$是这个方法$m$的返回值，记为$m \joinrel\xrightarrow{return} o_r$；%，或者 $ rel(m,o_r) = return$；%，或者三元组$\left\langle m, o_p, return\right\rangle $；
+		\item 实例关系：若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$m \joinrel\xrightarrow{instance} o_i$；%，或者 $ rel(m,o_i) = instance$；%，或者三元组$\left\langle m, o_p, instance\right\rangle $；
 	\end{itemize}
 
 通常情况下，一个方法执行过程中，返回值对象和实例对象不允许超过一个，而方法参数可以有多个\footnote{\textbf{注：}返回值为void的方法无返回值对象，静态方法无实例对象。}。
@@ -96,7 +96,7 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 
 
 \textbf{注意：}
-在应用执行过程中，方法A被调用了两次，方法A的每次调用都调用了方法B，则对应的函数调用图$CG$如~\autoref{equ:dcg_sample}所示。
+在应用执行过程中，方法A被调用了两次，方法A的每次调用都调用了方法B，则对应的函数调用图$CG$如\autoref{equ:dcg_sample}所示。
 在调用图$CG$中，$m_a$ 和 $m_b$ 各有两个，分别对应的两次\textbf{方法执行}。
 $\left\langle m_{a_{1}} \to m_{b_{1}}\right\rangle $对应的是第一次函数A调用函数B，
 $\left\langle m_{a_{2}} \to m_{b_{2}} \right\rangle    $对应的是第二次函数A调用函数B，
@@ -124,7 +124,7 @@ E = & \{
 	前者的方法间关系包括调用关系和触发关系；而后者的关系包括和方法对象相关的三个关系（参数关系、返回值关系与实例关系）。
 	
 \eat{
-	具体定义如~\autoref{equ:def_edcg}所示：
+	具体定义如\autoref{equ:def_edcg}所示：
 
 \begin{equation}
 \begin{aligned}
@@ -140,6 +140,82 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 }
 	
 	
+\section{触发规则的定义}
+
+触发关系描述的方法之间的关系。
+在定义触发定义通常有两个部分组成：对象与方法的属性约束条件、对象与方法的关系约束条件。
+前者描述的是对象和方法的属性约束条件，例如对象$o$本身的类型$o.class$、方法$m$的方法签名$m.methodSign$；
+后者对应的则是对象和方法之间的关系，包括方法对象关系、方法间的调用关系。
+本文中涉及的触发关系包括以下几点。
+
+
+\subsection{事件响应的触发规则}
+
+
+Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
+在上述方法中，方法$m_{register}$的实例对象$o_{view}$是方法$m_{click}$的参数对象，而方法$m_{register}$的参数对象$o_{listener}$是方法$m_{click}$的实例对象。
+因此，当两个方法$m_{register}$ 、$m_{register}$及其方法对象$o_{view}$、$m_{register}$满足\autoref{equ:rule_ui}时，$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{register}  $ 成立。
+%我们观察发现：
+%因此，在构建Andoid事件回调的触发关系过程中，当方法$m_{register} $、$m_{click} $满足第19$\sim$22行的条件时，这两个方法之间存在触发关系，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第23行）。
+
+
+
+
+\begin{equation}
+\begin{aligned}
+&o_{view}\text{、} o_{listener} \text{分别为类\code{View}和\code{View.setOnClickeListener}或者子类；} \\
+&m_{register}\text{的方法签名为\code{View.setOnClickeListener(View\$OnClickListener)}；}\\
+&m_{click}\text{的方法签名为\code{View\$OnClickListener.onClick(View)}；}\\
+&m_{register}\joinrel\xrightarrow{instance} o_{view}   \text{、}  m_{register} \joinrel\xrightarrow{parameter}   o_{listener}\text{成立；}\\
+&m_{click} \joinrel\xrightarrow{parameter}   o_{view}\text{、}  m_{click} \joinrel\xrightarrow{instance}   o_{listener}\text{成立。}
+%\left\langle m_{register}\joinrel\xrightarrow{instance} o_{view}\right\rangle,\left\langle m_{register} \joinrel\xrightarrow{parameter}   o_{listener}\right\rangle  \in ecg			 \\ 
+%\left\langle m_{click} \joinrel\xrightarrow{parameter}   o_{view}\right\rangle,\left\langle m_{click} \joinrel\xrightarrow{instance}   o_{listener}\right\rangle  \in ecg
+\end{aligned}
+\label{equ:rule_ui} 
+\end{equation}
+
+
+\subsection{基于Java 多线程交互的触发关系}
+
+
+基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
+因此，对于方法\code{Thread.start()}，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$。
+同样的，对于方法\code{Activity.runOnUiThread(Runnable)}，也存在类似的关系：
+如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{runOnUiThread} \hookrightarrow m_{run}$。
+
+\begin{equation}
+\begin{aligned}
+&m_{start}\text{、}m_{run}\text{的方法签名分别为\code{Thread.start()}、\code{Thread.run()}；}\\
+&o_{t}\text{分别为类\code{Thread}的子类；} 
+m_{start}\joinrel\xrightarrow{instance} o_t \text{、}  m_{run} \joinrel\xrightarrow{instance}   o_t \text{成立。}
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+&m_{runOnUiThread}\text{的方法签名为\code{Activity.runOnUiThread(Runnable)}；}\\
+&m_{run}\text{的方法签名为\code{Runnable.run()}；}\\
+&o_{r}\text{为类\code{Runnable}的子类；} \\
+& m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \text{、}  m_{run} \joinrel\xrightarrow{instance}   o_r  \text{成立}
+\end{aligned}
+\end{equation}
+
+\subsection{基于\code{Handler} 的多线程消息调度}
+
+
+首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+
+
+\begin{equation}
+\begin{aligned}
+&m_{enqueue}\text{的方法签名为\code{Handler.enqueueMessage(Message)}；}\\
+&m_{dispatch} \text{的方法签名为\code{Handler.dispatchMessage(Message)}；}\\
+& o_m  \text{为类\code{Message}；} \\
+ &m_{enqueue}\joinrel\xrightarrow{parameter} o_m  \text{、} m_{dispatch}\joinrel\xrightarrow{parameter} o_m  \text{成立}
+\end{aligned}
+\end{equation}
+
+
 \section{举例说明}
 
 
@@ -151,9 +227,6 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 %在Handler的方法handleMessage(Message)中，则有$m_handle \to $
 通过对Android Handler 运行机制的分析，我们知道$m_{send} \stackrel{\ast	}{\Rightarrow} m_{enqueue} $、$m_{enqueue} \hookrightarrow m_{dispatch}$以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，
 因此，$m_{send} \hookrightarrow m_{handle}$或$m_{send} \lhook\joinrel\xrightarrow{Handler}  m_{handle} $。
-
-
-
 
 
 \section{本章总结}
