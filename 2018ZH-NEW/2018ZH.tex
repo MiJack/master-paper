@@ -143,7 +143,7 @@
 
 
 \renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算~~~~法}
-\newcommand*{\fullref}[1]{\textbf{\hyperref[{#1}]{第\ref*{#1}章~\nameref*{#1}~~}}}
+\newcommand*{\fullref}[1]{\textbf{\hyperref[{#1}]{第\ref*{#1}章~}}}
 
 
 
@@ -159,11 +159,12 @@
 
 \newcommand{\TheisNamePartOne}[0]{构建Android 动态函数调用图：}
 \newcommand{\TheisNamePartTwo}[0]{RunDroid 的设计与实现}
+\newcommand{\ecg}{拓展函数调用图}
 \newcommand{\TheisNameEn}[0]{{\Large Building Android Dynamic Call Graph: }\\ Design and Implement of RunDroid}
 
 \newcommand{\code}[1]{\textit{ #1 }}
 \newcommand{\point}[1]{\subsubsection{\textbf{$\S$  #1 }}}
-
+%\renewcommand{\point}[1]{\noindent{\textbf{$\S$  #1 }}}
 
 
 \newcommand{\Line}[1]{ Line. #1}
@@ -178,7 +179,6 @@
 \newcommand{\methodObjectRel}[3]{  $ (  #1 \stackrel{#2}{\longrightarrow}   #3)  $ }
 
 \newcommand{\algrule}[1][.2pt]{\par\vskip.5\baselineskip\hrule height #1\par\vskip.5\baselineskip}
-
 
 
 

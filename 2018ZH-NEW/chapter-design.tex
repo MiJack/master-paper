@@ -325,7 +325,7 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 
 Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联起来，利用的是\code{Activity}生命周期方法的签名的不变性。
 
-\begin{algorithm}[!ht]
+\begin{algorithm}[!hb]
 	\caption{构建Activity的生命周期和事件回调} 
 	\label{alg:buildActivityLifecycle}
 	\KwIn{ $manifestFile$，AndroidManifest文件}
@@ -356,8 +356,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 			
 			
 			
-			\For{ \emph{ $m \in \{ m \mid  m$ is method node in $ ecg $    \\\qquad
-					and $o_{activity}$ is instance of $m\}$}}{
+			\For{ \emph{ $m \in \{ m \mid  m$ is method node in $ ecg $, $o_{activity}$ is instance of $m\}$}}{
 				
 				
 				\If{ \emph{ $m$ is the method of Activity's Lifecycle   \\\qquad
@@ -379,8 +378,8 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	}
 	% $o_p \stackrel{parameter}{\longrightarrow} m$
 	\Fn{patchUiEvent($ecg$)} {
-		\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node ,$o \in$ $ecg \}$} }{		
-			\For{\emph{$o_{view} \in \{ o \mid o $  is the $View$ object node ,$o \in$ $ecg \}$} }{
+		\For{\emph{$o_{view} \in \{ o \mid o $  is the $View$ object node ,$o \in ecg \}$} }{
+			\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node,  $ o \in ecg \}$} }{		
 				\If {\emph{$o_{view}$,$o_{listener}$,$m_{register}$ and $m_{click}$  satisfy formula \ref{equ:rule_ui}}
 					}{
 					$ecg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
@@ -390,26 +389,31 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	}		
 \end{algorithm}
 
+
+	
+	
 整个过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加表示Activity生命周期的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
 对于AndroidManifest文件中声明的每一个Activity组件对象 $o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
-若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第3$\sim$8行）。
-最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第9$\sim$10行）。
+若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第7$\sim$12行）。
+最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第13$\sim$14行）。
 
 这三个条件分别为：
-
 （1）方法$m$的方法签名和\autoref{fig:Activity-lifecycle}中的任何一个生命周期方法的签名保持一致；
-
 （2）方法$m$执行时所处的线程为主线程；
-
 （3）方法$m$在调用图$cg$中不在调用者，即在调用图$cg$中不存在方法$m' \in cg$，使得$m' \to m $成立。
 
 
 \point{构建Andoid事件回调的触发关系}
 
-Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
-根据第\ref{chp:definition}章中方法触发关系的相关定义，$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $ 成立。
-我们观察发现：方法$m_{register}$的实例对象$o_{view}$是方法$m_{click}$的参数对象，而方法$m_{register}$的参数对象$o_{listener}$是方法$m_{click}$的实例对象。
-因此，在构建Andoid事件回调的触发关系过程中，当方法$m_{register} $、$m_{click} $满足第19$\sim$22行的条件时，这两个方法之间存在触发关系，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第23行）。
+在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有\code{View}类型的对象节点$o_{view}$和\code{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
+对于组合$<o_{listener}$，$o_{view}>$，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第16$\sim$19行）。
+
+
+%Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
+%根据第\ref{chp:definition}章中方法触发关系的相关定义，$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $ 成立。
+%我们观察发现：方法$m_{register}$的实例对象$o_{view}$是方法$m_{click}$的参数对象，而方法$m_{register}$的参数对象$o_{listener}$是方法$m_{click}$的实例对象。
+%因此，在构建Andoid事件回调的触发关系过程中，当方法$m_{register} $、$m_{click} $满足第19$\sim$22行的条件时，这两个方法之间存在触发关系，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第23行）。
+
 
 \eat{
 基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
@@ -434,11 +438,11 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 	\SetKwProg{Fn}{Function}{:}{}
 	\Fn{addTriggerRels($ecg$)}{
 	
-		\tcp{addThreadTrigger into $ecg$}
+		{// add the Thread Trigger into $ecg$}
 		
 		
-		\For{\emph{$o_t \in \{ o \mid o $  is the $Thread$ object node ,$o \in$ $ecg \}$} }{
-			\If{ \emph{$o_t$,$m_{start}$ and $m_{run}$  satisfy formula \ref{equ:rule_thread}}}{
+		\For{\emph{$o_{thread} \in \{ o \mid o $  is the $Thread$ object node ,$o \in$ $ecg \}$} }{
+			\If{ \emph{$o_{thread}$,$m_{start}$ and $m_{run}$  satisfy formula \ref{equ:rule_thread}}}{
 				$ecg$.addTriggerRel($m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $)	
 			}}
 		\For{\emph{$o_r \in \{ o \mid o $  is the $Runnable$ object node ,$o \in$ $ecg \}$} }{
@@ -446,11 +450,13 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 				$ecg$.addTriggerRel($m_{runOnUiThread}  \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run} $)	
 			}	
 		}
-				\tcp{addHandlerTrigger into $ecg$}
+		{// add the Handler Trigger into $ecg$}
 		
 		
 			\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node ,$o \in$ $ecg \}$} }{
 			\If{ \emph{$o_m$,$m_{handle}$ and $m_{dispatch}$  satisfy formula \ref{equ:rule_handler}}}{
+				\tcp{Here means $m_{enqueue} \lhook\joinrel\xrightarrow{Handler} m_{dispatch} $.}
+			
 				$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
 				
 				$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
@@ -466,10 +472,30 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 \point{基于Java 的多线程交互}
 
-基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
-因此，对于方法\code{Thread.start()}，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$（第8 $\sim$10行）。
-同样的，对于方法\code{Activity.runOnUiThread(Runnable)}，也存在类似的关系：
-如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{runOnUiThread} \hookrightarrow m_{run}$（第11 $\sim$13行）。
+
+基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} 和\code{Activity.runOnUiThread(Runnable)}等API，进而触发类\code{Thread}和\code{Runnable}的方法\code{run()}的执行。
+
+对于方法\code{Thread.start()} 相关的触发关系，我们会遍历拓展调用图中的所有\code{Thread}类型的对象节点$o_{thread}$。
+判断调用图中是否存在方法节点$m_{start} $、$m_{run} $以及对象节点$o_{thread}$满足\autoref{equ:rule_thread}，方法节点$m_{start} $、$m_{run} $之间添加从$m_{start} $指向$m_{run} $的有向边，即$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $（第2$\sim$4行）。
+
+
+对于方法\code{Activity.runOnUiThread(Runnable)}相关的触发关系，我们会遍历拓展调用图中的所有\code{Runnable}类型的对象节点$o_{r}$。
+判断调用图中是否存在方法节点$m_{runOnUiThread} $、$m_{run} $以及对象节点$o_{r}$满足\autoref{equ:rule_runOnUiThread}，方法节点$m_{runOnUiThread} $、$m_{run} $之间添加从$m_{runOnUiThread} $指向$m_{run} $的有向边，即$m_{runOnUiThread} \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run}  $（第5$\sim$7行）。
+
+
+%基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()}和\code{Activity.runOnUiThread(Runnable)}等API，进而触发方法\code{Runnable.run()}（用$m_{run}$表示）的执行。
+%因此，对于方法\code{Thread.start()}，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$（第8 $\sim$10行）。
+%同样的，对于方法\code{Activity.runOnUiThread(Runnable)}，也存在类似的关系：
+%如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{runOnUiThread} \hookrightarrow m_{run}$（第11 $\sim$13行）。
+
+%在构建基于Java 多线程交互的触发关系时，
+
+
+%我们会遍历拓展调用图中的所有\code{View}类型的对象节点$o_{view}$和\code{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
+%对于组合$<o_{listener}$，$o_{view}>$，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第16$\sim$19行）。
+
+
+
 
 \eat{\begin{equation}
 	\label{equ:rule_1}
@@ -481,6 +507,9 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 	\Rightarrow  m_{start} \hookrightarrow m_{run}. 
 	\end{equation}
 }
+
+
+
 \eat{
 \begin{equation}
 \label{equ:rule_2}
@@ -505,13 +534,14 @@ rel(m_{run}, o_r) = instance \\
 根据第\ref{chp:background}、\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
 %在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
-首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
-找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第16$\sim$17 行）；
+在构建\code{Handler} 触发关系过程中，首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第$8\sim$9 行）；
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
-从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第18行），
-从$m_{dispatch}$ 顺着调用关系往下找到用户定义的方法\code{Handler.handleMessage(Message)}$m_{handle}$（第19行），
-最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \lhook\joinrel\xrightarrow{Handler} m_{handle}$（第20行）。
+从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第10行），
+从$m_{dispatch}$ 顺着调用关系往下找到用户定义的方法\code{Handler.handleMessage(Message)}$m_{handle}$（第11行），
+最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \lhook\joinrel\xrightarrow{Handler} m_{handle}$（第12行）。
 %如果$m_{send}$和$m_{handle}$中有一个方法未找到，表示
+最终，我们得到用户通过Handler进行多线程消息调度的用户层面方法的触发关系。
 
 
 \eat{
@@ -587,6 +617,8 @@ RETURN p,method,enqueue,dispatch
  \section{本章总结}
 
 本章详细介绍了RunDroid的设计。
-首先，本章简要介绍了RunDroid实现的基本功能，并通过一个简单的例子介绍了RunDroid的整体运行框架。
-由此，我们提出了RunDroid技术路线：RunDroid利用源代码插桩和运行时拦截器相结合的方式，将运行时的方法执行信息以日志的形式保存下来，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并在此基础上构建Activity的生命周期，补全方法间的触发关系，形成最终的拓展函数调用图。
+首先，本章简要介绍了RunDroid实现的基本功能，并通过示例介绍了RunDroid的整体运行流程。
+在此基础上，本章介绍了RunDroid各个的流程的设计细节。
+RunDroid利用源代码修改和运行时方法拦截相结合的方式，捕获用户方法和系统方法的执行信息，并将这些方法执行信息以日志的形式保存下来。
+RunDroid遍历各线程的方法执行日志结合栈的入栈、出栈操作，模拟各个线程的函数执行的过程，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并在此基础上构建Activity的生命周期，补全方法间的触发关系，形成最终的拓展函数调用图。
 

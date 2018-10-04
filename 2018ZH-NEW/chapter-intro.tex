@@ -227,22 +227,21 @@ mobile app tagging \cite{chen2016mobile}
 
 \section{本文组织结构}
 
-\todo{重写}
 
 本文共分为六章，环绕着Android动态函数调用图构建系统的设计与实现展开，各章节内容如下：
 
-\fullref{chp:intro}主要介绍了本文的主要研究背景、相关工作、主要工作内容及本文的工作难点。
+\fullref{chp:intro}主要介绍了本文的主要研究背景、相关工作、主要工作内容及本文遇到的困难与挑战。
 
-\fullref{chp:background}从Android的体系结构出发，介绍了和Android系统相关的背景知识。
+\fullref{chp:background}从Android的体系结构出发，介绍了和Android系统相关的背景知识，例如Activity组件和Android平台上的多线程交互方式。
 
 \fullref{chp:definition}方法和对象的关系、方法间关系、调用图等方面介绍本文用到的概念做了符号化的定义，并结合文章的例子对概念进行解释说明。
 
-\fullref{chp:design}从系统功能、整体设计思路及设计细节等若干方面介绍RunDroid的设计思想。
+\fullref{chp:design}对RunDroid系统的系统功能做了基本的介绍，从整体上阐述了RunDroid的工作原理，并详细地介绍了RunDroid获取运行时的方法信息，并根据日志构建\ecg 的完整过程。
 
 
-\fullref{chp:implement} 从系统组成、模块实现等若干方面介绍RunDroid的实现。
+\fullref{chp:implement}对RunDroid运行流程做了基本的阐述，并详细介绍了RunDroid中预处理器、运行时拦截器、日志记录器、调用图构建器等组件的技术实现。
 
-\fullref{chp:testing}将展示RunDroid系统生成的函数调用图的运行结果，并对函数调用图进行详细的阐述。
+\fullref{chp:testing} 将RunDroid的产出结果与静态分析工具FlowDroid进行对比；利用RunDroid构建开源应用的动态函数调用图；并将RunDroid与错误定位技术结合进行探索性的实验。
 
 \fullref{chp:future}对本文工作进行总结，并对下一步工作进行展望。
 

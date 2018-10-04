@@ -149,7 +149,7 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 本文中涉及的触发关系包括以下几点。
 
 
-\subsection{事件响应的触发关系}
+\subsection{基于事件响应的触发关系}
 
 
 Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
@@ -180,16 +180,16 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发类\code{Thread}和\code{Runnable}的方法\code{run()}（用$m_{run}$表示）的执行。
 
-通过方法$m_{start}$触发方法$m_{run}$的执行时，方法$m_{start}$和$m_{run}$的实例对象均为同一个Thread对象$o_t$。
+通过方法$m_{start}$触发方法$m_{run}$的执行时，方法$m_{start}$和$m_{run}$的实例对象均为同一个Thread对象$o_{thread}$。
 %因此，对于方法，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$。
-因此，当两个方法$m_{start}$ 、$m_{run}$及Thread对象$o_{t}$满足\autoref{equ:rule_thread}时，$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $ 成立。
+因此，当两个方法$m_{start}$ 、$m_{run}$及Thread对象$o_{thread}$满足\autoref{equ:rule_thread}时，$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $ 成立。
 
 \begin{equation}
 \begin{aligned}
 &m_{start}\text{的方法签名为\code{Thread.start()}；}\\
 &m_{run}\text{的方法签名为\code{Thread.run()}或子类的重写方法；}\\
-&o_{t}\text{分别为类\code{Thread}的子类；} 
-m_{start}\joinrel\xrightarrow{instance} o_t \text{、}  m_{run} \joinrel\xrightarrow{instance}   o_t \text{成立。}
+&o_{thread}\text{分别为类\code{Thread}的子类；} \\
+&m_{start}\joinrel\xrightarrow{instance} o_{thread} \text{、}  m_{run} \joinrel\xrightarrow{instance}   o_{thread} \text{成立。}
 \end{aligned}
 \label{equ:rule_thread} 
 \end{equation}
