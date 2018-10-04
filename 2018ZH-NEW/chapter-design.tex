@@ -381,7 +381,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	\Fn{patchUiEvent($ecg$)} {
 		\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node ,$o \in$ $ecg \}$} }{		
 			\For{\emph{$o_{view} \in \{ o \mid o $  is the $View$ object node ,$o \in$ $ecg \}$} }{
-				\If{ 满足条件 
+				\If {\emph{$o_{view}$,$o_{listener}$,$m_{register}$ and $m_{click}$  satisfy formula \ref{equ:rule_ui}}
 					}{
 					$ecg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
 				}
@@ -437,11 +437,12 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 		\tcp{addThreadTrigger into $ecg$}
 		
 		
-		\For{\emph{$o_r \in \{ o \mid o $  is the $Runnable$ object node ,$o \in$ $ecg \}$} }{
-			\If{ 满足条件}{
+		\For{\emph{$o_t \in \{ o \mid o $  is the $Thread$ object node ,$o \in$ $ecg \}$} }{
+			\If{ \emph{$o_t$,$m_{start}$ and $m_{run}$  satisfy formula \ref{equ:rule_thread}}}{
 				$ecg$.addTriggerRel($m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $)	
-			}
-			\If{ 满足条件}{
+			}}
+		\For{\emph{$o_r \in \{ o \mid o $  is the $Runnable$ object node ,$o \in$ $ecg \}$} }{
+			\If{ \emph{$o_r$,$m_{runOnUiThread}$ and $m_{run}$  satisfy formula \ref{equ:rule_runOnUiThread}}}{
 				$ecg$.addTriggerRel($m_{runOnUiThread}  \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run} $)	
 			}	
 		}
@@ -449,7 +450,7 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 		
 		
 			\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node ,$o \in$ $ecg \}$} }{
-			\If{满足条件}{
+			\If{ \emph{$o_m$,$m_{handle}$ and $m_{dispatch}$  satisfy formula \ref{equ:rule_handler}}}{
 				$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
 				
 				$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
