@@ -1,3 +1,117 @@
+
+
+\section{实验验证——函数触发关系的普遍性}
+
+相比其他分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
+为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid\cite{FDroidFr21:online}中随机抽取了9个应用，
+利用RunDroid获取各个应用的运行时日志信息，构建对应的动态函数调用图。
+最终，我们对调用图中的用户方法节点数、系统方法节点数、方法间调用关系及函数触发关系等数据进行了统计，各项数据如\autoref{table:app_results}所示。
+%表中第一行的数据为\autoref{fig:code_demo}对应的统计数据。
+
+观察用户方法、系统方法、函数调用关系三列，我们发现等式$\text{用户方法}+\text{系统方法}-\text{函数调用关系}=1$并不成立。
+函数调用图的构建过程保证了函数调用图本身是一个有向无环图。
+因此，从图论的角度看，函数调用图不是图论中的树，而是有若干个树组成的森林。
+这也反映Android基于事件驱动的的系统架构：
+在Android应用程序中，逻辑代码分散在不同方法中，通过系统调度在时间维度上串联起来，响应时间的。
+
+
+由于我们对\autoref{table:app_results}的应用进行了简单的交互，
+因此，期间触发的函数触发关系有限，RunDroid捕获到的函数触发关系大都集中在10$\sim$39之间。
+在这个方面，应用osmtracker-android和	archwiki-viewer属于两个不同的极端。
+osmtracker-android中的触发关系只有0个。
+经过分析，我们发现osmtracker中，用户操作大多与菜单、对话框与ListView产生交互操作，多线程相关操作是通过AsyncTask进行的，而不是通过Handler进行。
+而archwiki-viewer捕获到的触发关系多达102个，是所有应用中函数触发关系最多的。
+通过分析，我们发现，archwiki-viewer是一个基于浏览器的应用程序。
+RunDroid捕获到的102个触发关系中并不属于事件回调相关的触发关系，都是基于Handler的触发关系，大部分对应的Handler是\code{org.chromium.base.SystemMessageHandler}，属于浏览器内部业务逻辑。
+archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更新浏览器界面，因此产生大量和Handler相关的触发关系。
+
+%我们对表格中的数据逐个进行人工确认，发现实验数据不存在错误。
+%\todo{从\autoref{table:app_results}中，我们发现对大部分使用场景，应用程序执行过程对应的函数调用图均存在函数触发关系，只是在数量上存在差异。}
+由此，我们可以看出函数触发关系在Android应用中的普遍性：Android应用中的逻辑实现依赖于回调函数和多线程通信等函数触发关系。
+
+\begin{table*}[!ht]
+	\centering
+	{
+		\caption{各应用运行过程的统计数据}
+		\label{table:app_results}
+		\begin{tabular}{ |c |c|c|c|c|c|}
+			\hline
+			应用 &用户方法&系统方法&函数调用关系&函数触发关系\\ 
+			%	\cline{5-7}	
+			%	~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
+			%	 ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
+			%	\hline
+			%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
+			%	本章示例             & 19     & 27(700)     & 21                &5(119) \\ 				
+			\hline			
+			AnyMemo & 1021 & 322 & 1105& 38 \\ 				
+			\hline	
+			Microphone & 31 & 230 & 161&31 \\ 				
+			\hline	
+			Quran For My Android & 156 & 204 & 225&  35 \\ 				
+			\hline	
+			ReGeX & 1415 &95  & 1323& 39\\ 				
+			\hline	
+			upm-android & 118& 337& 355&  25 \\ 		
+			\hline		
+			screenrecorder& 1301 & 320 &879 & 10\\ 				
+			\hline	
+			chanu & 1086& 353 & 397& 34 \\ 	
+			\hline	
+			osmtracker-android & 997& 328 & 1162& 0 \\ 	
+			\hline	
+			archwiki-viewer & 195 & 360 & 310& 102 \\ 				
+			\hline	
+		\end{tabular}
+	}
+\end{table*}
+
+
+\eat{
+	
+	\begin{table*}[!ht]
+		\centering
+		{
+			\scriptsize
+			\caption{各应用运行过程中的涉及函数触发关系数量}
+			
+			\begin{tabular}{ |c |c|c|c|c|c|c|c|}
+				\hline
+				\multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}{2cm}{\centering 函数调用关系}& \multicolumn{3}{c|}{函数触发关系} \\ 
+				\cline{5-7}	
+				~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
+				~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
+				\hline
+				%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
+				本章示例             & 19     & 27(700)     & 21                & 3&1&1(114) \\ 				
+				\hline			
+				AnyMemo & 1021 & 322(2731) & 1105(3487)& 3& 0& 35(425) \\ 				
+				\hline	
+				archwiki-viewer & 3699 & 3504 & 310(3342)& 0& 0& 680(21332) \\ 				
+				\hline	
+				chanu & 1086& 353(3917) & 397(4817)& 0& 1& 33(43439) \\ 				
+				\hline	
+				Microphone & 31 & 230(1531) & 161(1334)&4& 6&21 (261)\\ 				
+				\hline	
+				osmtracker-android & 997& 328(2483) & 1162(2453)& 0& 0& 3(368) \\ 				
+				\hline	
+				Quran For My Android & 156 & 204(3930) & (3831)& 5& 2+2& 26(655) \\ 				
+				\hline	
+				ReGeX & 1415 &95 (987) & 1323(2311)& 0& 4& 35(166)\\ 				
+				\hline	
+				screenrecorder& 1301 & 320(3278) &879 (4539)& 1& 2& 4(24863)\\ 				
+				\hline	
+				upm-android & 118& 337( 3097)& 355(2918)& 2& 0+4& 19(489) \\ 		
+				\hline
+			\end{tabular}
+		}
+	\end{table*}
+}
+
+
+
+
+
 \section{应用结果展示}  
 %\label{chp:display}
 在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid的产出结果进行对比，分析各自的优劣。
@@ -116,13 +230,13 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 \subsection{Activity 生命周期和事件回调的效果展示}
 
 在本节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity生命周期方法的呈现效果。
-最终，我们得到的RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示。
+最终，我们得到的RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示\footnote{由于Neo4j表示的函数调用图无法完整地展示方法签名，\autoref{fig:rundroid-result-lifecycle}根据RunDroid产生的函数调用图重新绘制得到。}。
 针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，通过构造方法\code{dummyMainMethod()}串联Android Activity的生命周期和UI事件回调，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
 
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-lifecycle-rundroid.png}
-	\caption{Activity生命周期和事件回调的调用图（局部）}
+	\caption{Activity生命周期和事件回调的RunDroid调用图（局部）}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
 
@@ -160,7 +274,8 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 多线程开发是Android开发中经常涉及的开发要求。
 为此，针对这一场景，我们进行了相关的测试。
 在本节，我们将点击按钮button3，获取\code{doHandleButton3()}相关的调用图情况。
-经过实验，RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler}、\autoref{fig:flowdroid-result-handler}所示。
+经过实验，RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler}、\autoref{fig:flowdroid-result-handler}所示
+\footnote{由于Neo4j表示的函数调用图无法完整地展示方法签名，\autoref{fig:rundroid-result-handler}根据RunDroid产生的函数调用图重新绘制得到。}。
 两幅图在以下节点上存在不同:
 
 
@@ -170,7 +285,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-handler-rundroid.png}
-	\caption{多线程触发关系相关的调用图（局部）}
+	\caption{多线程触发关系相关的RunDroid调用图（局部）}
 	\label{fig:rundroid-result-handler}
 \end{figure*}
 
@@ -221,114 +336,6 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 
 
-
-\section{实验验证——函数触发关系的普遍性}
-
-相比其他分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
-为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid\cite{FDroidFr21:online}中随机抽取了9个应用，
-利用RunDroid获取各个应用的运行时日志信息，构建对应的动态函数调用图。
-最终，我们对调用图中的用户方法节点数、系统方法节点数、方法间调用关系及函数触发关系等数据进行了统计，各项数据如\autoref{table:app_results}所示。
-%表中第一行的数据为\autoref{fig:code_demo}对应的统计数据。
-
-观察用户方法、系统方法、函数调用关系三列，我们发现等式$\text{用户方法}+\text{系统方法}-\text{函数调用关系}=1$并不成立。
-函数调用图的构建过程保证了函数调用图本身是一个有向无环图。
-因此，从图论的角度看，函数调用图不是图论中的树，而是有若干个树组成的森林。
-这也反映Android基于事件驱动的的系统架构：
-在Android应用程序中，逻辑代码分散在不同方法中，通过系统调度在时间维度上串联起来，响应时间的。
-
-
-由于我们对\autoref{table:app_results}的应用进行了简单的交互，
-因此，期间触发的函数触发关系有限，RunDroid捕获到的函数触发关系大都集中在10$\sim$39之间。
-在这个方面，应用osmtracker-android和	archwiki-viewer属于两个不同的极端。
-osmtracker-android中的触发关系只有0个。
-经过分析，我们发现osmtracker中，用户操作大多与菜单、对话框与ListView产生交互操作，多线程相关操作是通过AsyncTask进行的，而不是通过Handler进行。
-而archwiki-viewer捕获到的触发关系多达102个，是所有应用中函数触发关系最多的。
-通过分析，我们发现，archwiki-viewer是一个基于浏览器的应用程序。
-RunDroid捕获到的102个触发关系中并不属于事件回调相关的触发关系，都是基于Handler的触发关系，大部分对应的Handler是\code{org.chromium.base.SystemMessageHandler}，属于浏览器内部业务逻辑。
-archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更新浏览器界面，因此产生大量和Handler相关的触发关系。
-
-%我们对表格中的数据逐个进行人工确认，发现实验数据不存在错误。
-%\todo{从\autoref{table:app_results}中，我们发现对大部分使用场景，应用程序执行过程对应的函数调用图均存在函数触发关系，只是在数量上存在差异。}
-由此，我们可以看出函数触发关系在Android应用中的普遍性：Android应用中的逻辑实现依赖于回调函数和多线程通信等函数触发关系。
-
-\begin{table*}[!ht]
-	\centering
-	{
-		\caption{各应用运行过程的统计数据}
-		\label{table:app_results}
-		\begin{tabular}{ |c |c|c|c|c|c|}
-			\hline
-			应用 &用户方法&系统方法&函数调用关系&函数触发关系\\ 
-		%	\cline{5-7}	
-		%	~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
-		%	 ~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
-		%	\hline
-		%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
-	%	本章示例             & 19     & 27(700)     & 21                &5(119) \\ 				
-			\hline			
-			AnyMemo & 1021 & 322 & 1105& 38 \\ 				
-			\hline	
-			Microphone & 31 & 230 & 161&31 \\ 				
-			\hline	
-			Quran For My Android & 156 & 204 & 225&  35 \\ 				
-			\hline	
-			ReGeX & 1415 &95  & 1323& 39\\ 				
-			\hline	
-			upm-android & 118& 337& 355&  25 \\ 		
-			\hline		
-			screenrecorder& 1301 & 320 &879 & 10\\ 				
-			\hline	
-			chanu & 1086& 353 & 397& 34 \\ 	
-			\hline	
-			osmtracker-android & 997& 328 & 1162& 0 \\ 	
-			\hline	
-			archwiki-viewer & 195 & 360 & 310& 102 \\ 				
-			\hline	
-		\end{tabular}
-	}
-\end{table*}
-
-
-\eat{
-	
-	\begin{table*}[!ht]
-		\centering
-		{
-			\scriptsize
-			\caption{各应用运行过程中的涉及函数触发关系数量}
-
-			\begin{tabular}{ |c |c|c|c|c|c|c|c|}
-				\hline
-				\multirow{3}*{应用 }& \multirow{3}*{用户方法 }  & \multirow{3}*{系统方法} &\multirow{3}{2cm}{\centering 函数调用关系}& \multicolumn{3}{c|}{函数触发关系} \\ 
-				\cline{5-7}	
-				~ & ~ & ~  & ~ &\multirow{2}*{ Ui事件}& \multirow{2}*{Thread相关}& Handler           \\ 				
-				~ & ~&~ & ~ & ~         & ~                   & 过滤后/过滤前\\ 				
-				\hline
-				%	1 &   & 19 & 27（118）& 21 & 3& 1& 1/114& ~ \\ 	
-				本章示例             & 19     & 27(700)     & 21                & 3&1&1(114) \\ 				
-				\hline			
-				AnyMemo & 1021 & 322(2731) & 1105(3487)& 3& 0& 35(425) \\ 				
-				\hline	
-				archwiki-viewer & 3699 & 3504 & 310(3342)& 0& 0& 680(21332) \\ 				
-				\hline	
-				chanu & 1086& 353(3917) & 397(4817)& 0& 1& 33(43439) \\ 				
-				\hline	
-				Microphone & 31 & 230(1531) & 161(1334)&4& 6&21 (261)\\ 				
-				\hline	
-				osmtracker-android & 997& 328(2483) & 1162(2453)& 0& 0& 3(368) \\ 				
-				\hline	
-				Quran For My Android & 156 & 204(3930) & (3831)& 5& 2+2& 26(655) \\ 				
-				\hline	
-				ReGeX & 1415 &95 (987) & 1323(2311)& 0& 4& 35(166)\\ 				
-				\hline	
-				screenrecorder& 1301 & 320(3278) &879 (4539)& 1& 2& 4(24863)\\ 				
-				\hline	
-				upm-android & 118& 337( 3097)& 355(2918)& 2& 0+4& 19(489) \\ 		
-				\hline
-			\end{tabular}
-		}
-	\end{table*}
-}
 
 \section{RunDroid在错误定位领域的应用}
 在本节中，我们将采用因果关联模型\cite{baah2010causal,baah2011mitigating}作为错误定位技术。
@@ -607,6 +614,9 @@ RunDroid提供的动态调用图，从方法调用关系和方法触发关系两
 	
 
 
+我们从开源社区F-Droid中下载9个开源应用程序，利用RunDroid产生这些应用程序的动态函数调用图，统计图中的函数触发关系。
+我们发现函数触发关系（事件回调、Java 多线程以及Handler）普遍存在于应用程序的业务中，特别是Handler机制在Android应用程序中的使用尤为广泛。
+
 % 本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估，并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
 
 本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
@@ -615,9 +625,6 @@ RunDroid提供的动态调用图，从方法调用关系和方法触发关系两
 另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
 前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。
 综上，RunDroid和FlowDroid体现方法的调用关系上各有千秋。
-
-我们还从开源社区F-Droid中下载9个开源应用程序，利用RunDroid产生这些应用程序的动态函数调用图，统计图中的函数触发关系。
-我们发现函数触发关系（事件回调、Java 多线程以及Handler）普遍存在于应用程序的业务中，特别是Handler机制在Android应用程序中的使用尤为广泛。
 
 
 同时，我们将RunDroid和错误定位技术结合，进行了探索性的实验。

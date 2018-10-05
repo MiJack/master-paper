@@ -26,12 +26,12 @@ Framework层主要是系统管理类库，包括Activity的管理，消息通知
 \end{figure*}
 
 
-\textbf{基于事件驱动的编程模型：}
+\textbf{基于事件驱动的系统架构：}
 在设计上，Android应用程序的开发架构采用的是事件驱动架构。在开发过程中，没有传统程序中入口函数Entry Point的概念。
 应用程序中通用的业务逻辑（例如应用程序如何启动退出、应用的窗口如何创建销毁等）存在于Android Framework中。
 %这也使得Android应用程序的分发文件（即APK文件）相对较小。
 
-\textbf{面向组件的开发方式：}
+\textbf{面向组件的编程模式：}
 Android程序中较为常见的是组件（例如Activity、Service、Content Provider、Broadcast Receiver），它是应用程序运行的最小单元，受到Android Framework的直接调度。
 开发人员通过继承这些组件，重写对应的生命周期函数，已实现对应的业务需求（界面的布局、页面状态的保存等），而这些组件的生命周期由Framework直接调度完成。
 
@@ -40,7 +40,7 @@ Android程序中较为常见的是组件（例如Activity、Service、Content Pr
 通常的，开发人员往往会借助回调函数处理控件的响应事件，利用多线程交互串联界面相关操作和耗时操作，完成对应的业务。
 
 
-\section{Android组件——Activity}
+\section{Android中的Activity组件}
 
 
 
