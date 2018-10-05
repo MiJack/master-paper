@@ -52,7 +52,7 @@
 特殊的，当$n=0$时，对于方法$m_0$和方法$m$，若$m_0 \to m$成立，则$m_0  \stackrel{\ast}{\to}  m$也成立。
 
 \begin{equation}
-m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
+m_0 \to m_1 , m_1 \to  m_2 ,\dots m_n \to m  \label{equ:extend_invoke}
 \end{equation}
 
 
@@ -69,7 +69,7 @@ m_0 \to m_1 \to \dots m_n \to m  \label{equ:extend_invoke}
 	
 	\begin{itemize}
 		\setlength{\itemsep}{-5pt}
-		\item 方法$m_a$的执行时间总是在方法$m_b$的执行时间之前；
+		\item  方法执行$m_a$的执行时间总是在方法执行$m_b$的执行时间之前；
 		\item 方法$m_a$和$m_b$之间不存在一条调用路径，即$m_a \stackrel{\ast}{\to} m_b $不成立；
 		\item $m_a$、$m_b$之间存在着因果关系，包括但不限于事件回调或多线程交互等。
 	\end{itemize}
@@ -144,7 +144,7 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 
 触发关系描述的方法之间的关系。
 在定义触发定义通常有两个部分组成：对象与方法的属性约束条件、对象与方法的关系约束条件。
-前者描述的是对象和方法的属性约束条件，例如对象$o$本身的类型$o.class$、方法$m$的方法签名$m.methodSign$；
+前者描述的是对象和方法的属性约束条件，例如对象$o$本身的类型$o.class$、方法$m$的签名$m.methodSign$；
 后者对应的则是对象和方法之间的关系，包括方法对象关系、方法间的调用关系。
 本文中涉及的触发关系包括以下几点。
 
@@ -164,8 +164,8 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \begin{gather}
 \begin{aligned}
 &o_{view}\text{、} o_{listener} \text{分别为类\code{View}和\code{View.setOnClickeListener}或者子类；} \\
-&m_{register}\text{的方法签名为\code{View.setOnClickeListener(View\$OnClickListener)}；}\\
-&m_{click}\text{的方法签名为\code{View\$OnClickListener.onClick(View)}或子类的重写方法；}\\
+&m_{register}\text{为\code{View.setOnClickeListener(View\$OnClickListener)}；}\\
+&m_{click}\text{为\code{View\$OnClickListener.onClick(View)}或子类的重写方法；}\\
 &m_{register}\joinrel\xrightarrow{instance} o_{view}   \text{、}  m_{register} \joinrel\xrightarrow{parameter}   o_{listener}\text{成立；}\\
 &m_{click} \joinrel\xrightarrow{parameter}   o_{view}\text{、}  m_{click} \joinrel\xrightarrow{instance}   o_{listener}\text{成立。}
 %\left\langle m_{register}\joinrel\xrightarrow{instance} o_{view}\right\rangle,\left\langle m_{register} \joinrel\xrightarrow{parameter}   o_{listener}\right\rangle  \in ecg			 \\ 
@@ -186,8 +186,8 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 \begin{equation}
 \begin{aligned}
-&m_{start}\text{的方法签名为\code{Thread.start()}；}\\
-&m_{run}\text{的方法签名为\code{Thread.run()}或子类的重写方法；}\\
+&m_{start}\text{为\code{Thread.start()}；}\\
+&m_{run}\text{为\code{Thread.run()}或子类的重写方法；}\\
 &o_{thread}\text{分别为类\code{Thread}的子类；} \\
 &m_{start}\joinrel\xrightarrow{instance} o_{thread} \text{、}  m_{run} \joinrel\xrightarrow{instance}   o_{thread} \text{成立。}
 \end{aligned}
@@ -201,8 +201,8 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 \begin{equation}
 \begin{aligned}
-&m_{runOnUiThread}\text{的方法签名为\code{Activity.runOnUiThread(Runnable)}；}\\
-&m_{run}\text{的方法签名为\code{Runnable.run()}或子类的重写方法；}\\
+&m_{runOnUiThread}\text{为\code{Activity.runOnUiThread(Runnable)}；}\\
+&m_{run}\text{为\code{Runnable.run()}或子类的重写方法；}\\
 &o_{r}\text{为类\code{Runnable}的子类；} \\
 & m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r \text{、}  m_{run} \joinrel\xrightarrow{instance}   o_r  \text{成立}
 \end{aligned}
@@ -219,8 +219,8 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 \begin{equation}
 \begin{aligned}
-&m_{enqueue}\text{的方法签名为\code{Handler.enqueueMessage(Message)}；}\\
-&m_{dispatch} \text{的方法签名为\code{Handler.dispatchMessage(Message)}；}\\
+&m_{enqueue}\text{为\code{Handler.enqueueMessage(Message)}；}\\
+&m_{dispatch} \text{为\code{Handler.dispatchMessage(Message)}；}\\
 & o_m  \text{为类\code{Message}；} \\
  &m_{enqueue}\joinrel\xrightarrow{parameter} o_m  \text{、} m_{dispatch}\joinrel\xrightarrow{parameter} o_m  \text{成立}
 \end{aligned}

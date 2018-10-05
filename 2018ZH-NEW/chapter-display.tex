@@ -291,6 +291,13 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 
 
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
+	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
+	\label{fig:flowdroid-result-handler}
+\end{figure*}
+
 
 
 
@@ -306,13 +313,6 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 虽然RunDroid和FlowDroid都可以在函数调用图表现Java API多线程的触发方式，但相比之下，RunDroid的呈现方式更为全面严谨，比FlowDroid更符合程序的运行过程。
 当方法\code{Thread.start()}和\code{WorkerThread.run()}同时在同一个函数中被调用，FlowDroid在调用图上无法将这两个方法间的调用关系和触发关系区分开。
 而RunDroid针对性地标识了函数间的关系是普通调用关系还是基于线程的触发关系，所以不会在方法关系展现上遇到类似的问题。
-
-\begin{figure*}[ht]
-	\centering
-	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
-	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
-	\label{fig:flowdroid-result-handler}
-\end{figure*}
 
 \point{基于Handler的多线程触发方式}
 
@@ -369,14 +369,10 @@ Y =\alpha +\tau T+\beta X
 
 \subsection{原理简介}
 
-基于因果关联模型的错误定位技术，以程序本身$P$和程序在一组测试用例下的覆盖率信息作为输入，
-通过期望模型（\autoref{equ:expectEquation}）和线性回归模型（\autoref{equ:linearEquation}）计算程序$P$中的语句$s$的相应的错误估计值$\tau$。
-$\tau$的值越大，语句$s$是错误的可能性越大。
-具体过程如\autoref{alg:fault-localization}所示。
 
 
 
-\begin{algorithm}[!ht]
+\begin{algorithm}[!hb]
 	
 	
 	\caption{错误定位的计算方法} 
@@ -415,6 +411,12 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 \end{algorithm}
 
 
+基于因果关联模型的错误定位技术，以程序本身$P$和程序在一组测试用例下的覆盖率信息作为输入，
+通过期望模型（\autoref{equ:expectEquation}）和线性回归模型（\autoref{equ:linearEquation}）计算程序$P$中的语句$s$的相应的错误估计值$\tau$。
+$\tau$的值越大，语句$s$是错误的可能性越大。
+具体过程如\autoref{alg:fault-localization}所示。
+
+
 
 
 
@@ -435,8 +437,16 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 %由于结算结果中回归直线斜率不存在，所以$\tau(\Line{2})= \text{NA}$。
 
 
+\subsection{结果分析}
 
-\begin{table}[!hb]
+
+为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
+我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
+我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数）。
+在编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
+列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
+
+\begin{table}[!ht]
 	
 	\caption{结果对比}
 
@@ -502,17 +512,17 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 \end{table}
 
 
-\subsection{结果分析}
 
 
-为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
-我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
-我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数）。
-在编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
-列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。
+从结果上看，$\tau'$的结果比结果$\tau$更好。
+在$\tau$的结果中，分数最高包括\Line{4}、\Line{7}和\Line{13}，均为0.67；
+在$\tau'$的结果中，分数最高只有\Line{13}，分数从原来的0.67提升到1。
+而对于其他行，分数保持不变。
+理由是，在RunDroid接入后，错误语句的分数有所提高，同时错误语句与非错误语句得到区分。
 
 
-\begin{figure}[!h]
+
+\begin{figure}[!hb]
 	\begin{center}
 		\includegraphics[width=0.8\textwidth]{./Figures/fault-localization.png}
 	\end{center}
@@ -520,11 +530,6 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 	\label{fig:motivationResultTreatment}
 \end{figure}
 
-从结果上看，$\tau'$的结果比结果$\tau$更好。
-在$\tau$的结果中，分数最高包括\Line{4}、\Line{7}和\Line{13}，均为0.67；
-在$\tau'$的结果中，分数最高只有\Line{13}，分数从原来的0.67提升到1。
-而对于其他行，分数保持不变。
-理由是，在RunDroid接入后，错误语句的分数有所提高，同时错误语句与非错误语句得到区分。
 
 \Line{13} 分数提高的原因如下：
 在接入RunDroid前，方法\code{onClick(View)}和\code{TaskThread.run()}没有任何调用关系。

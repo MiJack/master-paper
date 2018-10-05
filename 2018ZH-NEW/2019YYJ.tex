@@ -134,9 +134,6 @@
 
 \renewcommand{\contentsname}{\hfill\bfseries\Large 目录\hfill}   
 \renewcommand{\cftaftertoctitle}{\hfill}
-%\setlength{\cftbeforetoctitleskip}{30pt}
-%\setlength{\cftaftertoctitleskip}{20pt}
-
 
 \renewcommand{\listtablename}{\hfill\bfseries\Large 表~~~~格\hfill} 
 \renewcommand{\listfigurename}{\hfill\bfseries\Large 插~~~~图\hfill} 
@@ -145,6 +142,33 @@
 \renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算~~~~法}
 \newcommand*{\fullref}[1]{\textbf{\hyperref[{#1}]{第\ref*{#1}章~}}}
 
+
+%=============================段前段后定义=============================% 
+
+
+\def  \cftbeforetitleskip {45pt}
+\def \cftaftertitleskip {25pt}
+%% 目录部分
+\setlength{\cftbeforetoctitleskip}{\cftbeforetitleskip}
+\setlength{\cftaftertoctitleskip}{\cftaftertitleskip}
+
+%% 图目录
+
+\setlength{\cftbeforeloftitleskip}{\cftbeforetitleskip}
+\setlength{\cftafterloftitleskip}{\cftaftertitleskip}
+
+%% 表目录
+\setlength{\cftbeforelottitleskip}{\cftbeforetitleskip}
+\setlength{\cftafterlottitleskip}{\cftaftertitleskip}
+%% 算法目录
+%\setlength{\cftbeforeloatitleskip}{30pt}
+%\setlength{\cftafterloatitleskip}{20pt}
+
+
+
+
+\CTEXsetup[beforeskip=\cftbeforetitleskip]{chapter}
+\CTEXsetup[afterskip=\cftaftertitleskip]{chapter}
 
 
 
@@ -219,10 +243,19 @@
 %=============================== 代码格式定义 ================================%
 
 
+%% 辅助功能显示页边界
+%\usepackage{showframe} % just for the example
+
+\usepackage{etoolbox}
 
 
 
 \input{settings-lst}
+
+
+%\CTEXsetup[beforeskip=0mm]{chapter*}
+%\CTEXsetup[afterskip=3mm]{chapter*}
+
 
 
 %=============================== 正文部分 ================================%
@@ -259,6 +292,8 @@
 
 \input {B2-TOC.tex}
 
+
+
 \clearPaperPage
 
 \input {B3-Figure.tex}
@@ -266,8 +301,6 @@
 \input {B4-Table.tex}
 \clearPaperPage
 \input {B5-Algorithms.tex}
-
-
 
 
 
@@ -331,8 +364,9 @@
 	\bibliographystyle{GBT7714-2005}
 	\bibliography{bib/tex}
 
- 
+ \eat{
 \clearPaperPage
+
 
 \fancypagestyle{plain}{%
 	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
@@ -343,7 +377,7 @@
 \addcontentsline{toc}{chapter}{致  谢}
 
 \input {D2-ACHNOWLEDGEMENT.tex}
-
+}
 \clearPaperPage
 
 
