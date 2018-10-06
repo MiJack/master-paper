@@ -12,12 +12,14 @@
 函数调用图的构建过程保证了函数调用图本身是一个有向无环图。
 因此，从图论的角度看，函数调用图不是图论中的树，而是有若干个树组成的森林。
 这也反映Android基于事件驱动的的系统架构：
-在Android应用程序中，逻辑代码分散在不同方法中，通过系统调度在时间维度上串联起来，响应时间的。
+在Android应用程序中，逻辑代码分散在不同方法中，通过系统调度在时间维度上串联起来，\todo{响应时间的}。
 
 
+\todo{
 由于我们对\autoref{table:app_results}的应用进行了简单的交互，
 因此，期间触发的函数触发关系有限，RunDroid捕获到的函数触发关系大都集中在10$\sim$39之间。
-在这个方面，应用osmtracker-android和	archwiki-viewer属于两个不同的极端。
+}
+\todo{在这个方面，}应用osmtracker-android和	archwiki-viewer属于两个不同的极端。
 osmtracker-android中的触发关系只有0个。
 经过分析，我们发现osmtracker中，用户操作大多与菜单、对话框与ListView产生交互操作，多线程相关操作是通过AsyncTask进行的，而不是通过Handler进行。
 而archwiki-viewer捕获到的触发关系多达102个，是所有应用中函数触发关系最多的。
@@ -198,17 +200,17 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 \end{figure*}
 
 首先，两者在方法\code{doFibonacci()}数量上不同的：RunDroid得到的结果中，方法节点\code{doFibonacci()}共有9个，即在运行过程中，\code{doFibonacci()}被调用了9次。
-由于在一个应用中，一个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点。该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
+由于在一个应用中，每个方法的方法签名是唯一的，所以FlowDroid给出的结果中\code{doFibonacci()}只有一个节点。该节点上存在一个指向自己的环，表示这个方法在执行过程中可能出现递归调用的情况。
 %另外，静态分析方法(FlowDroid)在分析\code{doFibonacci()}这类方法时，对函数的执行上下文做出准确的判断，进而给出程序准确的运行时行为。
-因此，静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元，而动态分析技术的函数调用图可以细化方法执行之间的关系，反映了程序执行的具体过程。
+因此，\todo{静态分析技术得到的函数调用图往往以方法体本身作为研究的基本单元}，而动态分析技术的函数调用图可以细化方法执行之间的关系，反映了程序执行的具体过程。
 
 
 
 其次，在运行过程中，斐波拉契数列的计算结果最终以Toast的形式展现在界面上。
 但方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，却出现在FlowDroid给出的结果：
-出现这个现象的原因如下：该方法属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应的函数。
+出现这个现象的原因如下：该方法属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应的\todo{函数}。
 这也反映了RunDroid的不足：关于系统函数的运行时信息的捕获需要提前将相应的方法告知运行时拦截器，生成的调用图才会包括相应的方法。
-这使得调用图只包含研究人员关心的方法的执行信息，但也在一定程度上导致部分方法的缺失和调用图的局部不完整。
+\todo{这使得调用图只包含研究人员关心的方法的执行信息，但也在一定程度上导致部分方法的缺失和调用图的局部不完整。}
 
 
 \begin{figure*}[!ht]
@@ -221,7 +223,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 最后，FlowDroid给出的结果中包括了大量和\code{StringBuilder}相关的方法，而RunDroid的结果并不包括这些方法：
 对比源码发现，源程序并未直接使用\code{StringBuilder}。
-通过查阅文献\cite{gosling2000java}，我们发现出于提高字符串串联性能的考虑，Java编译器可以使用类\code{StringBuilder}等技术通过源代码做适当等价的修改，以避免表达式求值过程中产生过多的字符串数量。
+通过查阅文献\cite{gosling2000java}，\todo{我们发现出于提高字符串串联性能的考虑，Java编译器可以使用类\code{StringBuilder}等技术通过源代码做适当等价的修改}，以避免表达式求值过程中产生过多的中间字符串对象。
 由于上述过程发生在Java程序编译阶段并最后以字节码的形式保存在APK文件中，而FlowDroid从字节码层面对应用进行分析，因此FlowDroid的分析结果会包含该方法。
 对于RunDroid，上述方法既在源代码中未出现相关方法定义（无法进行日志代码编织），又不在运行时拦截器的目标方法列表中，所以RunDroid给出的调用图自然也不会包括\code{StringBuilder}相关的方法。
 
@@ -231,7 +233,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 在本节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity生命周期方法的呈现效果。
 最终，我们得到的RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示\footnote{由于Neo4j表示的函数调用图无法完整地展示方法签名，\autoref{fig:rundroid-result-lifecycle}根据RunDroid产生的函数调用图重新绘制得到。}。
-针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，通过构造方法\code{dummyMainMethod()}串联Android Activity的生命周期和UI事件回调，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
+针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，通过构造方法\code{dummyMainMethod()}\todo{将Android Activity的生命周期和UI事件回调串联起来}，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
 
 \begin{figure*}[ht]
 	\centering
@@ -242,7 +244,7 @@ FlowDroid的静态分析结果如\autoref{fig:flowdroid-result-Fibonacci}所示�
 
 对比\autoref{fig:rundroid-result-lifecycle}和\autoref{fig:flowdroid-result-lifecycle}，
 我们可以发现RunDroid和FlowDroid在组件生命周期和事件回调上的设计思想上是不同的：
-RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际执行，因此，RunDroid对于上述行为的展现主要是按照时间的先后顺序将这些方法节点串联起来，形成完整的事件序列。
+RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际执行，因此，RunDroid对于上述行为的展现是按照时间的先后顺序将这些方法节点串联起来，形成完整的事件序列。
 而FlowDroid在生成函数\code{dummyMainMethod()}时，会为AndroidManifest.xml文件中定义的每一个Activity单独创建包含生命周期方法和事件回调方法的状态迁移图
 （\autoref{fig:flowdroid-result-lifecycle}中的虚线框部分表示每个Activity各自的整体状态迁移，灰色部分为\code{MainActivity}中的UI事件响应方法），
 最后将这些Activity的状态迁移串联起来，并将Action为\code{android.intent.action.MAIN}并且category为\code{android.intent.category.LAUNCHER}的Activity组件作为结果的默认启动的Activity，最终形成方法\code{dummyMainMethod()}。
@@ -266,7 +268,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，
 并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
 而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后面一种情况。
-相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，更适合反映应用的状态变化。
+相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，\todo{更适合反映应用的状态变化}。
 
 
 \subsection{多线程触发关系效果展示}
@@ -304,15 +306,17 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \point{Java API多线程的触发方式}
 
 RunDroid在方法\code{Thread.start()}和方法\code{WorkerThread.run()}之间添加了一条有向边。
-这条有向边从前者指向后者，表示方法\code{Thread.start()}的执行触发了方法\code{WorkerThread.run()}的执行，边上标识着触发原因（通过Thread方式触发，Thread）。
+这条有向边从前者指向后者，表示方法\code{Thread.start()}的执行触发了方法\code{WorkerThread.run()}的执行，边上标识着触发原因（Thread，通过Thread方式触发）。
 FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}第42行中的变量$workerThread$类型为\code{WorkerThread}。
 同时，FlowDroid可以推算出方法\code{Thread.start()}的执行会导致方法\code{WorkerThread.run()}的执行。
 在FlowDroid的设计者看来，方法\code{Thread.start()}可以替换成方法\code{WorkerThread.run()}。
 因此，FlowDroid的结果中，方法\code{doHandleButton3()}和\code{WorkerThread.run()}之间存在调用边。
 这条有向边并不是像RunDroid从\code{Thread.start()}出发。
 虽然RunDroid和FlowDroid都可以在函数调用图表现Java API多线程的触发方式，但相比之下，RunDroid的呈现方式更为全面严谨，比FlowDroid更符合程序的运行过程。
-当方法\code{Thread.start()}和\code{WorkerThread.run()}同时在同一个函数中被调用，FlowDroid在调用图上无法将这两个方法间的调用关系和触发关系区分开。
+\todo{当方法\code{Thread.start()}和\code{WorkerThread.run()}同时在同一个函数中被调用，FlowDroid在调用图上无法将这两个方法间的调用关系和触发关系区分开。
 而RunDroid针对性地标识了函数间的关系是普通调用关系还是基于线程的触发关系，所以不会在方法关系展现上遇到类似的问题。
+}
+
 
 \point{基于Handler的多线程触发方式}
 
@@ -488,7 +492,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 			
 			\Line{11}&TaskThread.run() \{                             &   &   &   &   &   &      &       \\
 			
-			\Line{12}&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & 0.67 \\
+			\Line{12}&\quad if(v.getId() == R.id.btn1) \{                          & 1 & 1 & 1 & 1 & 1 &  NA   & NA \\
 			
 			\Line{13}&\quad \quad \textbf{loadData(num); /* FAULT */} & 0 & 1 & 1 & 0 & 1 & 0.67    & 1.0  \\
 			
@@ -514,12 +518,12 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 
 
 
-从结果上看，$\tau'$的结果比结果$\tau$更好。
+
 在$\tau$的结果中，分数最高包括\Line{4}、\Line{7}和\Line{13}，均为0.67；
 在$\tau'$的结果中，分数最高只有\Line{13}，分数从原来的0.67提升到1。
-而对于其他行，分数保持不变。
-理由是，在RunDroid接入后，错误语句的分数有所提高，同时错误语句与非错误语句得到区分。
-
+而其他行的分数保持不变。
+在RunDroid接入后，错误语句的分数有所提高，同时错误语句与非错误语句得到区分。
+因此，从结果上看，$\tau'$的结果比结果$\tau$更好。
 
 
 \begin{figure}[!hb]
@@ -536,10 +540,11 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 因此，\Line{13}的前驱节点集合中只包括控制依赖语句\Line{12} ，实验组和对照组的\code{Mdata(\Line{13})}数据如\autoref{fig:motivationResultTreatment}-(a)所示，所有的测试用例参与计算：$\tau= \frac{1+1+0	}{3} - \frac{0+0}{2} = 0.67$。
 而接入RunDroid后，方法\code{onClick(View)}和\code{TaskThread.run()}产生关联（即触发关系），
 %方法\code{onClick(View)}中\code{TaskThread.run()}
-进而形成数据依赖关系。
-\Line{13}的前驱节点增加了\Line{2}、\Line{5}和\Line{9}，实验组和对照组的\code{Mdata(\Line{13})}如\autoref{fig:motivationResultTreatment}-(b)所示。
+\todo{进而形成数据依赖关系}。
+\Line{13}的前驱节点增加了\Line{2}、\Line{5}和\Line{9}，\todo{变为}，实验组和对照组的\code{Mdata(\Line{13})}如\autoref{fig:motivationResultTreatment}-(b)所示。
 实验组中的测试用例$t_3$在对照组中找不到对应的测试用例，因此不参与计算。
 最后，根据测试用例$t_1$、$t_2$、$t_4$、$t_5$得到\Line{13}的错误估计值：$\tau =  \frac{1+1	}{2} - \frac{0+0}{2} = 1$。
+\todo{介绍一下\Line{12}，为什么不变。}
 对于其他语句，前驱节点的信息并没有发生变化，因此数值保持不变。
 
 
@@ -624,8 +629,9 @@ RunDroid提供的动态调用图，从方法调用关系和方法触发关系两
 
 % 本章中，我们将环绕着构建效率、日志效率、运行效率等三个方面对RunDroid角进行系统性能测试和评估，并结合实验结果阐述了采用源代码插桩、基于MMap的日志方案等原因。
 
-本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
-同时，我们还对比分析在相同场景下静态分析工具FlowDroid的运行结果。
+\todo{
+	本章结合具体的使用场景对RunDroid生成的拓展函数调用图做了较为详细的描述。
+	同时，我们还对比分析在相同场景下静态分析工具FlowDroid的运行结果。}
 我们发现，RunDroid生成的调用图的完整性依赖于源代码处理以及待拦截的目标系统方法列表的完整程度，而FlowDroid的分析对象是Android应用程序APK文件，调用图的完整性受到自身算法实现的限制。
 另外，两者在设计思想上不同的，RunDroid关心的是在程序执行过程中的方法之间的依赖关系，而FlowDroid反映的是从函数执行角度两个方法（包括递归调用）之间是否存在调用的可能性。
 前者是某一应用运行的具体、微观的表现，而后者更多的是反映方法调用关系在宏观、理论上的可能性。

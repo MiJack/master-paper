@@ -121,17 +121,17 @@ SimplePref\eat{利用了系统接口pref\_event\_open，}以采样（Sample）�
 %此外，该团队对Android 2.1 $\sim$  4.0等四个版本的系统源代码进行了广泛的分析，就权限设计的冗余性、无文档说明API的权限要求、权限在Android系统升级的演变等多个研究问题进行深入的探讨。
 在PScout的基础上，\textsc{WhyPer}\cite{pandita2013whyper}将自然语言处理技术（NLP）和传统静态分析技术相结合，
 可以帮人们找出应用市场中那些应用描述和实际使用到的权限不符的应用。
-Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为以防止被安全机构识别出来。%，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
+\todo{Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为以防止被安全机构识别出来。}%，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
 不同的是恶意软件的行为一般在特定条件下（例如深夜）运行。
 为此，Wei Yang等人提出了一种基于静态分析技术的解决方案AppContext\cite{yang2015appcontext}：
 在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件形成ICFG，提取出安全敏感行为的上下文，并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
-实验结果显示，AppContext的准确率和召回率分别达到了87.7\%和95\%，实验结果也验证了安全敏感行为的恶意性与该行为的意图(通过上下文反映)的密切关系。
+\todo{实验结果显示}，AppContext的准确率和召回率分别达到了87.7\%和95\%，实验结果也验证了安全敏感行为的恶意性与该行为的意图(通过上下文反映)的密切关系。
 AppIntent\cite{yang2013appintent}利用静态分析技术提取应用程序的时间约束条件，再结合符号执行技术，最后得到用户信息泄露的序列。
 AppAudit\cite{xia2015effective}利用静态分析技术找出函数调用图中潜在的数据泄露路径，并利用动态污点分析技术进行进一步确认，在一定程度上减低了结果的假阳性。
-相比AppIntent，AppAudit的分析结果准确度更高，时间开销较小。
+\todo{相比AppIntent，AppAudit的分析结果准确度更高，时间开销较小。}
 Marvin\cite{lindorfer2015marvin}从静动态分析技术的分析结果中提取应用的特征（例如应用元数据、类结果、应用运行时行为等），并利用机器学习技术进行训练。
 在大规模数据验证的时，Marvin可以识别出98.24\%的恶意软件，假阳性低于0.04\%。
-Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。
+\todo{Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。}
 
 
 %PATDroid\cite{sadeghi2017patdroid}动静态结合
@@ -139,16 +139,17 @@ Android应用程序中存在着大量的网络交互，因此，也有一部分�
 
 \point{质量保障}
 
-伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。
+\todo{伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。}
 %传统测试观点认为，在测试过程中，如果源代码的覆盖率可以维持在一个较高的水平，可在一定程度上可以覆盖
 %其中，提高代码的覆盖率就是非常重要的一个方面。
 这方面的工作包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、错误定位\cite{mirzaei2015exception,machado2013mzoltar}、错误修复分析\cite{tan2018repairing,QingGaoASE15}以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}等。
 %t, most GUI testing techniques, e.g., random testing [39, 57], search-based testing [58, 60], and model-based testing [2, 3, 8, 78, 85]
-工作\cite{azim2013targeted}利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
+\todo{工作\cite{azim2013targeted}利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
 Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，在深度优先算法的基础上，使得程序在当前状态无可再遍历状态的情况下进行回溯。
 相比传统的深度优先算法，Wei Yang的工作对应的时间开销更小，效率更高。
 此外，Stoat\cite{su2016fsmdroid,androidtest2}利用静态、动态分析技术标识出程序本身的状态和事件，从应用中抽象出有限状态机（FSM）模型。
 基于该模型，Stoat进行模型变异、测试用例生成与执行、模型迭代，使得应用程序的覆盖率相比之前工作\cite{hao2014puma,amalfitano2015mobiguitar}提升了17$\sim$31\%。
+}
 工作\cite{mirzaei2015exception,machado2013mzoltar}等将\eat{传统软件的错误定位技术——}基于频谱的错误定位技术\eat{（spectrum-based fault location，SBFL）}运用在Android应用上，取得了不错的成绩。
 工作\cite{tan2018repairing,QingGaoASE15}等主要聚焦如何在Android应用程序出现问题时，根据异常的堆栈信息结合软件变异技术或者问答网站生成补丁代码，实现程序的自动修复。
 范玲玲等人的工作\cite{fan2018large}通过开源社区中应用的issue解析分析，从异常种类（应用异常、系统异常、库（Library）异常）、系统异常分类、错误检查工具以及错误修复方式等若干方面进行较为深入的分析、探讨和总结。
@@ -169,8 +170,10 @@ mobile app tagging \cite{chen2016mobile}
 \section{论文研究内容}
 
 
+\todo{
 从上述工作中，我们不难发现对Android应用程序运行状态的建模是应用分析中的重要环节。
 而函数调用图就是一种重要的展现形式，
+}
 Android应用程序的特性（例如，基于事件驱动的架构、面向组件的开发方式、对回调函数和多线程交互的依赖等）使得传统分析工具无法准确对Android应用程序的执行过程进行建模，对研究人员了解Android应用程序执行细节造成了挑战。
 
 
@@ -191,14 +194,19 @@ RunDroid产出的函数调用图不仅包括方法调用关系，还展示了方
 %	\item   将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
 	\item  Android动态函数调用图构建系统RunDroid的设计与实现：
 	\\
+\todo{
 	除了传统调用图的方法调用关系，RunDroid生成的函数调用图还展示方法执行过程相关的对象信息和方法间的触发关系（例如多线程），反映Android平台相关的特性（Activity组件生命周期和事件回调）。
+}
 	\item 静动态分析技术效果对比：
 	\\
+\todo{	
 	详细展示和说明RunDroid产生的调用图，并就Activity 生命周期及事件回调、多线程触发关系等角度和与传统静态分析工具FlowDroid产生的静态调用图做了对比分析，并分析两种技术的优劣。
-	\item RunDroid系统的应用：
+}
+\item RunDroid系统的应用：
 	\\
-	利用RunDroid对开源Android应用的执行过程进行调用图构建，研究方法间触发关系在Android系统上的普遍性。另外， RunDroid与错误定位技术结合的实验说明RunDroid提供的信息，可以提供更多程序依赖信息，有助于提高错误定位技术技术结果的准确性。
-\end{itemize}
+	\todo{
+		利用RunDroid对开源Android应用的执行过程进行调用图构建，研究方法间触发关系在Android系统上的普遍性。另外， RunDroid与错误定位技术结合的实验说明RunDroid提供的信息，可以提供更多程序依赖信息，有助于提高错误定位技术技术结果的准确性。
+}\end{itemize}
 
 %\todo{对上述系统设计对应的实验方案，评估对应的实验效果。}
 
@@ -230,13 +238,13 @@ RunDroid产出的函数调用图不仅包括方法调用关系，还展示了方
 \section{本文组织结构}
 
 
-本文共分为六章，环绕着Android动态函数调用图构建系统的设计与实现展开，各章节内容如下：
+本文共分为七章，环绕着Android动态函数调用图构建系统的设计与实现展开，各章节内容如下：
 
 \fullref{chp:intro}主要介绍了本文的主要研究背景、相关工作、主要工作内容及本文遇到的困难与挑战。
 
 \fullref{chp:background}从Android的体系结构出发，介绍了和Android系统相关的背景知识，例如Activity组件和Android平台上的多线程交互方式。
 
-\fullref{chp:definition}方法和对象的关系、方法间关系、调用图等方面介绍本文用到的概念做了符号化的定义，并结合文章的例子对概念进行解释说明。
+\fullref{chp:definition}\todo{方法和对象的关系、方法间关系、调用图等方面介绍本文用到的概念做了符号化的定义，}并结合文章的例子对概念进行解释说明。
 
 \fullref{chp:design}对RunDroid系统的系统功能做了基本的介绍，从整体上阐述了RunDroid的工作原理，并详细地介绍了RunDroid获取运行时的方法信息，并根据日志构建\ecg 的完整过程。
 

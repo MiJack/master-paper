@@ -54,7 +54,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 \subsection{运行时拦截器}%——系统方法的捕获}
 
 %由于预处理器可以处理的方法需要
-由于无法对系统方法的源代码进行直接修改，因此预处理器无法实现对系统方法的日志代码编织。
+\todo {由于无法对系统方法的源代码进行直接修改，因此预处理器无法实现对系统方法的日志代码编织。}
 为了弥补预处理器的不足，RunDroid中的运行时拦截器需要在系统层面上实现对系统方法的拦截，实现后续方法信息的日志记录。
 
 
@@ -72,7 +72,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 %利用Xposed提供的类似面向切面编程的API接口，RunDroid中的运行时拦截器可以对任意方法（包括用户方法和系统方法）执行过程进行动态拦截，达到系统方法信息的日志记录的目的。
 
 
-在实现上，运行时拦截器是基于Xposed\cite{Xposed}实现的插件，它维护的列表包括了所有需要拦截的系统方法（下称为目标方法）。%，如\autoref{tbl:hookMethodList} 所示。
+在实现上，运行时拦截器是基于Xposed\cite{Xposed}实现的插件，它维护的列表包括了所有需要拦截的系统方法。%，如\autoref{tbl:hookMethodList} 所示。
 每当目标应用程序启动时，运行时拦截器通过Xposed提供的API\code{ XposedHelpers.findAndHookMethod()}将\autoref{tbl:hookMethodList}中的目标方法绑定到方法钩子（即\eat{Xposed提供的XC\_MethodHook的子类 ，}类HookCallBack）上。
 在应用程序的运行过程中，HookCallBack对象的方法\code{beforeHookedMethod(MethodHookParam)}会在目标方法执行之前被调用，
 方法\code{afterHookedMethod(MethodHookParam)}会在目标方法执行后调用。
@@ -82,7 +82,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 
 相比定制化Android系统，通过Xposed实现的运行时拦截器兼容性良好，适用于市面上主流的Android系统版本，实现成本低。
-同时，待拦截方法列表的编辑功能的引入，使得在不修改插件代码的情况下，支持动态添加删除待拦截的方法，避免了Xposed插件修改后的系统重启操作，提高了RunDroid整体的运行效率。
+同时，待拦截方法列表的编辑功能的引入，使得在不修改插件代码的情况下，支持动态添加删除待拦截的方法，避免了Xposed插件修改后的系统重启操作，提高了RunDroid整体的执行效率。
  
 
 \subsection{日志记录器}
@@ -103,7 +103,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 调用图构建器由调用图存储器、对象管理器和关系生成器组成，如\autoref{fig:rundroid_overview}所示。
 
 调用图存储器将Neo4j\cite{Neo4jthe19}作为调用图的底层存储引擎，承担着拓展函数调用图的存储、查询、展示的职责。
-Neo4j的数据分为节点（Node）和关系（Relationship）两大类型，支持自定义键值属性。
+Neo4j的数据分为节点和关系两种类型，支持自定义键值属性。
 同时，Neo4j可为节点指定标签，为关系指定类型，用于区分不同含义的节点和关系。
 拓展函数调用图中的数据在Neo4j中的表现形式如下：
 调用图中的方法和对象会以节点的形式出现在调用图中， 方法节点的标签分为\code{METHOD}和\code{FRAMEWORK}，对象节点的标签为\code{OBJECT}；
@@ -134,12 +134,12 @@ Neo4j的数据分为节点（Node）和关系（Relationship）两大类型，�
 
 
 
-关系生成器是第\ref{chp:design}章中\autoref{alg:buildCG}、\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，基于Cypher脚本和Soot完成。
+关系生成器是第\ref{chp:design}章中\autoref{alg:buildCG}、\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，\todo{基于Cypher脚本和Soot完成}。
 例如，\autoref{alg:buildTrigger}第16$\sim$17行中，我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$，并建立两者之间的触发关系。
-传统的实现方式需要对图进行遍历，效率较低。而RunDroid采用了Cypher脚本，实现简洁，开发效率高，如\autoref{fig:cypher_code}所示。
-Soot的工作主要是提供应用程序相关的类型查询服务。
+传统的实现方式需要对图进行遍历，效率较低。\todo{而RunDroid采用了Cypher脚本，实现简洁，开发效率高，如\autoref{fig:cypher_code}所示。}
+Soot的工作主要是提供应用程序相关的\todo{类继承检索}查询服务。
 例如，\autoref{alg:buildTrigger}第7行中，我们需要知道所有的Runnable对象，此处便需要通过Soot查询所有的Runnable子类。
-另外，在算法\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
+在算法\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
 
 
 \begin{figure}[!h]

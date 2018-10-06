@@ -12,7 +12,7 @@
 \subsection{关于方法和对象的定义}
 
 \begin{Def}
-	方法对象（Method Object，MO）
+	方法对象%（Method Object，MO）
 \end{Def}
 
 和方法执行相关的对象称为方法对象，可以体现对象和执行方法的相互关系。
@@ -30,8 +30,8 @@
 		\item 实例关系：若方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$，记为$m \joinrel\xrightarrow{instance} o_i$；%，或者 $ rel(m,o_i) = instance$；%，或者三元组$\left\langle m, o_p, instance\right\rangle $；
 	\end{itemize}
 
-通常情况下，一个方法执行过程中，返回值对象和实例对象不允许超过一个，而方法参数可以有多个\footnote{\textbf{注：}返回值为void的方法无返回值对象，静态方法无实例对象。}。
-一个对象可以同时是一个方法执行过程中的实例、参数或者返回值，具体情况由函数调用的上下文决定。
+通常情况下，一个方法执行过程中，返回值对象和实例对象不允许超过一个，而方法参数可以有多个\footnote{返回值为void的方法无返回值对象，静态方法无实例对象。}。
+一个对象可以同时是一个方法执行过程中的实例、参数或者返回值，具体情况由\todo{函数调用的上下文}决定。
 
 
 
@@ -42,7 +42,7 @@
 
 \subsection{关于方法间关系的定义}
 \begin{Def}
-	调用关系（Invoke）
+	调用关系%（Invoke）
 \end{Def}
 
 对于程序$P$的两个方法执行$m_1$和$m_2$，方法$m_1$调用了方法$m_2$，则记作$m_1 \to m_2$，称为方法$m_1$调用方法$m_2$。
@@ -69,7 +69,7 @@ m_0 \to  m_1 , m_1 \to  m_2 , \dots , m_n \to m  ( n \geqslant 0)
 类似的，若\eat{对于方法$m$和$m'$，}$m  \stackrel{\ast}{\to}  m'$总是成立，可以记为 $m  \stackrel{\ast}{ \Rightarrow } m'$。
 
 \begin{Def}
-	触发关系（Trigger）
+	触发关系%（Trigger）
 \end{Def}
 	
 	%如果对于动态函数调用图$DCG$中两个方法（不妨记为$m_a$和$m_b$，$m_a \in DCG$，$m_b \in DCG $），
@@ -96,7 +96,7 @@ m_0 \to  m_1 , m_1 \to  m_2 , \dots , m_n \to m  ( n \geqslant 0)
 \subsection{关于调用图的定义}
 
 \begin{Def}
-	函数调用图（CallGraph，CG）
+	函数调用图%（CallGraph，CG）
 \end{Def}	
 
 
@@ -141,7 +141,7 @@ CG &= &(V,E) ,\\
 
 
 \begin{Def}
-	拓展函数调用图（Extended CallGraph，ECG）
+	拓展函数调用图%（Extended CallGraph，ECG）
 \end{Def}
 
 
