@@ -81,8 +81,8 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 
 
-相比定制化Android系统，通过Xposed实现的运行时拦截器兼容性良好，适用于市面上主流的Android系统版本，同时开发便利，实现成本低。
-同时，待拦截方法列表的编辑功能的引入，可以在不修改插件代码的情况下，支持动态添加删除待拦截的方法列表，避免了Xposed插件修改后的重启系统操作，提高了RunDroid整体的运行效率。
+相比定制化Android系统，通过Xposed实现的运行时拦截器兼容性良好，适用于市面上主流的Android系统版本，实现成本低。
+同时，待拦截方法列表的编辑功能的引入，使得在不修改插件代码的情况下，支持动态添加删除待拦截的方法，避免了Xposed插件修改后的系统重启操作，提高了RunDroid整体的运行效率。
  
 
 \subsection{日志记录器}
@@ -100,7 +100,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 \subsection{调用图构建器}
 
 % 调用图构建器的功能是拓展函数调用图的构建、存储和展现。
-调用图构建器由调用图存储器、对象管理器和触发关系生成器组成，如\autoref{fig:rundroid_overview}所示。
+调用图构建器由调用图存储器、对象管理器和关系生成器组成，如\autoref{fig:rundroid_overview}所示。
 
 调用图存储器将Neo4j\cite{Neo4jthe19}作为调用图的底层存储引擎，承担着拓展函数调用图的存储、查询、展示的职责。
 Neo4j的数据分为节点（Node）和关系（Relationship）两大类型，支持自定义键值属性。
@@ -134,7 +134,7 @@ Neo4j的数据分为节点（Node）和关系（Relationship）两大类型，�
 
 
 
-触发关系生成器是第\ref{chp:design}章中\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，基于Cypher脚本和Soot完成。
+关系生成器是第\ref{chp:design}章中\autoref{alg:buildCG}、\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，基于Cypher脚本和Soot完成。
 例如，\autoref{alg:buildTrigger}第16$\sim$17行中，我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$，并建立两者之间的触发关系。
 传统的实现方式需要对图进行遍历，效率较低。而RunDroid采用了Cypher脚本，实现简洁，开发效率高，如\autoref{fig:cypher_code}所示。
 Soot的工作主要是提供应用程序相关的类型查询服务。
