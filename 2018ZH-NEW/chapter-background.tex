@@ -33,7 +33,7 @@ Framework层主要是系统管理类库，包括Activity的管理，消息通知
 
 \textbf{面向组件的编程模式：}
 Android程序中较为常见的是组件（例如Activity、Service、Content Provider、Broadcast Receiver），它是应用程序运行的最小单元，受到Android Framework的直接调度。
-开发人员通过继承这些组件，重写对应的生命周期函数，已实现对应的业务需求（界面的布局、页面状态的保存等），而这些组件的生命周期由Framework直接调度完成。
+开发人员通过继承这些组件，重写对应的生命周期函数，实现对应的业务需求（界面的布局、页面状态的保存等），而这些组件的生命周期由Framework直接调度完成。
 
 \textbf{逻辑实现依赖于回调函数和多线程通信：}
 由于Android应用程序采用的是基于单线程消息队列的事件驱动架构，因此，界面相关的操作只允许出现在主线程（UI Thread）中，耗时操作只能在工作线程（Worker Thread）中进行。
@@ -44,7 +44,7 @@ Android程序中较为常见的是组件（例如Activity、Service、Content Pr
 
 
 
-在Android应用程序运行过程中，Activity向用户展示图形界面，响应用户的反馈，和其他组件一同完成相关业务，扮演着最为重要的作用。%\cite{Activity2:online}。
+在Android应用程序运行过程中，Activity向用户展示图形界面，响应用户的反馈，和其他组件一同完成相关业务，扮演着最为重要的角色。%\cite{Activity2:online}。
 由于Android应用程序在架构选型上采用了事件驱动模型，为了便于协调应用内部状态的管理，Android组件通常有生命周期的概念，Activity也不例外。
 
 Android系统根据Activity 在运行时和用户的反馈将其状态分为以下四种：

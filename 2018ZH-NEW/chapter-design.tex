@@ -8,7 +8,7 @@
 为了了解Android 应用程序在运行阶段的执行过程，本文提出了一个可用于还原Android应用程序运行时动态函数调用图的工具——RunDroid。
 RunDroid利用源程序代码插桩和运行时方法拦截的相结合的方式，捕获应用程序在应用层面和系统层面的方法执行信息，还原方法间的调用关系。
 在此基础上，RunDroid利用对象和方法的关系结合具体的触发规则，进而还原出方法间触发关系，在调用图中展现运行过程中的Android特性行为。
-RunDroid提供的函数调用图从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地刻画了Android应用程序的执行过程，可以为应用程序分析提供更为多样、准确的信息。
+RunDroid提供的函数调用图从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地刻画了Android应用程序的执行过程。
 
 
 \section{整体设计}
@@ -92,14 +92,14 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 预处理器以Android项目源代码作为输入，输出预处理后的APK文件。
 %输出的APK文件在应用执行过程中将用户方法的执行信息输出出来。
 具体处理过程如\autoref{alg:instrument}所示：
-预处理器会遍历项目源代码中的Java源文件，将源文件和对应的抽象语法树转化成XML格式的文件，并以DOM的形式加载到程序中（第1$\sim$4行）。
+预处理器会遍历项目源代码中的Java源文件，将源文件和对应的抽象语法树转化成XML格式的文件，并以DOM的形式加载到程序中（第3行）。
 %  利用获取的语法结构，预处理器会提取出所有的方法体，
-对于抽象语法树中的每一个类和每一个方法，预处理器会计算出编译后所处的类的全限类名及方法签名（第5$\sim$\ref{alg:instrument:computeMethodId}行）。
+对于抽象语法树中的每一个类和每一个方法，预处理器会计算出编译后所处的类的全限类名及方法签名（第4$\sim$\ref{alg:instrument:computeMethodId}行）。
 全限类名和方法签名的组合<全限类名，方法签名>可以作为方法体的唯一标识，和抽象语法树中的方法体一一对应。
 在每个方法内部，预处理器会插入用户方法日志记录的代码，实现日志代码编织，达到用户方法运行时信息记录的目的（第\ref{alg:instrument:addMethodExitLogCode}$\sim$\ref{alg:instrument:addMethodEnterLogCode}行）。
 另外，预处理器还对每个方法体进行了异常捕获处理，防止方法体内部的异常导日志记录过程的中断，影响函数调用图的构建（第\ref{alg:instrument:addMethodCatchLogCode}行）。
 上述操作都是对DOM对象\code{document}直接操作的。
-当一个Java文件修改完毕后，预处理器会将DOM对象重新转换成Java源文件，并替换原来的文件（第12行）。
+当一个Java文件修改完毕后，预处理器会将DOM对象重新转换成Java源文件，并替换原来的文件（第\ref{alg:instrument:rewriteFile}行）。
 最后，预处理器会利用编织后得到的源代码构建成APK文件（第\ref{alg:instrument:buildApk}行）。
 
 
@@ -116,27 +116,26 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 		
 		\For{$ javaFile \in javaFiles $}{
 			
-			transform $javaFile $ to xml-format File $xmlFile$
-			
-			transform $xmlFile$ to DOM Object $document$
-			
+
+			将源文件 $javaFile $ 的抽象语法树转化成DOM对象 document；
+						
 			\For{ \emph { $ classEle \in document$}}{
 				
-				$className \gets $computeClassSign($classEle$,$xmlFile$); 	
+				$className $ ~ $\gets  $ ~ computeClassName($classEle$,$xmlFile$)； 	
 				
-				\For{\emph { $methodEle \in classEle$}}{
+				\For{\emph { $methodEle \in  classEle $}}{
 					
-					$methodId\gets $computeMethodId($methodEle$,$className$ ); 	 \label{alg:instrument:computeMethodId}
+					$methodId $ ~ $\gets $~ computeMethodId($methodEle$,$className$ )； 	 \label{alg:instrument:computeMethodId}
 					
-					addMethodExitLogCode($methodEle$,$methodId$); \label{alg:instrument:addMethodExitLogCode}
+					addMethodExitLogCode($methodEle$,$methodId$)；\label{alg:instrument:addMethodExitLogCode}
 					
-					addMethodCatchLogCode($methodEle$,$methodId$);  \label{alg:instrument:addMethodCatchLogCode}
+					addMethodCatchLogCode($methodEle$,$methodId$)；  \label{alg:instrument:addMethodCatchLogCode}
 					
-					addMethodEnterLogCode($methodEle$,$methodId$); \label{alg:instrument:addMethodEnterLogCode}
+					addMethodEnterLogCode($methodEle$,$methodId$)；\label{alg:instrument:addMethodEnterLogCode}
 				}
 				
 			}
-			write $document$ into new Java File $newJavaFile$
+		将  $document$ 转化成新的Java文件 $newJavaFile$； \label{alg:instrument:rewriteFile}
 			
 		}
 		$	apk  \gets$ buildApk($newJavaFiles$)  \label{alg:instrument:buildApk}
@@ -323,7 +322,6 @@ RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理�
 
 \point{构建Activity的生命周期}
 
-Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联起来，利用的是\code{Activity}生命周期方法的签名的不变性。
 
 \begin{algorithm}[!hb]
 	\caption{构建Activity的生命周期和事件回调} 
@@ -352,16 +350,16 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 		$lifecycleList \gets$ new   $ List()$;
 		
 		
-		\For{ \emph{ $o_{activity} \in \{ activity \mid activity $ defined in  $manifestFile \} $ }}{
+		\For{ \emph{ $o_{activity} \in \{ act \mid act $ 为 $manifestFile $中定义的Activity$ \} $ }}{
 			
 			
 			
-			\For{ \emph{ $m \in \{ m \mid  m$ is method node in $ ecg $, $o_{activity}$ is instance of $m\}$}}{
+			\For{ \emph{ $m \in \{ m \mid  m$ 为调用图 $ ecg $中以$o_{activity}$为实例的方法节点$\}$}}{
 				
 				
-				\If{ \emph{ $m$ is the method of Activity's Lifecycle   \\\qquad
-						and  Thread for $m$ is MainThread	  \\\qquad
-						and $  \left\langle  m' \to m \right\rangle  \notin ecg$
+				\If{ \emph{ $m$ 为Activity的生命周期方法  \\\qquad
+						\&\&   $m$ 的执行线程为主线程\\\qquad
+						\&\&  $  \left\langle  m' \to m \right\rangle  \notin ecg$
 				} }{
 					
 					$lifecycleList$.add($m$);
@@ -378,9 +376,9 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	}
 	% $o_p \stackrel{parameter}{\longrightarrow} m$
 	\Fn{patchUiEvent($ecg$)} {
-		\For{\emph{$o_{view} \in \{ o \mid o $  is the $View$ object node ,$o \in ecg \}$} }{
-			\For{\emph{$o_{listener} \in \{ o \mid o $  is the $View.OnClickListener$ object node,  $ o \in ecg \}$} }{		
-				\If {\emph{$o_{view}$,$o_{listener}$,$m_{register}$ and $m_{click}$  satisfy formula \ref{equ:rule_ui}}
+		\For{\emph{$o_{view} \in \{ o \mid o $ 为调用图 $ ecg $中\code{View}类型的对象节点  $ \}$} }{ 
+			\For{\emph{$o_{listener} \in \{ o \mid o $  为调用图 $ ecg $  中\code{View.OnClickListener} 类型的对象节点 $ \}$} }{		
+				\If {\emph{$o_{view}$,$o_{listener}$,$m_{register}$ and $m_{click}$  满足\autoref{equ:rule_ui}}
 					}{
 					$ecg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
 				}
@@ -391,8 +389,8 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 
 	
-	
-整个过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加表示Activity生命周期的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
+Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联起来。%，利用的是\code{Activity}生命周期方法的签名的不变性。
+生命周期的构建过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加表示Activity生命周期的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
 对于AndroidManifest文件中声明的每一个Activity组件对象 $o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
 若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第7$\sim$12行）。
 最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第13$\sim$14行）。
@@ -406,7 +404,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 \point{构建Andoid事件回调的触发关系}
 
 在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有\code{View}类型的对象节点$o_{view}$和\code{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
-对于组合$<o_{listener}$，$o_{view}>$，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第16$\sim$19行）。
+对于组合$\left\langle o_{listener}  , o_{view}\right\rangle $，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第16$\sim$19行）。
 
 
 %Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
@@ -438,28 +436,28 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 	\SetKwProg{Fn}{Function}{:}{}
 	\Fn{addTriggerRels($ecg$)}{
 	
-		{// add the Thread Trigger into $ecg$}
+		{// 在调用图$ecg$中创建基于Java 多线程交互的触发关系}
 		
 		
 		\For{\emph{$o_{thread} \in \{ o \mid o $  is the $Thread$ object node ,$o \in$ $ecg \}$} }{
-			\If{ \emph{$o_{thread}$,$m_{start}$ and $m_{run}$  satisfy formula \ref{equ:rule_thread}}}{
+			\If{ \emph{$o_{thread}$、$m_{start}$ 和 $m_{run}$  满足\autoref{equ:rule_thread}}}{
 				$ecg$.addTriggerRel($m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $)	
 			}}
-		\For{\emph{$o_r \in \{ o \mid o $  is the $Runnable$ object node ,$o \in$ $ecg \}$} }{
-			\If{ \emph{$o_r$,$m_{runOnUiThread}$ and $m_{run}$  satisfy formula \ref{equ:rule_runOnUiThread}}}{
+		\For{\emph{$o_r \in \{ o \mid o $  为调用图$ecg$中的  $Runnable$ 类型的对象节点$  \}$} }{
+			\If{ \emph{$o_r$、$m_{runOnUiThread}$ 和 $m_{run}$  满足\autoref{equ:rule_runOnUiThread}}}{
 				$ecg$.addTriggerRel($m_{runOnUiThread}  \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run} $)	
 			}	
 		}
-		{// add the Handler Trigger into $ecg$}
+		{// 在调用图$ecg$中创建基于\code{Handler} 多线程消息调度的触发关系}
 		
 		
-			\For{\emph{ $o_m \in  \{ o\mid$ o is the $Message$ object node ,$o \in$ $ecg \}$} }{
-			\If{ \emph{$o_m$,$m_{handle}$ and $m_{dispatch}$  satisfy formula \ref{equ:rule_handler}}}{
-				\tcp{Here means $m_{enqueue} \lhook\joinrel\xrightarrow{Handler} m_{dispatch} $.}
+			\For{\emph{ $o_m \in  \{ o\mid  o $  为调用图$ecg$中的 $Message$ 类型的对象节点$\}$} }{
+			\If{ \emph{$o_m$、$m_{handle}$和 $m_{dispatch}$  满足\autoref{equ:rule_handler}}}{
+		%		\tcp{Here means $m_{enqueue} \lhook\joinrel\xrightarrow{Handler} m_{dispatch} $.}
 			
-				$m_{send}$ =  calculateSendMethod($ecg$,$m_{enqueue}$);
+				$m_{send}  \gets $   calculateSendMethod($ecg$,$m_{enqueue}$);
 				
-				$m_{handle}$ =  calculateHandleMethod($ecg$,$m_{dispatch}$);
+				$m_{handle} \gets$  calculateHandleMethod($ecg$,$m_{dispatch}$);
 				
 				$ecg$.addTriggerRel($m_{send} \lhook\joinrel\xrightarrow{Handler} m_{handle} $ )	
 			}	
