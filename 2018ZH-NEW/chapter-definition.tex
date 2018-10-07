@@ -274,10 +274,10 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 %在Handler的方法handleMessage(Message)中，则有$m_handle \to $
 通过对Android Handler 运行机制的分析，我们知道$m_{enqueue} \hookrightarrow m_{dispatch}$。
 从\autoref{fig:handler-apis}、\autoref{fig:handler-framework}中可知，所有的Handler API最后就会调用到\code{Handler.enqueueMessage( MessageQueue, Message, long)}方法，即$m_{send} \stackrel{\ast	}{\Rightarrow} m_{enqueue} $。
-
-以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，
-因此，$m_{send} \hookrightarrow m_{handle}$或$m_{send} \lhook\joinrel\xrightarrow{Handler}  m_{handle} $。
-
+\todo{
+	以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，
+	因此，$m_{send} \hookrightarrow m_{handle}$或$m_{send} \lhook\joinrel\xrightarrow{Handler}  m_{handle} $。
+}
 
 \section{本章总结}
 
