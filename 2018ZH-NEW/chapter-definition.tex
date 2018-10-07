@@ -87,7 +87,7 @@ m_0 \to  m_1 , m_1 \to  m_2 , \dots , m_n \to m  ( n \geqslant 0)
 以多线程中的Thread为例，方法\code{Thread.start()}（记为$m_{start}$）的执行会使JVM/Dalvik虚拟机创建一个新的线程。
 最终，虚拟机会在新的线程中回调该Thread对象的方法\code{Thread.run()}（记为$m_{run}$）。
 上述描述可以表示成$m_{start} \hookrightarrow m_{run}$。由于这个触发关系和多线程相关，也可以记作$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $。
-同样的，触发关系也适用于Ui事件注册与响应\footnote{Ui事件注册与响应指的是控件的点击事件，例如\code{View.setOnClickeListener(View\$OnClickListener)}和\code{View\$OnClickListener.onClick(View)}的关系} 、基于Handler的多线程交互。
+同样的，触发关系也适用于UI事件注册与响应\footnote{UI事件注册与响应指的是控件的点击事件，例如\code{View.setOnClickeListener(View\$OnClickListener)}和\code{View\$OnClickListener.onClick(View)}的关系} 、基于Handler的多线程交互。
 
 \important{在系统源代码的层面上}，对于方法$m_a$ ,$m_b$ ,$m_c$ ，
 若$m_a  \stackrel{\ast}{ \Rightarrow } m_b$ 、 $m_b \hookrightarrow m_c$\important{同时}成立，则$m_a \hookrightarrow m_c$成立；

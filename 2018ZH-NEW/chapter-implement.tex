@@ -102,13 +102,13 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 % 调用图构建器的功能是拓展函数调用图的构建、存储和展现。
 调用图构建器由调用图存储器、对象管理器和关系生成器组成，如\autoref{fig:rundroid_overview}所示。
 
-调用图存储器将Neo4j\cite{Neo4jthe19}作为调用图的底层存储引擎，承担着拓展函数调用图的存储、查询、展示的职责。
+调用图存储器将Neo4j\cite{Neo4jthe19}作为调用图的存储引擎，承担着拓展函数调用图的存储、查询、展示的职责。
 Neo4j的数据分为节点和关系两种类型，支持自定义键值属性。
 同时，Neo4j可为节点指定标签，为关系指定类型，用于区分不同含义的节点和关系。
 拓展函数调用图中的数据在Neo4j中的表现形式如下：
 调用图中的方法和对象会以节点的形式出现在调用图中， 方法节点的标签分为\code{METHOD}和\code{FRAMEWORK}，对象节点的标签为\code{OBJECT}；
-方法和方法的关系分为调用关系和触发关系，在Neo4j中分别用关系\code{INVOKE}和\code{TRIGGER}表示；
-方法和对象之间的关系分为参数关系、返回值关系和实例关系，在Neo4j中分别用关系\code{PARAMETER}、\code{RETURN}、\code{INSTANCE}表示。
+方法间关系分为调用关系和触发关系，分别用关系\code{INVOKE}和\code{TRIGGER}表示；
+方法和对象之间的关系分为参数关系、返回值关系和实例关系，分别用关系\code{PARAMETER}、\code{RETURN}、\code{INSTANCE}表示。
 
 
 
