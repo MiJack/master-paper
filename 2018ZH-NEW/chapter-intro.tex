@@ -11,25 +11,34 @@
 
 \begin{figure*}[h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/app-numbers.png}
+	\includegraphics[width=0.9\textwidth]{./Figures/app-numbers.png}
 	\caption{Google Play Store上架的应用总数的变化趋势}
 	\label{fig:app_number}
 \end{figure*}
+
+
+
 
 
 正因为移动应用迅猛的增长趋势，研究人员开始研究如何通过技术手段分析移动应用的代码内容，了解应用本身的运行时行为，进行相关学术研究和工业生产。
 利用程序分析技术，研究人员对应用程序的项目相关源代码、配置文件或者二进制分发文件进行分析，监控程序的运行时行为，总结出应用程序相关特征。
 结合具体应用场景，我们对这些特征进行归纳总结出相关规律，应用在应用分析、安全风险以及质量保障等领域，进一步提升应用程序的易用性、安全性和可靠性。
 
-从分类上看，根据分析过程中是否需要运行目标程序，我们可以将这些技术手段分为静态分析技术和动态分析技术。
+
+
+\section{Android分析技术}
+
+在软件分析领域，根据分析过程中是否需要运行目标程序，我们可以将软件分析技术分为静态分析技术和动态分析技术。
 如果分析过程不依赖于目标程序的运行，这种分析技术称为静态分析技术，反之则为动态分析技术。
+
 静态分析技术通常以二进制程序文件或者程序源代码作为研究主体，结合控制流分析、数据流分析技术、指针分析以及程序依赖分析，得出应用程序相关的函数调用图、UML类图和序列图等，并在此基础上进行学术研究。
 %\footnote{在Java语言中，函数称为方法。在本文中，两者可以相互替换，不做区分。}。
 %的控制依赖和数据依赖（两者统称为程序依赖）；
 %根据程序方法内相关函数/方法调用，可以得到函数调用图、UML类图和序列图；
 %我们将程序依赖数据和函数调用图相结合，可以进一步得到过程间程序依赖，
 %帮助研究人员了解程序整体层面的业务间的依赖关系，进行污点传播分析\cite{stafford2000formal}。
-相反的，动态分析技术依赖目标程序的运行，通过修改目标程序的运行文件，搭建目标程序的运行环境，记录程序运行过程中相关操作信息，监控目标程序在运行过程中的状态变迁或指标变化，
+
+动态分析技术依赖目标程序的运行，通过修改目标程序的运行文件，搭建目标程序的运行环境，记录程序运行过程中相关操作信息，监控目标程序在运行过程中的状态变迁或指标变化，
 进而得出程序在运行过程中的行为特征，帮助研究人员进行程序安全性分析，提升程序的质量可靠性。
 
 
@@ -47,17 +56,11 @@
 
 
 
-
-
-\section{Android分析技术}
-
-在Android软件分析领域，软件分析技术分为静态分析技术和动态分析技术。
-
 \subsection{静态分析技术}
 
 
 在不执行应用程序的情况下，静态分析技术通过对应用程序的源代码或者执行文件进行控制流分析和数据流分析，进而推断应用程序在运行过程中可能产生的行为。
-这方面相关工具包括[\citenum{vallee1999soot,arzt2014flowdroid,AmanDroid,iccta,androguard:online,pxb1988d85,javadeco45,iBotPeac46,maaaazan93}]。
+这方面相关工作包括[\citenum{vallee1999soot,arzt2014flowdroid,AmanDroid,iccta,androguard:online,pxb1988d85,javadeco45,iBotPeac46,maaaazan93}]。
 %Soot\cite{vallee1999soot}、FlowDroid\cite{arzt2014flowdroid}、AmanDroid\cite{AmanDroid}、IccTA\cite{iccta}、AndroGuard\cite{androguard:online}、Dex2Jar \cite{pxb1988d85}、JD-GUI\cite{javadeco45}、APKTool\cite{iBotPeac46}、AndroWarn\cite{maaaazan93}等。
 Soot\cite{vallee1999soot}是传统的静态分析工具，其思路是将所有的Java字节码文件转化成一种中间语言Jimple，并在Jimple的基础上进行常规的控制流分析、数据流分析，理论上适用于所有可以在Java虚拟机上运行的语言（例如Scala、Groovy等等）的分析。
 由于Android程序本身的字节码Davlik和Java字节码在格式上保持一致，因此，Soot也支持Android应用程序的静态分析。
@@ -65,10 +68,8 @@ Soot\cite{vallee1999soot}是传统的静态分析工具，其思路是将所有�
 为此，德国达姆施塔特工业大学的Steven Arzt等人在Soot的基础上考虑Android程序中Activity的生命周期特性，推出了一个针对Android的静态分析工具FlowDroid\cite{arzt2014flowdroid}，可以做到上下文、路径、对象、字段等层面上的敏感。
 FlowDroid通过定义数据源点和数据泄漏点，在Android应用生命周期的基础上，可以实现数据流敏感的污点分析。
 但其不足之处在于缺少跨组件通信的分析不考虑多线程调用问题。
-在FlowDroid基础上，卢森堡大学的Li Li等人推出了IccTA\cite{iccta}，利用跨组件通信分析工具IC3提取跨组件通信\eat{（Inter-Component Communication, ICC）}的方法调用，并结合AndroidManifest.xml文件定义的Intent Filter信息，连接ICC两端的组件，克服了FlowDroid因缺少跨组件通信而导致的数据流上的缺失。
-\eat{因为它是构建在FlowDroid之上的一个探测敏感信息泄露的，所以受限于FlowDroid的局限性。}
-Yang等人~\cite{yang2015static}利用静态分析技术并将回调函数添加到控制流图（调用图）中，形成了回调函数控制流图\eat{（Callback control-flow gragh）}。
-\todo{实验结果显示，Yang的工作比Gator~\cite{rountev2014static}在控件监听器绑定上得到了更为准确的结果。}
+在FlowDroid基础上，卢森堡大学的Li Li等人推出了IccTA\cite{iccta}，利用跨组件通信分析工具IC3提取跨组件通信\eat{（Inter-Component Communication, ICC）}的方法调用，并结合AndroidManifest.xml文件定义的Intent Filter信息，连接跨组件通信的两端组件，克服了FlowDroid因缺少跨组件通信而导致的数据流上的缺失。
+%Yang等人\cite{yang2015static}利用静态分析技术并将回调函数添加到控制流图（调用图）中，形成了回调函数控制流图\eat{（Callback control-flow gragh）}。
 %法国和意大利的学者~\cite{payet2012static}通过对Java字节码静态分析器Julia进行扩展，使得其支持对 Android 应用程序的静态分析；
 %他们通过改写 Android 库中 Activity、LayoutInflater 等类的代码逻辑，规避了Android系统分析常见难点(如程序的事件机制，基于反射的视图加载等)，
 %实现了包括死代码检查、空指针检查在内的7种静态分析技术。
@@ -92,26 +93,15 @@ DroidBox\cite{droidbox:online}在TaintDroid基础上，对Android Framework的�
 和TaintDroid不同，TraceDroid\cite{van2013dynamic}采用的是另一种思路，利用字节码插装技术AspectJ，使得方法在执行时输出相应的日志信息。根据这些信息TraceDroid可以还原函数调用图，得到分析结果。
 由于Aspect在进行字节码编织时引入的新的方法会导致方法数65K限制问题（即构建APK文件的过程中，方法总数超过65536，进而使得APK文件无法成功构建~\cite{Configur27}），因此该方案存在不稳定的情况。
 Inspeckage\cite{acpmInsp34}是一个基于Xposed框架开发的动态分析工具，通过拦截应用程序相关的Android API，帮助用户实时了解应用程序的运行时行为（例如文件读写、加解密、网络服务等）。
-\eat{
 
 
-另外，研究人员还用动态分析技术查找Android应用程序在运行时性能瓶颈，辅助程序代码修改以达到提升程序的运行性能的目的。
-Android官方性能检测工具SimplePref~\cite{simpleperf:online}就是其中的一个代表：
-SimplePref\eat{利用了系统接口pref\_event\_open，}以采样（Sample）的方式获取到CPU性能监视单元的状态\eat{（例如cpu周期数、执行的指令数、缓存失效次数等）}，进而得到程序执行数据\eat{方法执行时间}，辅助性能瓶颈的查找。
-%利用这些信息，SimplePref可以得到对应时刻的CPU状态，还原出各个方法的执行时间和对应的执行路径。
-受到技术方案的限制，不合理的采样频率会影响实验效果：过快的采样频率会导致过大的系统开销，影响原有程序的执行；反之，过低的采样频率则会丢失部分方法的执行信息。
-为此，Uber的Nanoscope\cite{ubernanoscope:online}采用追踪（Trace）技术在定制化的系统Nanoscope OS中运行，在虚拟机解释执行目标方法前后输出相关Trace日志，进而得到性能报告。
-相比SimplePref输出所有线程的执行信息，Nanoscope只输出主线程相关的方法数据信息，避免了不必要性能开销。
-但是，Nanoscope的局限性在于构建成本较高，需要配合特定的系统使用。
-%而且，Android程序关心的性能瓶颈一般都位于主线程，而SimplePref会，实际开销较大。
-}
 
 
 
 \subsection{分析技术的应用}
 
-\todo{上述技术广泛运用在安全性分析、质量保障等领域。}
-\todo{伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。}
+静态分析技术和动态分析技术可以分析软件行为表现，常运用在安全性分析、质量保障等领域。
+
 
 %\point{安全性分析：}
 
@@ -135,7 +125,11 @@ AppIntent\cite{yang2013appintent}利用静态分析技术提取应用程序的�
 相比AppIntent，AppAudit得到的数据泄露路径，准确度更高，同时时间开销较小。
 Marvin\cite{lindorfer2015marvin}从静动态分析技术的分析结果中提取应用的特征（例如应用元数据、类结果、应用运行时行为等），并利用机器学习技术进行训练。
 在大规模数据验证的时，Marvin可以识别出98.24\%的恶意软件，假阳性低于0.04\%。
-\todo{Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。}
+由于网络通信在Android应用中的普遍性，文献[\citenum{Shao2016The,Jia2017Open,bu2017program}]专门研究Android应用上的网络安全问题，涵盖UNIX Domain Socket、Internet Socket等多个不同的方面，探讨了不同使用场景下的网络安全问题。
+
+
+
+
 
 
 %PATDroid\cite{sadeghi2017patdroid}动静态结合
@@ -145,12 +139,11 @@ Marvin\cite{lindorfer2015marvin}从静动态分析技术的分析结果中提取
 
 分析技术在质量保障领域的应用包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、错误定位\cite{mirzaei2015exception,machado2013mzoltar}、错误修复分析\cite{tan2018repairing,QingGaoASE15}以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}等。
 %t, most GUI testing techniques, e.g., random testing [39, 57], search-based testing [58, 60], and model-based testing [2, 3, 8, 78, 85]
-\todo{工作[\citenum{azim2013targeted}]利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
+文献[\citenum{azim2013targeted}]利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
 Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，在深度优先算法的基础上，使得程序在当前状态无可再遍历状态的情况下进行回溯。
 相比传统的深度优先算法，Wei Yang的工作对应的时间开销更小，效率更高。
 此外，Stoat\cite{su2016fsmdroid,androidtest2}利用静态、动态分析技术标识出程序本身的状态和事件，从应用中抽象出有限状态机（FSM）模型。
 基于该模型，Stoat进行模型变异、测试用例生成与执行、模型迭代，使得应用程序的覆盖率相比之前工作[\citenum{hao2014puma,amalfitano2015mobiguitar}]提升了17$\sim$31\%。
-}
 文献[\citenum{mirzaei2015exception,machado2013mzoltar}]等将\eat{传统软件的错误定位技术——}基于频谱的错误定位技术\eat{（spectrum-based fault location，SBFL）}运用在Android应用上，取得了不错的成绩。
 文献[\citenum{tan2018repairing,QingGaoASE15}]等主要聚焦如何在Android应用程序出现问题时，根据异常的堆栈信息结合软件变异技术或者问答网站生成补丁代码，实现程序的自动修复。
 范玲玲等人的工作\cite{fan2018large}通过开源社区中应用的issue解析分析，从异常种类（应用异常、系统异常、库（Library）异常）、系统异常分类、错误检查工具以及错误修复方式等若干方面进行较为深入的分析、探讨和总结。
@@ -164,18 +157,22 @@ Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，�
 
 % 例如错误定位、自动化分析、profiling等
 
-\section{论文研究内容}
+\section{论文研究意义}
 
 
 从上述工作中，我们不难发现，分析技术的应用往往需要构建Android应用程序的函数调用图，对程序执行过程进行建模。
-但是，Android应用程序的特性（例如，基于事件驱动的架构、面向组件的开发方式、对回调函数和多线程交互的依赖等）使得传统分析工具无法准确对Android应用程序的执行过程进行建模，对研究人员了解Android应用程序执行细节造成了挑战。
+但是，Android应用程序的特性（例如，基于事件驱动的架构、面向组件的开发方式、对回调函数和多线程交互的依赖等）会导致函数调用关系缺失或者不准确，丢失函数关联的必要信息，使得分析工具无法对程序执行过程进行准确建模，对程序分析工作造成挑战。
+
+
 
 
 为此，本文提出了一种可用于还原Android动态函数调用图的技术方案——RunDroid。
 %RunDroid通过对程序源代码和运行环境进行预处理，获得程序的运行时信息，最终还原出Android应用程序的动态函数调用图。
-RunDroid产出的函数调用图不仅包括方法调用关系，还展示了方法对象、方法间触发关系等信息，可以帮助研究人员全面的了解函数间的关系。
-%，提供较为全面地了解应用程序运行时的状态变化。
+RunDroid产出的函数调用图不仅包括方法调用关系，还展示了方法对象、方法间触发关系等信息，可以帮助研究人员全面的了解函数间的关系，辅助程序分析工作的完成。
 
+
+%，提供较为全面地了解应用程序运行时的状态变化。
+\section{论文研究内容}
 本文的主要研究工作包括以下：
 \begin{itemize}
 	%				\setlength{\itemsep}{-5pt}
@@ -186,23 +183,23 @@ RunDroid产出的函数调用图不仅包括方法调用关系，还展示了方
 %	\item 本文深入Android系统的平台特性，在传统调用图的方法调用关系的基础上，提出了函数触发关系的观念。
 %	\item 本文提出并实现Android动态函数调用图构建系统RunDroid。RunDroid生成的函数调用图不仅体现了传统调用图的方法调用关系，还展示方法执行过程相关的对象信息和函数间的触发关系，反映Android平台相关的特性。
 %	\item   将RunDroid和静态分析工具进行对比，分析两种技术在生成函数调用图上的优缺点。
-	\item  Android动态函数调用图构建系统RunDroid的设计与实现：
-	\\
-\todo{
-	除了传统调用图的方法调用关系，RunDroid生成的函数调用图还展示方法执行过程相关的对象信息和方法间的触发关系（例如多线程），反映Android平台相关的特性（Activity组件生命周期和事件回调）。
-}
-	\item 静动态分析技术效果对比：
-	\\
-\todo{	
-	详细展示和说明RunDroid产生的调用图，并就Activity 生命周期及事件回调、多线程触发关系等角度和与传统静态分析工具FlowDroid产生的静态调用图做了对比分析，并分析两种技术的优劣。
-}
-\item RunDroid系统的应用：
-	\\
-	\todo{
-		利用RunDroid对开源Android应用的执行过程进行调用图构建，研究方法间触发关系在Android系统上的普遍性。另外， RunDroid与错误定位技术结合的实验说明RunDroid提供的信息，可以提供更多程序依赖信息，有助于提高错误定位技术技术结果的准确性。
-}\end{itemize}
 
-%\todo{对上述系统设计对应的实验方案，评估对应的实验效果。}
+	\item 本文在传统的方法调用关系的基础上，提出了函数触发关系的定义，并定义了Android系统中常见的触发关系。
+
+	\item  本文提出了一个可用于生成Android动态函数调用图的系统——RunDroid。
+	RunDroid通过获取应用程序运行时的执行信息，还原出程序的动态函数调用图。
+	RunDroid生成的函数调用图可以体现函数间的调用关系和触发关系，反映Android平台相关的特性，为分析程序执行提供更为详细的信息。
+		
+		
+	\item 本文利用RunDroid构建开源Android应用的动态函数调用图，研究方法间触发关系在程序运行过程中的普遍性。
+	
+	\item 本文对RunDroid的运行效果进行实验，将其产生的函数调用图与经典的静动态分析工具FlowDroid产生的函数调用图进行对比分析，并从不同的角度比较了两者的异同，分析两种技术的优劣。
+	
+	\item  本文将RunDroid应用在错误定位领域， RunDroid与错误定位技术结合的实验说明RunDroid提供的信息，可以提供更多程序依赖信息，有助于提高错误定位技术技术结果的准确性。
+
+
+\end{itemize}
+
 
 
 \section{本文遇到的困难与挑战}
@@ -246,7 +243,7 @@ RunDroid产出的函数调用图不仅包括方法调用关系，还展示了方
 
 \fullref{chp:implement}对RunDroid运行流程做了基本的阐述，并详细介绍了RunDroid中预处理器、运行时拦截器、日志记录器、调用图构建器等组件的技术实现。
 
-\fullref{chp:testing} 将利用RunDroid构建开源应用的动态函数调用图；将RunDroid的产出调用图与静态分析工具FlowDroid进行对比；并将RunDroid与错误定位技术结合进行探索性的实验。
+\fullref{chp:testing} 将利用RunDroid构建开源应用的动态函数调用图；将RunDroid产出的调用图与静态分析工具FlowDroid进行对比；并将RunDroid与错误定位技术结合进行探索性的实验。
 
 \fullref{chp:future}对本文工作进行总结，并对下一步工作进行展望。
 

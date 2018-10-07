@@ -11,7 +11,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 
 
-在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分，对应的工作流程如\autoref{fig:rundroid_overview}所示。
+在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分，整体架构图如\autoref{fig:rundroid_overview}所示。
 %从功能上，预处理器和运行时拦截器两者的作用是一致的：在程序运行过程中，当相关方法执行时，触发日志记录器记录相应的信息。
 预处理器通过源代码插桩技术实现在用户方法运行时触发用户方法的信息记录，而运行时拦截器则是通过方法劫持技术实现对系统方法执行的拦截，进而触发日志记录。
 %系统方法的执行。
@@ -23,7 +23,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 \begin{figure*}[!hb]
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Figures/rundroid-overview.png}
-	\caption{ RunDroid的工作流程}
+	\caption{ RunDroid的整体架构图}
 	\label{fig:rundroid_overview}
 \end{figure*}
 
@@ -54,7 +54,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 \subsection{运行时拦截器}%——系统方法的捕获}
 
 %由于预处理器可以处理的方法需要
-\todo {由于无法对系统方法的源代码进行直接修改，因此预处理器无法实现对系统方法的日志代码编织。}
+由于无法对系统方法的源代码进行直接修改，因此预处理器无法实现对系统方法的日志代码编织，无法达到系统方法信息记录的目的。
 为了弥补预处理器的不足，RunDroid中的运行时拦截器需要在系统层面上实现对系统方法的拦截，实现后续方法信息的日志记录。
 
 
@@ -134,10 +134,11 @@ Neo4j的数据分为节点和关系两种类型，支持自定义键值属性。
 
 
 
-关系生成器是第\ref{chp:design}章中\autoref{alg:buildCG}、\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，\todo{基于Cypher脚本和Soot完成}。
-例如，\autoref{alg:buildTrigger}第16$\sim$17行中，我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$，并建立两者之间的触发关系。
-传统的实现方式需要对图进行遍历，效率较低。\todo{而RunDroid采用了Cypher脚本，实现简洁，开发效率高，如\autoref{fig:cypher_code}所示。}
-Soot的工作主要是提供应用程序相关的\todo{类继承检索}查询服务。
+关系生成器是\autoref{alg:buildCG}、\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，由Cypher脚本和Soot等技术共同实现。
+当我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$（\autoref{alg:buildTrigger}第16$\sim$17行）时，可以直接使用脚本\autoref{fig:cypher_code}
+直接在调用图中找到所有符合条件的节点。
+相比传统的编程语言，Cypher实现相关逻辑，表达形式简洁，代码阅读性好，开发效率高效。
+Soot的工作主要是提供应用程序相关的类继承检索服务。
 例如，\autoref{alg:buildTrigger}第7行中，我们需要知道所有的Runnable对象，此处便需要通过Soot查询所有的Runnable子类。
 在算法\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
 
