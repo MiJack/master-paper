@@ -1,4 +1,4 @@
-\chapter{系统设计}
+\chapter{RunDroid的系统设计}
 \label{chp:design}
 
 
@@ -107,6 +107,7 @@ RunDroid会遍历项目源代码中的Java源文件，将源文件和对应的�
 
 
 \begin{algorithm}[!ht]
+	\tablewuhao
 	\caption{日志代码插桩过程} 
 	\label{alg:instrument}
 	\KwIn{ $javaFiles$，应用程序的源代码}
@@ -158,7 +159,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 {
 \begin{table*}[!ht]
 	%	\centering
-	\footnotesize		
+	\tablewuhao		
 	
 	\caption{运行时拦截器拦截的系统方法列表}
 	
@@ -217,7 +218,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 	}
 \end{table*}
 }
-\section{扩展函数调用图的构建过程}
+\section{\ecg 的构建过程}
 
 RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 根据程序运行时的日志提取函数间的调用关系，创建函数调用图；
@@ -229,7 +230,8 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 \subsection{构建函数调用图}
 
 
-\begin{algorithm}[hb]
+\begin{algorithm}[!hb]
+\tablewuhao
 	\caption{函数调用图的构建过程} 
 	\label{alg:buildCG}
 	\KwIn{ $logs$，应用程序的运行时日志}
@@ -326,6 +328,7 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 
 
 \begin{algorithm}[!hb]
+\tablewuhao
 	\caption{构建Activity的生命周期和事件回调} 
 	\label{alg:buildActivityLifecycle}
 	\KwIn{ $manifestFile$，AndroidManifest文件\\ \qquad  \quad $ecg$，函数调用图}	
@@ -392,8 +395,8 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联起来。%，利用的是\code{Activity}生命周期方法的签名的不变性。
 生命周期的构建过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加Activity生命周期变化的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
 对于AndroidManifest文件中声明的每一个Activity组件对象 $o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
-若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第7$\sim$12行）。
-最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第13$\sim$14行）。
+若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第7$\sim$11行）。
+最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第12$\sim$13行）。
 
 这三个条件分别为：
 （1）方法$m$的方法签名和\autoref{fig:Activity-lifecycle}中的任何一个生命周期方法的签名保持一致；
@@ -411,7 +414,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 \point{构建Andoid事件回调的触发关系}
 
 在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有\code{View}类型的对象节点$o_{view}$和\code{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
-对于组合$\left\langle o_{listener}  , o_{view}\right\rangle $，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第16$\sim$19行）。
+对于组合$\left\langle o_{listener}  , o_{view}\right\rangle $，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第15$\sim$18行）。
 
 
 %Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
@@ -434,6 +437,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 
 \begin{algorithm}[!ht]
+	\tablewuhao
 	\caption{扩展函数调用图的构建过程}
 	\label{alg:buildTrigger}
 	\KwIn {	$ecg$， 拓展函数调用图} 
@@ -626,4 +630,3 @@ RETURN p,method,enqueue,dispatch
 在此基础上，本章介绍了RunDroid各个的流程的设计细节。
 RunDroid利用源代码修改和运行时方法拦截相结合的方式，捕获用户方法和系统方法的执行信息，并将这些方法执行信息以日志的形式保存下来。
 RunDroid遍历各线程的方法执行日志结合栈的入栈、出栈操作，模拟各个线程的函数执行的过程，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并在此基础上构建Activity的生命周期，补全方法间的触发关系，形成最终的拓展函数调用图。
-

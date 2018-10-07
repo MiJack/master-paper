@@ -114,6 +114,8 @@
 \newcommand{\dawuhao}{\fontsize{11pt}{11pt}\selectfont}       % 大五号, 单倍行距
 \newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}    % 五号, 单倍行距
 
+\newcommand{\tablewuhao}{\fontsize{10.5pt}{12.5pt}\selectfont}    % 五号, 单倍行距
+
 
 \renewcommand*{\bibfont}{\normalfont\normalsize\linespread{1}\selectfont}
 \setlength{\bibitemsep}{\baselineskip}
@@ -371,10 +373,14 @@
 \clearPaperPage
 \input {chapter-design.tex}
 
-\cleardoublepage
+\clearPaperPage
+
+
 \input {chapter-implement.tex}
 \clearPaperPage
-\input {chapter-testing.tex}
+
+\input {chapter-display.tex}
+
 \clearPaperPage
 \input{chapter-application.tex}
 

@@ -1,4 +1,14 @@
 
+\chapter{RunDroid的系统实验}  
+\label{chp:testing}
+
+
+实验相关配置的环境如下：
+实验平台是ThinkPad E430，CPU为Intel 酷睿i5 3210M，内存为12GB。
+手机型号为小米 MI 5，处理器型号为骁龙820，RAM为3GB，系统为Android 6.0，内置Xposed运行环境。
+
+
+
 
 \section{实验验证——函数触发关系的普遍性}
 
@@ -31,6 +41,7 @@ archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更�
 \begin{table*}[!ht]
 	\centering
 	{
+		\tablewuhao
 		\caption{各应用运行过程的统计数据}
 		\label{table:app_results}
 		\begin{tabular}{ |c |c|c|c|c|c|}
@@ -179,8 +190,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 在应用程序运行时，点击按钮button1，应用会计算斐波拉契数列中的第5项，并将这个数以Toast的形式展示给用户。
 上述过程中，方法调用同时涉及到普通方法调用、递归函数调用。
 RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
-每一个红色节点对应的是方法执行，\eat{每一个蓝色节点对应的是系统方法执行，}每一个紫色节点对应是一个对象；
-如果对象是方法执行的方法对象，则在图中会有一条边从方法指向该对象，并在边上标识两种之间的关系（蓝色有向边表示参数关系、黄色有向边返回值关系等\footnote{由于所有方法的实例对象都是\code{MainActivity}，所以实例关系在图中不做展示}）；
+每一个蓝色节点对应的是方法执行，\eat{每一个蓝色节点对应的是系统方法执行，}每一个粉色节点对应是一个对象；
+如果对象是方法执行的方法对象，则在图中会有一条边从方法指向该对象，并在边上标识两种之间的关系（蓝色有向边表示参数关系、黄色有向边表示返回值关系等\footnote{由于所有方法的实例对象都是\code{MainActivity}，所以实例关系在图中不做展示}）；
 如果两个方法执行之间存在调用关系，则他们之间会通过从调用发起方指向被调用方的绿色有向边进行连接。
 
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
@@ -382,40 +393,41 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 
 \begin{algorithm}[hb]
 	
+\tablewuhao
+
+\caption{错误定位的计算方法} 
+
+
+\label{alg:fault-localization}
+\KwIn{ $P$，应用程序}
+\KwIn{ $CoverageInfo$，应用程序的覆盖信息}
+\KwOut{ $sorted\_\tau$，程序语句的逆向排序}
+
+
+\SetKwProg{Fn}{Function}{:}{}
+
+\Fn{FaultLocazilation($P$,$CoverageInfo$)}{
 	
-	\caption{错误定位的计算方法} 
-	
-	
-	\label{alg:fault-localization}
-	\KwIn{ $P$，应用程序}
-	\KwIn{ $CoverageInfo$，应用程序的覆盖信息}
-	\KwOut{ $sorted\_\tau$，程序语句的逆向排序}
-	
-	
-	\SetKwProg{Fn}{Function}{:}{}
-	
-	\Fn{FaultLocazilation($P$,$CoverageInfo$)}{
+	\For{$s \in P$ }{
 		
-		\For{$s \in P$ }{
-			
-			计算语句$s$在程序$P$中前驱节点集合$Pred(s) $;
-			
-			根据$Pred(s) $的覆盖率情况筛选待计算的数据$Mdata(s)$;
-			
-			\eIf{\emph{$Mdata(s)$ 为 $\emptyset$	}}{
-				使用$Mdata(s)$根据\autoref{equ:expectEquation}计算 $\tau(s)$ ;			
-			}{
-				根据\autoref{equ:linearEquation}计算 $\tau(s)$ ;
-			}
-			
-		} 
+		计算语句$s$在程序$P$中前驱节点集合$Pred(s) $;
 		
-		对各语句按照$\tau$ 逆向排序得到	$sorted\_\tau$；
+		根据$Pred(s) $的覆盖率情况筛选待计算的数据$Mdata(s)$;
 		
-		\KwRet{$sorted\_\tau$};
+		\eIf{\emph{$Mdata(s)$ 为 $\emptyset$	}}{
+			使用$Mdata(s)$根据\autoref{equ:expectEquation}计算 $\tau(s)$ ;			
+		}{
+			根据\autoref{equ:linearEquation}计算 $\tau(s)$ ;
+		}
 		
-	}
+	} 
 	
+	对各语句按照$\tau$ 逆向排序得到	$sorted\_\tau$；
+	
+	\KwRet{$sorted\_\tau$};
+	
+}
+
 \end{algorithm}
 
 
@@ -525,7 +537,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 因此，$\tau'$的结果比结果$\tau$更好。
 
 
-\begin{figure}[!hb]
+\begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=0.8\textwidth]{./Figures/fault-localization.png}
 	\end{center}
