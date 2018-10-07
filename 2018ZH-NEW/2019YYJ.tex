@@ -59,7 +59,8 @@
 \usepackage{amssymb}                % AMSLaTeX宏包 用来排出更加漂亮的公式
 \usepackage{mathrsfs}
 \usepackage[subnum]{cases}
-\usepackage[numbers,sort&compress]{natbib}
+%\usepackage[numbers,sort&compress]{natbib}
+\usepackage[super,square,comma,sort&compress]{natbib}
 \usepackage{hypernat}
 \usepackage{geometry}
 \usepackage{times}
@@ -177,6 +178,9 @@
 \newcommand{\eat}[1]{}
 
 \newcommand{\anonymous}[1]{\phantom{ #1 }}
+\newcommand{\citeline}[1]{[\citenum{ #1 }]}
+
+
 
 \newcommand{\important}[1]{\CJKunderdot{\textbf{#1}}}
 
@@ -263,6 +267,17 @@
 
 %\CTEXsetup[beforeskip=0mm]{chapter*}
 %\CTEXsetup[afterskip=3mm]{chapter*}
+
+
+%\bibpunct{[}{]}{,}{s}{}{;}
+
+\makeatletter
+\DeclareRobustCommand\citenum
+{\begingroup
+	%      \NAT@swatrue\let\NAT@ctype\z@\NAT@parfalse\let\textsuperscript\NAT@spacechar% DELETED
+	\NAT@swatrue\let\NAT@ctype\z@\NAT@parfalse\let\textsuperscript\relax% NEW
+	\NAT@citexnum[][]}
+\makeatother
 
 
 

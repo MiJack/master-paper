@@ -445,7 +445,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 
 
 为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
-我们按照\cite{baah2010causal,baah2011mitigating}的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
+我们按照[\citenum{baah2010causal,baah2011mitigating}]的实验设置，使用原始因果影响模型的计算结果（没有RunDroid）作为基线，和并使用RunDroid后的因果影响模型的计算结果进行比较。
 我们的实验对象如\autoref{tab:result}所示，代码\Line{13}为程序的错误（方法\code{loadData(int)}的参数不可为负数）。
 在编写的5个测试用例$t_1\sim t_5$中，$t_2$、$ t_5$未通过测试。
 列$\tau$为未使用RunDroid情况下的计算结果，列$\tau'$为使用RunDroid情况下的计算结果。

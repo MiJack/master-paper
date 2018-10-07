@@ -57,7 +57,7 @@
 
 
 在不执行应用程序的情况下，静态分析技术通过对应用程序的源代码或者执行文件进行控制流分析和数据流分析，进而推断应用程序在运行过程中可能产生的行为。
-这方面相关工具包括\cite{vallee1999soot,arzt2014flowdroid,AmanDroid,iccta,androguard:online,pxb1988d85,javadeco45,iBotPeac46,maaaazan93}。
+这方面相关工具包括[\citenum{vallee1999soot,arzt2014flowdroid,AmanDroid,iccta,androguard:online,pxb1988d85,javadeco45,iBotPeac46,maaaazan93}]。
 %Soot\cite{vallee1999soot}、FlowDroid\cite{arzt2014flowdroid}、AmanDroid\cite{AmanDroid}、IccTA\cite{iccta}、AndroGuard\cite{androguard:online}、Dex2Jar \cite{pxb1988d85}、JD-GUI\cite{javadeco45}、APKTool\cite{iBotPeac46}、AndroWarn\cite{maaaazan93}等。
 Soot\cite{vallee1999soot}是传统的静态分析工具，其思路是将所有的Java字节码文件转化成一种中间语言Jimple，并在Jimple的基础上进行常规的控制流分析、数据流分析，理论上适用于所有可以在Java虚拟机上运行的语言（例如Scala、Groovy等等）的分析。
 由于Android程序本身的字节码Davlik和Java字节码在格式上保持一致，因此，Soot也支持Android应用程序的静态分析。
@@ -67,7 +67,7 @@ FlowDroid通过定义数据源点和数据泄漏点，在Android应用生命周�
 但其不足之处在于缺少跨组件通信的分析不考虑多线程调用问题。
 在FlowDroid基础上，卢森堡大学的Li Li等人推出了IccTA\cite{iccta}，利用跨组件通信分析工具IC3提取跨组件通信\eat{（Inter-Component Communication, ICC）}的方法调用，并结合AndroidManifest.xml文件定义的Intent Filter信息，连接ICC两端的组件，克服了FlowDroid因缺少跨组件通信而导致的数据流上的缺失。
 \eat{因为它是构建在FlowDroid之上的一个探测敏感信息泄露的，所以受限于FlowDroid的局限性。}
-Yang等人~\cite{yang2015static}，利用静态分析技术，并将回调函数添加到控制流图（调用图）中，形成了回调函数控制流图\eat{（Callback control-flow gragh）}。
+Yang等人~\cite{yang2015static}利用静态分析技术并将回调函数添加到控制流图（调用图）中，形成了回调函数控制流图\eat{（Callback control-flow gragh）}。
 \todo{实验结果显示，Yang的工作比Gator~\cite{rountev2014static}在控件监听器绑定上得到了更为准确的结果。}
 %法国和意大利的学者~\cite{payet2012static}通过对Java字节码静态分析器Julia进行扩展，使得其支持对 Android 应用程序的静态分析；
 %他们通过改写 Android 库中 Activity、LayoutInflater 等类的代码逻辑，规避了Android系统分析常见难点(如程序的事件机制，基于反射的视图加载等)，
@@ -83,7 +83,7 @@ Yang等人~\cite{yang2015static}，利用静态分析技术，并将回调函数
 % 为了解决这一问题，研究人员提出了动态分析技术。
 和静态分析技术相对应，动态分析技术通过执行应用程序，获取程序运行过程的相关信息，从而实现对应的研究目的。
 动态分析技术往往需要对运行环境做适当的修改或者调用特殊的系统接口，记录应用程序运行过程的关键信息，结合数据流追踪等技术，实现对应用程序的运行时行为的监控与记录。
-这方面的工作代表包括\cite{chun2014taintdroid,droidbox:online,van2013dynamic,droidscope}等。
+这方面的工作代表包括[\citenum{chun2014taintdroid,droidbox:online,van2013dynamic,droidscope}]等。
 Enck等人提出的TaintDroid\cite{chun2014taintdroid}，是一个高效的系统级的动态污点跟踪和分析系统。它通过修改Dalvik虚拟机，利用动态污点分析技术实时监控敏感数据的生成、传播和泄露，实现了变量层面、方法层面、文件层面的数据追踪。
 此外，TaintDroid还支持跨进程通信（IPC）层面上的污点分析，因此可以精确分析出应用程序从消费者手机上获取和发布隐私信息的完整传播过程。
 TaintDroid提供了较为完备的数据流分析技术，但是不支持控制流追踪，无法给出相关语句的执行路径。
@@ -111,24 +111,28 @@ SimplePref\eat{利用了系统接口pref\_event\_open，}以采样（Sample）�
 \subsection{分析技术的应用}
 
 \todo{上述技术广泛运用在安全性分析、质量保障等领域。}
+\todo{伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。}
 
-\point{安全性分析：}
+%\point{安全性分析：}
 
 安全性分析包括隐私泄露、权限机制研究、恶意软件排查等。
 为了弥补Android官方文档权限说明不完整的状况，多伦多大学的Kathy Au等人提出的PScout\cite{au2012pscout}利用Soot对Android系统程序进行静态分析，
 构建出Android系统的函数调用图，在调用图中标识权限相关的Binder跨进程调用，结合逆向可达性分析技术得出系统API接口与权限的映射关系。
 %相比其他类似工作，由于考虑了Android系统特性，PScout分析的到结果更加完整，但受到可达性分析的精度限制，存在部分错误的映射关系。
 %此外，该团队对Android 2.1 $\sim$  4.0等四个版本的系统源代码进行了广泛的分析，就权限设计的冗余性、无文档说明API的权限要求、权限在Android系统升级的演变等多个研究问题进行深入的探讨。
-在PScout的基础上，\textsc{WhyPer}\cite{pandita2013whyper}将自然语言处理技术（NLP）和传统静态分析技术相结合，
+在PScout的基础上，\textsc{WhyPer}\cite{pandita2013whyper}将自然语言处理技术和传统静态分析技术相结合，
 可以帮人们找出应用市场中那些应用描述和实际使用到的权限不符的应用。
-\todo{Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为以防止被安全机构识别出来。}%，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
-不同的是恶意软件的行为一般在特定条件下（例如深夜）运行。
+{Wei Yang等人发现一部分恶意应用试图通过模仿正常应用的行为模式，以躲避安全系统的检测。}
+%虽然，这些恶意软件和常规软件具备相同的功能，但是行为的执行时机和%，例如恶意软件用到了和正常软件经常使用到的发送短信的功能，
+%不同的是恶意软件的行为一般在特定条件下（例如深夜）运行。
 为此，Wei Yang等人提出了一种基于静态分析技术的解决方案AppContext\cite{yang2015appcontext}：
-在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件形成ICFG，提取出安全敏感行为的上下文，并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
-\todo{实验结果显示}，AppContext的准确率和召回率分别达到了87.7\%和95\%，实验结果也验证了安全敏感行为的恶意性与该行为的意图(通过上下文反映)的密切关系。
+在FlowDroid提供的函数调用图的基础上，AppContext结合Android常见的系统事件形成ICFG，提取出安全敏感行为的上下文，
+并利用机器学习算法通过明敏感行为及其上下文将应用行为分类为良性行为以及恶意行为。
+%并利用SVM技术对这些信息进行机器学习，得到最终的安全检测模型。
+经过验证，AppContext的准确率和召回率分别达到了87.7\%和95\%，这验证了安全敏感行为的恶意性与该行为的意图(通过上下文反映)的密切关系。
 AppIntent\cite{yang2013appintent}利用静态分析技术提取应用程序的时间约束条件，再结合符号执行技术，最后得到用户信息泄露的序列。
-AppAudit\cite{xia2015effective}利用静态分析技术找出函数调用图中潜在的数据泄露路径，并利用动态污点分析技术进行进一步确认，在一定程度上减低了结果的假阳性。
-\todo{相比AppIntent，AppAudit的分析结果准确度更高，时间开销较小。}
+类似的，AppAudit\cite{xia2015effective}采用了静动态分析结合的技术方案，利用静态分析技术找出函数调用图中潜在的数据泄露路径，并利用动态污点分析技术进行进一步确认，在一定程度上减低了结果的假阳性。
+相比AppIntent，AppAudit得到的数据泄露路径，准确度更高，同时时间开销较小。
 Marvin\cite{lindorfer2015marvin}从静动态分析技术的分析结果中提取应用的特征（例如应用元数据、类结果、应用运行时行为等），并利用机器学习技术进行训练。
 在大规模数据验证的时，Marvin可以识别出98.24\%的恶意软件，假阳性低于0.04\%。
 \todo{Android应用程序中存在着大量的网络交互，因此，也有一部分研究Socket\cite{Shao2016The,Jia2017Open,bu2017program}聚焦于移动应用的网络安全问题。}
@@ -137,32 +141,25 @@ Marvin\cite{lindorfer2015marvin}从静动态分析技术的分析结果中提取
 %PATDroid\cite{sadeghi2017patdroid}动静态结合
 
 
-\point{质量保障}
+%\point{质量保障}
 
-\todo{伴随着Android应用程序的发展，研究人员也开始思考如何利用技术手段保障应用本身的质量。}
-%传统测试观点认为，在测试过程中，如果源代码的覆盖率可以维持在一个较高的水平，可在一定程度上可以覆盖
-%其中，提高代码的覆盖率就是非常重要的一个方面。
-这方面的工作包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、错误定位\cite{mirzaei2015exception,machado2013mzoltar}、错误修复分析\cite{tan2018repairing,QingGaoASE15}以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}等。
+分析技术在质量保障领域的应用包括提升软件在测试过程中的代码覆盖率\cite{azim2013targeted,yang2013grey,su2016fsmdroid,androidtest2}、错误定位\cite{mirzaei2015exception,machado2013mzoltar}、错误修复分析\cite{tan2018repairing,QingGaoASE15}以及变异测试\cite{MutationOperatorsAndroid,deng2015towards,linares2017enabling}等。
 %t, most GUI testing techniques, e.g., random testing [39, 57], search-based testing [58, 60], and model-based testing [2, 3, 8, 78, 85]
-\todo{工作\cite{azim2013targeted}利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
+\todo{工作[\citenum{azim2013targeted}]利用静态分析工具SCanDroid得到静态Activity迁移图，并结合基于目标探索策略和深度优先探索策略进而达到了较好的Activity覆盖率。
 Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，在深度优先算法的基础上，使得程序在当前状态无可再遍历状态的情况下进行回溯。
 相比传统的深度优先算法，Wei Yang的工作对应的时间开销更小，效率更高。
 此外，Stoat\cite{su2016fsmdroid,androidtest2}利用静态、动态分析技术标识出程序本身的状态和事件，从应用中抽象出有限状态机（FSM）模型。
-基于该模型，Stoat进行模型变异、测试用例生成与执行、模型迭代，使得应用程序的覆盖率相比之前工作\cite{hao2014puma,amalfitano2015mobiguitar}提升了17$\sim$31\%。
+基于该模型，Stoat进行模型变异、测试用例生成与执行、模型迭代，使得应用程序的覆盖率相比之前工作[\citenum{hao2014puma,amalfitano2015mobiguitar}]提升了17$\sim$31\%。
 }
-工作\cite{mirzaei2015exception,machado2013mzoltar}等将\eat{传统软件的错误定位技术——}基于频谱的错误定位技术\eat{（spectrum-based fault location，SBFL）}运用在Android应用上，取得了不错的成绩。
-工作\cite{tan2018repairing,QingGaoASE15}等主要聚焦如何在Android应用程序出现问题时，根据异常的堆栈信息结合软件变异技术或者问答网站生成补丁代码，实现程序的自动修复。
+文献[\citenum{mirzaei2015exception,machado2013mzoltar}]等将\eat{传统软件的错误定位技术——}基于频谱的错误定位技术\eat{（spectrum-based fault location，SBFL）}运用在Android应用上，取得了不错的成绩。
+文献[\citenum{tan2018repairing,QingGaoASE15}]等主要聚焦如何在Android应用程序出现问题时，根据异常的堆栈信息结合软件变异技术或者问答网站生成补丁代码，实现程序的自动修复。
 范玲玲等人的工作\cite{fan2018large}通过开源社区中应用的issue解析分析，从异常种类（应用异常、系统异常、库（Library）异常）、系统异常分类、错误检查工具以及错误修复方式等若干方面进行较为深入的分析、探讨和总结。
 
-\eat{
 
-\point{应用分类：}
+%\point{应用分类：}
+%Simapp\cite{chen2015simapp}
+%mobile app tagging \cite{chen2016mobile}
 
-Simapp\cite{chen2015simapp}
-
-mobile app tagging \cite{chen2016mobile}
-
-}
 
 
 % 例如错误定位、自动化分析、profiling等
@@ -170,11 +167,8 @@ mobile app tagging \cite{chen2016mobile}
 \section{论文研究内容}
 
 
-\todo{
-从上述工作中，我们不难发现对Android应用程序运行状态的建模是应用分析中的重要环节。
-而函数调用图就是一种重要的展现形式，
-}
-Android应用程序的特性（例如，基于事件驱动的架构、面向组件的开发方式、对回调函数和多线程交互的依赖等）使得传统分析工具无法准确对Android应用程序的执行过程进行建模，对研究人员了解Android应用程序执行细节造成了挑战。
+从上述工作中，我们不难发现，分析技术的应用往往需要构建Android应用程序的函数调用图，对程序执行过程进行建模。
+但是，Android应用程序的特性（例如，基于事件驱动的架构、面向组件的开发方式、对回调函数和多线程交互的依赖等）使得传统分析工具无法准确对Android应用程序的执行过程进行建模，对研究人员了解Android应用程序执行细节造成了挑战。
 
 
 为此，本文提出了一种可用于还原Android动态函数调用图的技术方案——RunDroid。
@@ -244,7 +238,8 @@ RunDroid产出的函数调用图不仅包括方法调用关系，还展示了方
 
 \fullref{chp:background}从Android的体系结构出发，介绍了和Android系统相关的背景知识，例如Activity组件和Android平台上的多线程交互方式。
 
-\fullref{chp:definition}\todo{方法和对象的关系、方法间关系、调用图等方面介绍本文用到的概念做了符号化的定义，}并结合文章的例子对概念进行解释说明。
+\fullref{chp:definition}对本文使用到的基本概念做基本的介绍，定义Android系统中常见的触发关系，并结合具体示例简单解释这些概念。
+
 
 \fullref{chp:design}对RunDroid系统的系统功能做了基本的介绍，从整体上阐述了RunDroid的工作原理，并详细地介绍了RunDroid获取运行时的方法信息，并根据日志构建\ecg 的完整过程。
 
