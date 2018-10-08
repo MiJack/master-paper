@@ -95,6 +95,8 @@
 \makeindex
 \pagestyle{fancy}
 
+\newcommand{\eat}[1]{}
+
 \renewcommand{\headrulewidth}{0.4pt}
 \fancyfoot[CO,CE]{\thepage}
 
@@ -102,6 +104,7 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \newtheorem{Def}{定义}
+
 
 \newcommand{\yihao}{\fontsize{26pt}{36pt}\selectfont}           % 一号, 1.4 倍行距
 \newcommand{\erhao}{\fontsize{22pt}{28pt}\selectfont}          % 二号, 1.25 倍行距
@@ -148,6 +151,45 @@
 
 
 %=============================段前段后定义=============================% 
+\def  \cftbeforetitleskip {35pt}
+\def \cftaftertitleskip {25pt}
+%% 目录部分
+\setlength{\cftbeforetoctitleskip}{\cftbeforetitleskip}
+\setlength{\cftaftertoctitleskip}{\cftaftertitleskip}
+
+%% 图目录
+
+\setlength{\cftbeforeloftitleskip}{\cftbeforetitleskip}
+\setlength{\cftafterloftitleskip}{\cftaftertitleskip}
+
+%% 表目录
+\setlength{\cftbeforelottitleskip}{\cftbeforetitleskip}
+\setlength{\cftafterlottitleskip}{\cftaftertitleskip}
+%% 算法目录
+%\setlength{\cftbeforeloatitleskip}{30pt}
+%\setlength{\cftafterloatitleskip}{20pt}
+
+
+
+
+\CTEXsetup[format={\zihao{3}\heiti\centering}]{chapter}
+\CTEXsetup[format={\raggedright\zihao{4}\heiti}]{section}
+\CTEXsetup[format={\zihao{-4}\heiti}]{subsection}
+
+\CTEXsetup[beforeskip=17pt]{chapter}
+\CTEXsetup[afterskip=16.5 pt]{chapter}
+
+
+
+
+
+\renewcommand{\baselinestretch}{1.5}
+
+%\setlength{\baselineskip}{25pt}  %%正文设为25磅行间距
+
+
+%\CTEXsetup[beforeskip=\cftbeforetitleskip]{chapter}
+%\CTEXsetup[afterskip=\cftaftertitleskip]{chapter}
 
 
 
@@ -155,7 +197,7 @@
 
 %===============================概念定义===============================% 
 
-\newcommand{\eat}[1]{}
+
 
 \newcommand{\anonymous}[1]{\phantom{ #1 }}
 \newcommand{\citeline}[1]{[\citenum{ #1 }]}
@@ -236,7 +278,7 @@
 
 
 %% 辅助功能显示页边界
-%\usepackage{showframe} % just for the example
+\usepackage{showframe} % just for the example
 
 \usepackage{etoolbox}
 
@@ -244,20 +286,6 @@
 
 \input{settings-lst}
 
-
-%\CTEXsetup[beforeskip=0mm]{chapter*}
-%\CTEXsetup[afterskip=3mm]{chapter*}
-
-
-%\bibpunct{[}{]}{,}{s}{}{;}
-
-\makeatletter
-\DeclareRobustCommand\citenum
-{\begingroup
-	%      \NAT@swatrue\let\NAT@ctype\z@\NAT@parfalse\let\textsuperscript\NAT@spacechar% DELETED
-	\NAT@swatrue\let\NAT@ctype\z@\NAT@parfalse\let\textsuperscript\relax% NEW
-	\NAT@citexnum[][]}
-\makeatother
 
 
 
@@ -302,8 +330,8 @@
 \input {B3-Figure.tex}
 \clearPaperPage
 \input {B4-Table.tex}
-\clearPaperPage
-\input {B5-Algorithms.tex}
+%\clearPaperPage
+%\input {B5-Algorithms.tex}
 
 
 
@@ -317,13 +345,6 @@
 
 
 
-\CTEXsetup[format+={\zihao{3}\heiti}]{chapter}
-\CTEXsetup[format+={\raggedright\zihao{4}\heiti}]{section}
-\CTEXsetup[format+={\zihao{-4}\heiti}]{subsection}
-
-
-\setlength{\baselineskip}{25pt}  %%正文设为25磅行间距
-
 
 
 % 在章首页添加页眉
@@ -333,9 +354,10 @@
 \fancyhead[RE,LO]{ \leftmark}
 }
 
-\raggedbottom
+
 %\banxiaosi
 \xiaosi
+
 \clearPaperPage
 
 
