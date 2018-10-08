@@ -172,7 +172,7 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 
 触发关系描述的是方法执行间的关系。
 触发定义通常由对象与方法的属性约束条件和对象与方法的关系约束条件两个部分组成。
-前者描述的是对象和方法执行的属性约束条件，即对对象$o$本身的类型$o.class$、定义方法$m$的类$m.class$、方法执行$m$的方法签名$m.sign$和方法执行$m$的方法全限签名$m.methodSign$等属性的约束；
+前者描述的是对象和方法执行的属性约束条件，即对对象$o$本身的类型$o.class$、定义方法$m$的类$m.class$、方法执行$m$的方法签名$m.sign$和方法执行$m$的方法完整签名$m.methodSign$（即$m.class$和$m.sign$的组合）等属性的约束；
 后者对应的则是对象和方法之间的关系，包括方法对象关系、方法间的调用关系。
 本文中涉及的触发关系包括以下几种。
 
@@ -193,8 +193,9 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \begin{equation}  
 \left\{
 \begin{array}{ll}
-&o_{view}.class =\text{\codeInEqu{View}}, o_{listener}.class  \in  \{ c \mid  c \text{为类\codeInEqu{View\$OnClickListener}  的子类}  \}\\
-&m_{register}.methodSign = \text{\codeInEqu{View.setOnClickListener(View\$OnClickListener)}};\\
+&o_{view}.class =\text{\codeInEqu{View}};\\
+& o_{listener}.class  \in  \{ c \mid  c \text{为类\codeInEqu{View\$OnClickListener}  的子类}  \};\\
+&m_{register}.methodSign =\text{\codeInEqu{View.setOnClickListener(View\$OnClickListener)}};\\
 & m_{click}.class \in  \{ c \mid  c \text{为类\codeInEqu{View\$OnClickListener}  的子类}  \};\\
 &m_{click}.sign =\text{\codeInEqu{onClick(View)}};\\
 &m_{register}\joinrel\xrightarrow{instance} o_{view}   ,  m_{register} \joinrel\xrightarrow{parameter}   o_{listener};\\
@@ -221,7 +222,8 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \left\{  
 \begin{array}{ll}
 &m_{start}.methodSign  = \text{\codeInEqu{Thread.start()}};\\
-&m_{run}.class \in  \{ c \mid c \text{为类\codeInEqu{Thread}的子类} \} , m_{run}.sign = \text{\codeInEqu{run()}};\\
+&m_{run}.class \in  \{ c \mid c \text{为类\codeInEqu{Thread}的子类} \} ;\\
+&m_{run}.sign = \text{\codeInEqu{run()}};\\
 &o_{thread} \in  \{  c \mid \text{c为类\codeInEqu{Thread}的子类}  \} ;\\
 &m_{start}\joinrel\xrightarrow{instance} o_{thread} , m_{run} \joinrel\xrightarrow{instance}   o_{thread} .
 \end{array}  
@@ -239,7 +241,8 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \left\{  
 \begin{array}{ll}
 &m_{runOnUiThread}.methodSign = \text{\codeInEqu{Activity.runOnUiThread(Runnable)}};\\
-&m_{run}.class \in  \{ c \mid c \text{为接口\codeInEqu{Runnable}的实现类} \} , m_{run}.sign = \text{\codeInEqu{run()}};\\
+&m_{run}.class \in  \{ c \mid c \text{为接口\codeInEqu{Runnable}的实现类} \} ;\\
+& m_{run}.sign = \text{\codeInEqu{run()}};\\
 &o_{r}.class\in  \{  c \mid  c \text{为接口\codeInEqu{Runnable}的实现类}  \} ;\\
 & m_{runOnUiThread} \joinrel\xrightarrow{parameter}   o_r ,  m_{run} \joinrel\xrightarrow{instance}   o_r  .
 \end{array}  

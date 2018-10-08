@@ -116,7 +116,7 @@
 
 \newcommand{\tablewuhao}{\fontsize{10.5pt}{12.5pt}\selectfont}    % 五号, 单倍行距
 
-\newcommand{\equwuhao}{\fontsize{11pt}{13.5pt}\selectfont}  
+\newcommand{\equwuhao}{\fontsize{11.5pt}{15pt}\selectfont}  
 
 \renewcommand*{\bibfont}{\normalfont\normalsize\linespread{1}\selectfont}
 \setlength{\bibitemsep}{\baselineskip}
@@ -176,12 +176,11 @@
 
 
 
-
 %===============================概念定义===============================% 
 
 \newcommand{\eat}[1]{}
 
-\newcommand{\anonymous}[2]{{ #2 }}
+\newcommand{\anonymous}[1]{\phantom{ #1 }}
 \newcommand{\citeline}[1]{[\citenum{ #1 }]}
 
 
@@ -196,12 +195,8 @@
 \newcommand{\ecg}{拓展函数调用图}
 \newcommand{\TheisNameEn}[0]{{\Large Building Android Dynamic Call Graph: }\\ Design and Implement of RunDroid}
 
-\newcommand{\code}[1]{	 {#1}}
-
-
-
-
-\newcommand{\codeInEqu}[1]{ {  {\kaishu \textbf{#1 }}}}
+\newcommand{\code}[1]{\textit{ #1 }}
+\newcommand{\codeInEqu}[1]{ {  \textit{\kaishu \textbf{#1 }}}}
  
 %\renewcommand{\code}[1]{{ \lstinline{#1}}}
 
@@ -330,10 +325,8 @@
 \input {B3-Figure.tex}
 \clearPaperPage
 \input {B4-Table.tex}
-
-
-%\clearPaperPage
-%\input {B5-Algorithms.tex}
+\clearPaperPage
+\input {B5-Algorithms.tex}
 
 
 
@@ -401,6 +394,7 @@
 	\bibliographystyle{GBT7714-2005}
 	\bibliography{bib/tex}
 
+ \eat{
 \clearPaperPage
 
 
@@ -410,11 +404,21 @@
 }
 
 
-\input {D2-ACHNOWLEDGEMENT.tex}
+\addcontentsline{toc}{chapter}{致  谢}
 
+\input {D2-ACHNOWLEDGEMENT.tex}
+}
 \clearPaperPage
 
 
+\fancypagestyle{plain}{%
+	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
+	\fancyhead[RE,LO]{ 攻读学位期间发表的学术论文}
+}
+
+
+
+\addcontentsline{toc}{chapter}{攻读学位期间发表的学术论文}
 \input {D3-MYACHIEVEMENTS.tex}
 
 
