@@ -135,9 +135,9 @@ Neo4j的数据分为节点和关系两种类型，支持自定义键值属性。
 
 
 关系生成器是\autoref{alg:buildCG}、\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，由Cypher脚本和Soot等技术共同实现。
-当我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$（\autoref{alg:buildTrigger}第16$\sim$17行）时，可以直接使用脚本\autoref{fig:cypher_code}
+当我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$（\autoref{alg:buildTrigger}第11行）时，可以直接使用脚本\autoref{fig:cypher_code}
 直接在调用图中找到所有符合条件的节点。
-相比传统的编程语言，Cypher实现相关逻辑，表达形式简洁，代码阅读性好，开发效率高效。
+相比传统的编程语言，Cypher在实现相同逻辑时，表达形式简洁，代码可读性高，开发效率高效。
 Soot的工作主要是提供应用程序相关的类继承检索服务。
 例如，\autoref{alg:buildTrigger}第7行中，我们需要知道所有的Runnable对象，此处便需要通过Soot查询所有的Runnable子类。
 在算法\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
@@ -162,4 +162,4 @@ Soot的工作主要是提供应用程序相关的类继承检索服务。
 预处理器和运行时拦截器分别对应应用程序在执行过程中用户方法和系统方法的执行拦截，以触发日志记录器记录方法执行信息。
 预处理器是通过源代码编织实现的，避免了新方法的引入，规避了方法数65K限制问题。
 运行时拦截器借助Xposed框架提供的方法执行劫持技术实现对系统方法的执行拦截，在实现上规避了Xposed插件修改后的重启系统操作。
-调用图构建器将运行过程中方法执行的日志信息作为输入，在Neo4j图数据库上构建函数调用图，利用图中方法和对象之间的关系，利用Soot和Cypher语句实现Activity生命周期的构建、方法触发关系的生成。
+调用图构建器将运行过程中方法执行的日志信息作为输入，在Neo4j图数据库上构建函数调用图，利用图中方法和对象之间的关系，利用Soot和Cypher语句实现Activity生命周期的构建、方法触发关系的生成，形成最终的扩展函数调用图。

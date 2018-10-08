@@ -169,10 +169,10 @@ G_{method} =  & E_{DCG} \bigcup \{ \left\langle m_1 , m_2 \right\rangle  \mid m_
 \section{Android系统中的触发关系}
 
 触发关系描述的是方法执行间的关系。
-在定义触发定义通常有两个部分组成：对象与方法的属性约束条件、对象与方法的关系约束条件。
-前者描述的是对象和方法执行的属性约束条件，例如对象$o$本身的类型$o.class$、定义方法$m$的类$m.class$、方法执行$m$的方法签名$m.sign$和方法执行$m$的方法全限签名$m.methodSign$；
+触发定义通常由对象与方法的属性约束条件和对象与方法的关系约束条件两个部分组成。
+前者描述的是对象和方法执行的属性约束条件，即对对象$o$本身的类型$o.class$、定义方法$m$的类$m.class$、方法执行$m$的方法签名$m.sign$和方法执行$m$的方法全限签名$m.methodSign$等属性的约束；
 后者对应的则是对象和方法之间的关系，包括方法对象关系、方法间的调用关系。
-本文中涉及的触发关系包括以下几点。
+本文中涉及的触发关系包括以下几种。
 
 
 
@@ -209,9 +209,9 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发类\code{Thread}和\code{Runnable}的方法\code{run()}（用$m_{run}$表示）的执行。
 
-通过方法$m_{start}$触发方法$m_{run}$的执行时，方法$m_{start}$和$m_{run}$的实例对象均为同一个Thread对象$o_{thread}$。
+通过方法$m_{start}$触发方法$m_{run}$的执行时，方法$m_{start}$和$m_{run}$的实例对象均为同一个\code{Thread}对象$o_{thread}$。
 %因此，对于方法，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$。
-因此，当两个方法$m_{start}$ 、$m_{run}$及Thread对象$o_{thread}$满足\autoref{equ:rule_thread}时，$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $ 成立。
+因此，当两个方法$m_{start}$ 、$m_{run}$及\code{Thread}对象$o_{thread}$满足\autoref{equ:rule_thread}时，$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $ 成立。
 
 \begin{equation}
 \left\{  
@@ -244,7 +244,7 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 \subsection{基于\code{Handler} 多线程消息调度的触发关系}
 
-根据第\ref{chp:background}章中关于Handler的介绍，我们知道Handler通过Message进行多线程消息调度：
+根据第\ref{chp:background}章中关于\code{Handler}的介绍，我们知道\code{Handler}通过\code{Message}进行多线程消息调度：
 通过方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）向消息队列从放入消息（用$o_m$表示）；
 通过方法\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）从消息队列中取出消息$o_m$，进行对应业务逻辑处理。
 %首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
@@ -268,16 +268,13 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 
 
 以第\ref{chp:background}章中的\autoref{fig:handler-code}为例，我们将简要阐述上述概念。
-在线程WorkerThread中，方法\code{run()}\eat{$m_{run}$}依次调用了方法\code{Message.obtain()}\eat{$m_{obtain}$}和方法\code{Handler.sendMessage(Message)}\eat{$m_{send}$}，则有$m_{run} \to m_{obtain} $和$m_{run} \to m_{send}$。
+在线程WorkerThread中，方法\code{run()}\eat{$m_{run}$}依次调用了方法\code{Message.obtain()}（用$m_{obtain}$表示）和方法\code{Handler.sendMessage(Message)}（用$m_{send}$表示），则有$m_{run} \to m_{obtain} $和$m_{run} \to m_{send}$。
 对于方法$m_{ontain}$，$o_{m} \joinrel\xrightarrow{return} m_{obtain} $成立。
 对于方法$m_{send}$，$o_{m} \joinrel\xrightarrow{parameter} m_{send} $、$o_{handler} \joinrel\xrightarrow{instance} m_{send} $成立。
 %在Handler的方法handleMessage(Message)中，则有$m_handle \to $
 通过对Android Handler 运行机制的分析，我们知道$m_{enqueue} \hookrightarrow m_{dispatch}$。
-从\autoref{fig:handler-apis}、\autoref{fig:handler-framework}中可知，所有的Handler API最后就会调用到\code{Handler.enqueueMessage( MessageQueue, Message, long)}方法，即$m_{send} \stackrel{\ast	}{\Rightarrow} m_{enqueue} $。
-\todo{
-	以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，
-	因此，$m_{send} \hookrightarrow m_{handle}$或$m_{send} \lhook\joinrel\xrightarrow{Handler}  m_{handle} $。
-}
+从\autoref{fig:handler-apis}、\autoref{fig:handler-framework}中可知，所有的Handler API最后就会调用到\code{Handler.enqueueMessage( MessageQueue, Message, long)}方法，即$m_{send} \stackrel{\ast	}{\Rightarrow} m_{enqueue} $，以及$m_{dispatch} \stackrel{\ast}{\Rightarrow}  m_{handle}$，
+因此，方法$m_{send}$ 触发调用了方法$m_{handle}$ ，即$m_{send} \hookrightarrow m_{handle}$或$m_{send} \lhook\joinrel\xrightarrow{Handler}  m_{handle} $。
 
 \section{本章总结}
 
