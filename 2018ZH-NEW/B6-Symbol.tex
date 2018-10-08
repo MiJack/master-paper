@@ -1,11 +1,59 @@
-\eat{
+
+
+\fancypagestyle{plain}{%
+	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
+	\fancyhead[RE,LO]{ 本文使用到的符号说明}
+}
+
+
 \addcontentsline{toc}{chapter}{本文使用到的符号说明}
 
-\chapter*{\zihao{2}\heiti{本文使用到的符号说明}}
-
-
-\setlength{\baselineskip}{25pt}	
+\chapter*{本文使用到的符号说明}
 
 
 
-}
+
+\begin{table*}[!ht]
+\centering
+
+\begin{tabular}{|c|p{10cm}|}
+\hline
+符号&说明\\
+\hline
+$o$ & 对象$o$\\
+\hline
+$m$ & 方法或方法执行 $m$\\
+\hline	
+$o.class$ &对象$o$的类型 \\ 
+\hline	
+$m.class$ & 定义方法$m$的类 \\
+\hline	
+$m.sign$ & 方法执行$m$的方法签名 \\
+\hline	
+ $m.methodSign$  &方法执行$m$的方法完整签名，$m.class$和$m.sign$的组合 \\
+\hline	
+ $m \joinrel\xrightarrow{parameter} o_p$  &  对象$o_p$是这个方法$m$的参数  \\
+\hline 
+$m \joinrel\xrightarrow{return} o_r$& 对象$o_r$是这个方法$m$的返回值  \\
+\hline
+$m \joinrel\xrightarrow{instance} o_i$&   方法$m$是非静态方法，则方法执行时我们可以获取到关联到的this指针对象$o_i$\\
+\hline
+$m \to m'$ & 方法$m$在执行时调用了方法$m'$\\
+\hline
+%$m_0 \to  m_1 \to  \dots \to m_n \to m$ & \\
+%\hline
+$m \stackrel{\ast}{\to} m' $ &  方法$m$扩展调用方法$m'$\\
+\hline
+$m  \stackrel{\ast}{ \Rightarrow } m'$ &在系统源代码层面上， 方法$m$扩展调用方法$m'$恒成立 \\
+\hline
+$m \hookrightarrow m'$ & 方法$m$的执行触发了方法$m'$的执行 \\
+\hline					
+$m \lhook\joinrel\xrightarrow{\text{\textit{触发关系}}}  m' $& 方法$m$的执行触发了方法$m'$的执行，原因为\textit{触发关系}\\
+\hline
+\end{tabular}
+\end{table*}
+
+
+
+
+

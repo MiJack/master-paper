@@ -140,11 +140,11 @@
 \renewcommand{\contentsname}{\hfill\bfseries\Large 目录\hfill}   
 \renewcommand{\cftaftertoctitle}{\hfill}
 
-\renewcommand{\listtablename}{\hfill\bfseries\Large 表~格~清~单\hfill} 
-\renewcommand{\listfigurename}{\hfill\bfseries\Large 插~图~清~单\hfill} 
+\renewcommand{\listtablename}{\hfill\bfseries\Large 表~~~~格\hfill} 
+\renewcommand{\listfigurename}{\hfill\bfseries\Large 插~~~~图\hfill} 
 
 
-\renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算~法~清~单}
+\renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算~~~~法}
 \newcommand*{\fullref}[1]{\textbf{\hyperref[{#1}]{第\ref*{#1}章~}}}
 
 
@@ -261,7 +261,7 @@
 
 
 %% 辅助功能显示页边界
-%\usepackage{showframe} % just for the example
+\usepackage{showframe} % just for the example
 
 \usepackage{etoolbox}
 
@@ -329,8 +329,8 @@
 \input {B4-Table.tex}
 
 \input {B5-Algorithms.tex}
-\clearPaperPage
-%\input{B6-Symbol.tex}
+%\clearPaperPage
+
 
 
 
@@ -400,7 +400,9 @@
 
 \clearPaperPage
 
+\input{B6-Symbol.tex}
 
+\clearPaperPage
 
 \fancypagestyle{plain}{%
 	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
