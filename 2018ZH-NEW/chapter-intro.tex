@@ -83,7 +83,7 @@ FlowDroid通过定义数据源点和数据泄漏点，在Android应用生命周�
 % 为了解决这一问题，研究人员提出了动态分析技术。
 和静态分析技术相对应，动态分析技术通过执行应用程序，获取程序运行过程的相关信息，从而实现对应的研究目的。
 动态分析技术往往需要对运行环境做适当的修改或者调用特殊的系统接口，记录应用程序运行过程的关键信息，结合数据流追踪等技术，实现对应用程序的运行时行为的监控与记录。
-这方面的工作代表包括[\citenum{chun2014taintdroid,droidbox:online,van2013dynamic,droidscope}]等。
+这方面的工作代表包括[\citenum{chun2014taintdroid,droidbox:online,van2013dynamic,droidscope,acpmInsp34}]等。
 Enck等人提出的TaintDroid\cite{chun2014taintdroid}，是一个高效的系统级的动态污点跟踪和分析系统。它通过修改Dalvik虚拟机，利用动态污点分析技术实时监控敏感数据的生成、传播和泄露，实现了变量层面、方法层面、文件层面的数据追踪。
 此外，TaintDroid还支持跨进程通信（IPC）层面上的污点分析，因此可以精确分析出应用程序从消费者手机上获取和发布隐私信息的完整传播过程。
 TaintDroid提供了较为完备的数据流分析技术，但是不支持控制流追踪，无法给出相关语句的执行路径。

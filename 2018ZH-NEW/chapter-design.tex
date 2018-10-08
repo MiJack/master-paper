@@ -380,8 +380,8 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 	}
 	% $o_p \stackrel{parameter}{\longrightarrow} m$
 	\Fn{patchUiEvent($ecg$)} {
-		\For{\emph{$o_{view} \in \{ o \mid o $ 为调用图 $ ecg $中\code{View}类型的对象节点  $ \}$} }{ 
-			\For{\emph{$o_{listener} \in \{ o \mid o $  为调用图 $ ecg $  中\code{View.OnClickListener} 类型的对象节点 $ \}$} }{		
+		\For{\emph{$o_{view} \in \{ o \mid o $ 为调用图 $ ecg $中{View}类型的对象节点  $ \}$} }{ 
+			\For{\emph{$o_{listener} \in \{ o \mid o $  为调用图 $ ecg $  中{View.OnClickListener} 类型的对象节点 $ \}$} }{		
 				\If {\emph{$o_{view}$，$o_{listener}$，$m_{register}$ 和 $m_{click}$  满足\autoref{equ:rule_ui}}
 					}{
 					$ecg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
@@ -397,7 +397,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 生命周期的构建过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加Activity生命周期变化的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
 对于AndroidManifest文件中声明的每一个Activity组件对象 $o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
 若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第7$\sim$11行）。
-最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第12$\sim$13行）。
+最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到{Activity}的生命周期（第12$\sim$13行）。
 
 这三个条件分别为：
 （1）方法$m$的方法签名和\autoref{fig:Activity-lifecycle}中的任何一个生命周期方法的签名保持一致；
@@ -414,7 +414,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 \point{构建Andoid事件回调的触发关系}
 
-在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有\code{View}类型的对象节点$o_{view}$和\code{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
+在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有{View}类型的对象节点$o_{view}$和{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
 对于组合$\left\langle o_{listener}  , o_{view}\right\rangle $，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第15$\sim$18行）。
 
 
@@ -433,7 +433,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 
  \subsection{构建多线程触发关系}
-基于函数调用图构建多线程触发关系主要分为两个方面，基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度，具体的过程如\autoref{alg:buildTrigger}所示。
+基于函数调用图构建多线程触发关系主要分为两个方面，基于Java 的多线程交互与基于{Handler} 的多线程消息调度，具体的过程如\autoref{alg:buildTrigger}所示。
 
 
 
@@ -451,19 +451,19 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 		{// 在调用图$ecg$中创建基于Java 多线程交互的触发关系}
 		
 		
-		\For{\emph{$o_{thread} \in \{ o \mid o $  为调用图$ecg$中的 $Thread$ 类型的对象节点 $ \}$} }{
+		\For{\emph{$o_{thread} \in \{ o \mid o $  为调用图$ecg$中的 {Thread} 类型的对象节点 $ \}$} }{
 			\If{ \emph{$o_{thread}$、$m_{start}$ 和 $m_{run}$  满足\autoref{equ:rule_thread}}}{
 				$ecg$.addTriggerRel($m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $)	
 			}}
-		\For{\emph{$o_r \in \{ o \mid o $  为调用图$ecg$中的  $Runnable$ 类型的对象节点$  \}$} }{
+		\For{\emph{$o_r \in \{ o \mid o $  为调用图$ecg$中的  {Runnable} 类型的对象节点$  \}$} }{
 			\If{ \emph{$o_r$、$m_{runOnUiThread}$ 和 $m_{run}$  满足\autoref{equ:rule_runOnUiThread}}}{
 				$ecg$.addTriggerRel($m_{runOnUiThread}  \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run} $)	
 			}	
 		}
-		{// 在调用图$ecg$中创建基于\code{Handler} 多线程消息调度的触发关系}
+		{// 在调用图$ecg$中创建基于{Handler} 多线程消息调度的触发关系}
 		
 		
-			\For{\emph{ $o_m \in  \{ o\mid  o $  为调用图$ecg$中的 $Message$ 类型的对象节点$\}$} }{
+			\For{\emph{ $o_m \in  \{ o\mid  o $  为调用图$ecg$中的 {Message} 类型的对象节点$\}$} }{
 			\If{ \emph{$o_m$、$m_{handle}$和 $m_{dispatch}$  满足\autoref{equ:rule_handler}}}{
 		%		\tcp{Here means $m_{enqueue} \lhook\joinrel\xrightarrow{Handler} m_{dispatch} $.}
 			
@@ -483,13 +483,13 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 \point{基于Java 的多线程交互}
 
 
-基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} 和\code{Activity.runOnUiThread(Runnable)}等API，进而触发类\code{Thread}和\code{Runnable}的方法\code{run()}的执行。
+基于Java的多线程交互往往是以{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} 和\code{Activity.runOnUiThread(Runnable)}等API，进而触发类{Thread}和{Runnable}的方法\code{run()}的执行。
 
-对于方法\code{Thread.start()} 相关的触发关系，我们会遍历拓展调用图中的所有\code{Thread}类型的对象节点$o_{thread}$。
+对于方法\code{Thread.start()} 相关的触发关系，我们会遍历拓展调用图中的所有{Thread}类型的对象节点$o_{thread}$。
 判断调用图中是否存在方法节点$m_{start} $、$m_{run} $以及对象节点$o_{thread}$满足\autoref{equ:rule_thread}，方法节点$m_{start} $、$m_{run} $之间添加从$m_{start} $指向$m_{run} $的有向边，即$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $（第2$\sim$4行）。
 
 
-对于方法\code{Activity.runOnUiThread(Runnable)}相关的触发关系，我们会遍历拓展调用图中的所有\code{Runnable}类型的对象节点$o_{r}$。
+对于方法\code{Activity.runOnUiThread(Runnable)}相关的触发关系，我们会遍历拓展调用图中的所有{Runnable}类型的对象节点$o_{r}$。
 判断调用图中是否存在方法节点$m_{runOnUiThread} $、$m_{run} $以及对象节点$o_{r}$满足\autoref{equ:rule_runOnUiThread}，方法节点$m_{runOnUiThread} $、$m_{run} $之间添加从$m_{runOnUiThread} $指向$m_{run} $的有向边，即$m_{runOnUiThread} \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run}  $（第5$\sim$7行）。
 
 
@@ -539,12 +539,12 @@ rel(m_{run}, o_r) = instance \\
 
 
 
-\point{基于\code{Handler} 的多线程消息调度}
+\point{基于{Handler} 的多线程消息调度}
 
 根据第\ref{chp:background}、\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
 %在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
-在构建\code{Handler} 触发关系过程中，首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+在构建{Handler} 触发关系过程中，首先，我们利用类{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
 找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第$8\sim$9 行）；
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
 从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第10行），

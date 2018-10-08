@@ -87,7 +87,7 @@ m_0 \to  m_1 , m_1 \to  m_2 , \dots , m_n \to m  ( n \geqslant 0)
 以多线程中的Thread为例，方法\code{Thread.start()}（记为$m_{start}$）的执行会使JVM/Dalvik虚拟机创建一个新的线程。
 最终，虚拟机会在新的线程中回调该Thread对象的方法\code{Thread.run()}（记为$m_{run}$）。
 上述描述可以表示成$m_{start} \hookrightarrow m_{run}$。由于这个触发关系和多线程相关，也可以记作$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $。
-同样的，触发关系也适用于UI事件注册与响应\footnote{UI事件注册与响应指的是控件的点击事件，例如\code{View.setOnClickeListener(View\$OnClickListener)}和\code{View\$OnClickListener.onClick(View)}的关系} 、基于Handler的多线程交互。
+同样的，触发关系也适用于UI事件注册与响应\eat{UI事件注册与响应指的是控件的点击事件，例如\code{View.setOnClickeListener(View\$OnClickListener)}和\code{View\$OnClickListener.onClick(View)}的关系} 、基于Handler的多线程交互。
 
 \important{在系统源代码的层面上}，对于方法$m_a$ ,$m_b$ ,$m_c$ ，
 若$m_a  \stackrel{\ast}{ \Rightarrow } m_b$ 、 $m_b \hookrightarrow m_c$\important{同时}成立，则$m_a \hookrightarrow m_c$成立；
@@ -122,6 +122,8 @@ E = & \{
 \end{aligned}
 \end{equation}
 }
+{ 
+\equwuhao
 
 
 \begin{equation}  
@@ -137,7 +139,7 @@ CG &= &(V,E) ,\\
 \label{equ:dcg_sample} 
 \end{equation} 
 
-
+}
 
 
 \begin{Def}
@@ -186,7 +188,8 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 %因此，在构建Andoid事件回调的触发关系过程中，当方法$m_{register} $、$m_{click} $满足第19$\sim$22行的条件时，这两个方法之间存在触发关系，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第23行）。
 
 
-
+{ 
+	\equwuhao
 \begin{equation}  
 \left\{
 \begin{array}{ll}
@@ -202,17 +205,18 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \right.  
 \label{equ:rule_ui} 
 \end{equation}  
-
+}
 
 \subsection{基于Java 多线程交互的触发关系}
 
 
-基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发类\code{Thread}和\code{Runnable}的方法\code{run()}（用$m_{run}$表示）的执行。
+基于Java的多线程交互往往是以{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} （用$m_{start}$表示）和\code{Activity.runOnUiThread(Runnable)}（用$m_{runOnUiThread}$表示）等API，进而触发类{Thread}和{Runnable}的方法\code{run()}（用$m_{run}$表示）的执行。
 
-通过方法$m_{start}$触发方法$m_{run}$的执行时，方法$m_{start}$和$m_{run}$的实例对象均为同一个\code{Thread}对象$o_{thread}$。
+通过方法$m_{start}$触发方法$m_{run}$的执行时，方法$m_{start}$和$m_{run}$的实例对象均为同一个{Thread}对象$o_{thread}$。
 %因此，对于方法，如果存在一个\code{Runnable}类型的对象\code{r}，它既是方法$m_{start}$的实例，又是方法$m_{run}$的实例，则两个方法间存在触发关系，即$m_{start} \hookrightarrow m_{run}$。
-因此，当两个方法$m_{start}$ 、$m_{run}$及\code{Thread}对象$o_{thread}$满足\autoref{equ:rule_thread}时，$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $ 成立。
-
+因此，当两个方法$m_{start}$ 、$m_{run}$及{Thread}对象$o_{thread}$满足\autoref{equ:rule_thread}时，$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $ 成立。
+{ 
+	\equwuhao
 \begin{equation}
 \left\{  
 \begin{array}{ll}
@@ -224,12 +228,13 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \right.  
 \label{equ:rule_thread} 
 \end{equation}
-
+}
 
 同样的，对于方法\code{Activity.runOnUiThread(Runnable)}，也存在类似的关系：
-在该触发关系中，\code{Runnable}类型的对象$o_r$，既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例。
+在该触发关系中，{Runnable}类型的对象$o_r$，既是方法$m_{runOnUiThread}$的参数，又是方法$m_{run}$的实例。
 因此，当两个方法$m_{runOnUiThread}$ 、$m_{run}$及其方法对象$o_{r}$满足\autoref{equ:rule_runOnUiThread}时，$m_{runOnUiThread} \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run}  $ 成立。
-
+{ 
+	\equwuhao
 \begin{equation}
 \left\{  
 \begin{array}{ll}
@@ -241,15 +246,17 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \right.  
 \label{equ:rule_runOnUiThread} 
 \end{equation}
+}
 
-\subsection{基于\code{Handler} 多线程消息调度的触发关系}
+\subsection{基于{Handler} 多线程消息调度的触发关系}
 
-根据第\ref{chp:background}章中关于\code{Handler}的介绍，我们知道\code{Handler}通过\code{Message}进行多线程消息调度：
+根据第\ref{chp:background}章中关于{Handler}的介绍，我们知道{Handler}通过{Message}进行多线程消息调度：
 通过方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）向消息队列从放入消息（用$o_m$表示）；
 通过方法\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）从消息队列中取出消息$o_m$，进行对应业务逻辑处理。
 %首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
 因此，当两个方法$m_{enqueue}$ 、$m_{dispatch}$及其方法对象$o_{m}$满足\autoref{equ:rule_handler}时，$m_{enqueue} \lhook\joinrel\xrightarrow{Handler}  m_{dispatch}  $ 成立。
-
+{ 
+	\equwuhao
 \begin{equation}
 \left\{  
 \begin{array}{ll}
@@ -261,7 +268,7 @@ Andoid事件回调的触发关系描述的是控件点击事件的注册和响�
 \right.  
 \label{equ:rule_handler} 
 \end{equation}
-
+}
 
 \section{举例说明}
 

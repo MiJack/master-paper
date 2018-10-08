@@ -127,7 +127,7 @@ archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更�
 在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid的产出结果进行对比，分析各自的优劣。
 
 我们研究的APK的主体代码如\autoref{fig:code_demo}所示。
-在\autoref{fig:code_demo}中，我们声明了有Activity\code{MainActivity}，他是应用层的主Activity，该Activity界面主要有3个按钮组成，
+在\autoref{fig:code_demo}中，我们声明了Activity组件 {MainActivity}，他是应用层的主Activity，该Activity界面主要有3个按钮组成，
 方便对应的是斐波拉契数量的计算、启动一个Activity（生命周期相关）以及基于Handler的异步事件。
 
 
@@ -231,20 +231,20 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 
 
 
-最后，FlowDroid给出的结果中包括了大量和\code{StringBuilder}相关的方法，而RunDroid的结果并不包括这些方法：
-对比源码发现，源程序并未直接使用\code{StringBuilder}。
-通过查阅文献[\citenum{gosling2000java}]，在编译过程中，Java编译器会通过对源代码做适当等价修改，通过引入\code{StringBuilder}，避免表达式求值过程中产生过多的中间字符串对象，提高字符串连接的性能。
+最后，FlowDroid给出的结果中包括了大量和{StringBuilder}相关的方法，而RunDroid的结果并不包括这些方法：
+对比源码发现，源程序并未直接使用 {StringBuilder}。
+通过查阅文献[\citenum{gosling2000java}]，在编译过程中，Java编译器会通过对源代码做适当等价修改，通过引入{StringBuilder}，避免表达式求值过程中产生过多的中间字符串对象，提高字符串连接的性能。
 由于上述过程发生在Java程序编译阶段，并最后以字节码的形式保存在APK文件中，而FlowDroid从字节码层面对应用进行分析，因此FlowDroid的分析结果会包含该方法。
-对于RunDroid，上述方法既在源代码中未出现相关方法定义（无法进行日志代码编织），又不在运行时拦截器的目标方法列表中，所以RunDroid给出的调用图自然也不会包括\code{StringBuilder}相关的方法。
+对于RunDroid，上述方法既在源代码中未出现相关方法定义（无法进行日志代码编织），又不在运行时拦截器的目标方法列表中，所以RunDroid给出的调用图自然也不会包括{StringBuilder}相关的方法。
 
 
 
 \subsection{Activity 生命周期和事件回调的效果展示}
 
 
-在本节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity 生命周期和事件回调的效果展示。
+在本节中，应用运行时，我们将点击按钮button2，在{MainActivity}启动另一个{NewActivity}，对比RunDroid和FlowDroid在Activity 生命周期和事件回调的效果展示。
 最终，我们得到的RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示。
-针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，将 Activity 的生命周期和UI事件回调串联起来，构造应用层面的方法\code{dummyMainMethod()}表示应用的执行过程，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
+针对Android 组件 {Activity}的生命周期特性，FlowDroid 进行了针对性的建模，将 Activity 的生命周期和UI事件回调串联起来，构造应用层面的方法\code{dummyMainMethod()}表示应用的执行过程，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
 
 
 \begin{figure*}[!ht]
@@ -259,7 +259,7 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 我们可以发现RunDroid和FlowDroid在组件生命周期和事件回调上的设计思想上是不同的：
 RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际执行，因此，RunDroid对于上述行为的展现是按照时间的先后顺序将这些方法节点串联起来，形成完整的事件序列。
 而FlowDroid在生成函数\code{dummyMainMethod()}时，会为AndroidManifest.xml文件中定义的每一个Activity单独创建包含生命周期方法和事件回调方法的状态迁移图
-（\autoref{fig:flowdroid-result-lifecycle}中的虚线框部分表示每个Activity各自的整体状态迁移，灰色部分为\code{MainActivity}中的UI事件响应方法），
+（\autoref{fig:flowdroid-result-lifecycle}中的虚线框部分表示每个Activity各自的整体状态迁移，灰色部分为{MainActivity}中的UI事件响应方法），
 最后将这些Activity的状态迁移串联起来，并将Action为\code{android.intent.action.MAIN}并且category为\code{android.intent.category.LAUNCHER}的Activity组件作为结果的默认启动的Activity，最终形成方法\code{dummyMainMethod()}。
 
 
@@ -271,16 +271,16 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \end{figure*}
 
 在结果展现上，RunDroid倾向于展现所有和Activity生命周期相关的方法。
-例如，虽然开发人员在源代码中没有定义\code{onResume()}等方法，但在运行过程中，\code{MainActivity}的父类方法\code{onResume()}被调用了，便会出现在RunDroid的结果中。
+例如，虽然开发人员在源代码中没有定义\code{onResume()}等方法，但在运行过程中，{MainActivity}的父类方法\code{onResume()}被调用了，便会出现在RunDroid的结果中。
 而FlowDroid在这点上的处理方式恰恰相反：FlowDroid认为一个父类方法未被重写，则该方法运行行为表现保持一致性，FlowDroid并不会在结果中展示父类Activity未重载的生命周期方法。
 
 
 
-另外，我们发现在应用从\code{MainActivity}切换到\code{NewActivity}过程中，
+另外，我们发现在应用从{MainActivity}切换到{NewActivity}过程中，
 对应的生命周期变化为\code{MainActivity.onPause()} $\to$\code{NewActivity.onCreate()}$\to$\code{NewActivity.onStart()}$\to$\code{NewActivity.onResume()}$\to$ \code{MainActivity.onStop()}，
-\code{MainActivity}和\code{NewActivity}的生命周期方法是交替出现的，
-并不是\code{MainActivity}的生命周期方法全部执行完毕后才执行\code{NewActivity}的生命周期方法。
-而FlowDroid给出的结果将\code{MainActivty}和\code{NewActivity}分开处理，因此得到的结果属于后者。
+{MainActivity}和{NewActivity}的生命周期方法是交替出现的，
+并不是{MainActivity}的生命周期方法全部执行完毕后才执行{NewActivity}的生命周期方法。
+而FlowDroid给出的结果将{MainActivty}和{NewActivity}分开处理，因此得到的结果属于后者。
 相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，真实地反映了应用的状态变化。
 
 
@@ -341,9 +341,9 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 \point{静态方法的使用}
 
 
-另外，在FlowDroid给出的结果中，我们发现方法\code{doHandleButton3()}还调用了类\code{Message}的类初始化方法\code{<clinit>()}。
+另外，在FlowDroid给出的结果中，我们发现方法\code{doHandleButton3()}还调用了类{Message}的类初始化方法\code{<clinit>()}。
 原因是方法\code{doHandleButton3()}调用类\code{Message}的静态方法\code{obtain()}，因此可能需要进行类的初始化。
-由于在程序运行过中，方法\code{doHandleButton3()}在执行方法\code{Message.obtain()}前，类\code{Message}已经完成了类的初始化，方法\code{Message.<clinit>()}并没有被调用。
+由于在程序运行过中，方法\code{doHandleButton3()}在执行方法\code{Message.obtain()}前，类{Message}已经完成了类的初始化，方法\code{Message.<clinit>()}并没有被调用。
 因此RunDroid的结果中显示上述两个方法不存在调用关系。
 这从一个侧面方面反映出FlowDroid分析的结果和动态运行的过程可能存在一定的偏差。
 
@@ -548,9 +548,9 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 
 \Line{13} 分数提高的原因如下：
 在接入RunDroid前，方法\code{onClick(View)}和\code{TaskThread.run()}没有任何调用关系。
-因此，\Line{13}的前驱节点集合中只包括控制依赖语句\Line{12} ，实验组和对照组的\code{Mdata(\Line{13})}数据如\autoref{fig:motivationResultTreatment}-(a)所示，所有的测试用例参与计算：$\tau= \frac{1+1+0	}{3} - \frac{0+0}{2} = 0.67$。
+因此，\Line{13}的前驱节点集合中只包括控制依赖语句\Line{12} ，实验组和对照组的$Mdata(\Line{13})$数据如\autoref{fig:motivationResultTreatment}-(a)所示，所有的测试用例参与计算：$\tau= \frac{1+1+0	}{3} - \frac{0+0}{2} = 0.67$。
 而接入RunDroid后，方法\code{onClick(View)}和\code{TaskThread.run()}通过方法触发关系产生方法间的因果关联，进而形成新的程序依赖关系。
-\Line{13}的前驱节点增加了\Line{2}、\Line{5}和\Line{9}，变为$\{ \Line{2},\Line{5},\Line{9} ,\Line{12}\}$，实验组和对照组的\code{Mdata(\Line{13})}如\autoref{fig:motivationResultTreatment}-(b)所示。
+\Line{13}的前驱节点增加了\Line{2}、\Line{5}和\Line{9}，变为$\{ \Line{2},\Line{5},\Line{9} ,\Line{12}\}$，实验组和对照组的$Mdata(\Line{13})$如\autoref{fig:motivationResultTreatment}-(b)所示。
 实验组中的测试用例$t_3$在对照组中找不到对应的测试用例，因此不参与计算。
 最后，根据测试用例$t_1$、$t_2$、$t_4$、$t_5$得到\Line{13}的错误估计值：$\tau =  \frac{1+1	}{2} - \frac{0+0}{2} = 1$。
 \Line{12}的前驱节点也发生了变化，但是由于实验组和对照组匹配结果保存不变，因此结果保存不变。

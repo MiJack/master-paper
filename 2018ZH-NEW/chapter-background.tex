@@ -81,8 +81,8 @@ Android系统将Activity的运行状态分为以下四种，Activity的生命周
 \end{figure*}
 
 Activity的生命周期受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
-和\code{Activity}生命周期相关的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、 \code{ onStop()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
-\code{Activity}的生命周期如\autoref{fig:Activity-lifecycle}所示：
+和{Activity}生命周期相关的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、 \code{ onStop()}和\code{onDestroy()}等，方便开发人员在Activity的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
+{Activity}的生命周期如\autoref{fig:Activity-lifecycle}所示：
 
 
 
@@ -146,8 +146,8 @@ Android应用程序是在Java的基础上开发的，因此，开发人员可以
 \autoref{fig:handler-code}为关于Handler的使用示例。
 图中对应的场景为应用由于业务需要获取一个字符串，并将这个字符串展现在用户界面上。
 考虑到获取字符串的过程比较耗时，可能会阻塞主线程的相关业务，因此我们会在工作线程执行这部分逻辑（如\autoref{fig:handler-code}-左所示），而在主线程执行信息展现的逻辑（如\autoref{fig:handler-code}-右所示）。
-具体的，在工作线程中，用户生成的字符串和对应的逻辑代码\code{MSG\_CHANGE\_TEXT}封装到\code{Message}对象中，通过Handler发送出去；
-Handler在主线程中收到了该\code{Message}对象时，会根据逻辑代码（即\code{Message.what}的值）决定进行对应的逻辑处理（本例中，对应逻辑为更新界面信息）。
+具体的，在工作线程中，用户生成的字符串和对应的逻辑代码\code{MSG\_CHANGE\_TEXT}封装到{Message}对象中，通过Handler发送出去；
+Handler在主线程中收到了该{Message}对象时，会根据逻辑代码（即\code{Message.what}的值）决定进行对应的逻辑处理（本例中，对应逻辑为更新界面信息）。
 
 
 %用户在工作线程执行生成一个字符串，将生成的字符串传递给Message对象，并通过Handler对象通知主线程进行界面更新。
@@ -165,7 +165,7 @@ Handler在主线程中收到了该\code{Message}对象时，会根据逻辑代�
 \end{figure*}
 
 
-除了示例中的调用方式，Android 系统提供的API\cite{HandlerA26:online}还提供多种API（如\autoref{fig:handler-apis}所示），同时支持基于\code{Runnable}的消息调度和基于逻辑代码的消息调度：
+除了示例中的调用方式，Android 系统提供的API\cite{HandlerA26:online}还提供多种API（如\autoref{fig:handler-apis}所示），同时支持基于{Runnable}的消息调度和基于逻辑代码的消息调度：
 %开发人员可以通过\code{post(Runnable)}，\code{postAtTime(Runnable，long)}，\code{sendMessage(Message)}，\code{sendMessageDelayed(Message，long)}，\code{sendMessageAtTime(Message，long)}和\code{sendEmptyMessage(int)}等多种API形式实现消息调度。
  通过分析Android系统相关源代码，我们发现Android系统提供的Handler API间调用关系如\autoref{fig:handler-apis}所示。
  所有的Handler API最终都会调用到Handler类的私有方法\code{enqueueMessage(MessageQueue, Message, long)}。
@@ -197,7 +197,7 @@ Handler机制中各组成部分的相互关系如\autoref{fig:handler-framework}
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Figures/Handler-framework.png}
-	\caption{ Handler机制中各组成部分的相互关系}
+	\caption{ Handler机制}
 	\label{fig:handler-framework}
 \end{figure*}
 
