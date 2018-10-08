@@ -150,29 +150,6 @@
 %=============================段前段后定义=============================% 
 
 
-\def  \cftbeforetitleskip {45pt}
-\def \cftaftertitleskip {25pt}
-%% 目录部分
-\setlength{\cftbeforetoctitleskip}{\cftbeforetitleskip}
-\setlength{\cftaftertoctitleskip}{\cftaftertitleskip}
-
-%% 图目录
-
-\setlength{\cftbeforeloftitleskip}{\cftbeforetitleskip}
-\setlength{\cftafterloftitleskip}{\cftaftertitleskip}
-
-%% 表目录
-\setlength{\cftbeforelottitleskip}{\cftbeforetitleskip}
-\setlength{\cftafterlottitleskip}{\cftaftertitleskip}
-%% 算法目录
-%\setlength{\cftbeforeloatitleskip}{30pt}
-%\setlength{\cftafterloatitleskip}{20pt}
-
-
-
-
-\CTEXsetup[beforeskip=\cftbeforetitleskip]{chapter}
-\CTEXsetup[afterskip=\cftaftertitleskip]{chapter}
 
 
 
@@ -411,14 +388,7 @@
 \clearPaperPage
 
 
-\fancypagestyle{plain}{%
-	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
-	\fancyhead[RE,LO]{ 攻读学位期间发表的学术论文}
-}
 
-
-
-\addcontentsline{toc}{chapter}{攻读学位期间发表的学术论文}
 \input {D3-MYACHIEVEMENTS.tex}
 
 

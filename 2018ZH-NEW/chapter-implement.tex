@@ -4,7 +4,6 @@
 \label{chp:implement}
 
 RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术，由预处理器、运行时拦截器、日志记录器、调用图构建器等部分组成，整体架构图如\autoref{fig:rundroid_overview}所示。
-
 %从功能上，预处理器和运行时拦截器两者的作用是一致的：在程序运行过程中，当相关方法执行时，触发日志记录器记录相应的信息。
 预处理器通过源代码插桩技术实现在用户方法运行时触发用户方法的信息记录，而运行时拦截器则是通过方法劫持技术实现对系统方法执行的拦截，进而触发日志记录。
 %系统方法的执行。
@@ -15,7 +14,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 \begin{figure*}[!hb]
 	\centering
-	\includegraphics[width=0.9\textwidth]{./Figures/overview.png}
+	\includegraphics[width=0.8\textwidth]{./Figures/overview.png}
 	\caption{ RunDroid的整体架构图}
 	\label{fig:rundroid_overview}
 \end{figure*}

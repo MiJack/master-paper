@@ -417,9 +417,6 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有{View}类型的对象节点$o_{view}$和{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
 对于组合$\left\langle o_{listener}  , o_{view}\right\rangle $，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第15$\sim$18行）。
 
-\foreach \t in {1,...,10} {
-\todo{\t }\newline
-}
 
 %Andoid事件回调的触发关系描述的是控件点击事件的注册和响应之间的因果关系，即方法\code{View.setOnClickeListener(View\$OnClickListener)}（用$m_{register}$表示）和\code{View\$OnClickListener.onClick(View)}间的因果关系（用$m_{click}$表示）。
 %根据第\ref{chp:definition}章中方法触发关系的相关定义，$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $ 成立。
