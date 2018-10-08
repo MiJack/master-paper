@@ -38,7 +38,7 @@ RunDroid提供的函数调用图从方法调用关系、方法间的触发关系
 %本文采用的方案是利用在方法执行前后均记录执行日志（即一个方法的执行会输出两条日志：方法开始日志、方法结束日志），
 %进行动态函数调用图的还原。
 
-本文采用的方案：
+本文采用的技术方案：
 RunDroid通过对源程序（\autoref{fig:code_sample}-左上）进行预处理，得到包含日志记录功能的运行代码（\autoref{fig:code_sample}-右上）；
 程序在函数执行前后可以输出和方法执行相关的日志信息，（\autoref{fig:code_sample}-右下）；
 最后，我们根据这些日志信息构建出函数调用图（\autoref{fig:code_sample}-左下）。
@@ -150,8 +150,10 @@ RunDroid会遍历项目源代码中的Java源文件，将源文件和对应的�
 
 由于无法直接对系统方法进行源代码修改，RunDroid利用动态拦截技术对系统方法的执行进行拦截，达到获取系统方法的执行信息的目的。
 RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如\autoref{tbl:hookMethodList}所示。
-列表中的方法通常和Android特性相关，涵盖Activity的生命周期方法、Java Thread API以及Handler等多个方面。
-在目标应用程序开始运行前，运行时拦截器会为上述目标方法注册执行回调函数。
+列表中的方法通常和Android特性相关，涵盖Activity的生命周期方法、Java Thread API以及Handler机制等多个方面。
+
+
+在目标应用程序开始运行前，RunDroid会为上述目标方法注册执行回调函数。
 在目标方法执行前和执行后，对应的回调函数会被执行，进而通过日志记录器记录下这些方法执行的相关信息。
 在RunDroid中，系统方法执行信息的获取，可以填补调用图缺失的系统方法执行，进而还原出应用层和系统层之间以及系统内部的方法调用，使得产生的调用图更加完整。
 
@@ -160,7 +162,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 	%	\centering
 	\tablewuhao		
 	
-	\caption{运行时拦截器拦截的系统方法列表}
+	\caption{待拦截的系统方法列表}
 	
 	\label{tbl:hookMethodList}
 	
@@ -172,7 +174,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 				\hline
 				方法签名&说明\\
 				\hline
-				Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{和Activity生命周期相关的方法}\\
+				Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{\centering 和Activity生命周期相关的方法}\\
 				%	\cline{1-1}
 				Activit.onStart()    &\\
 				Activity.onResume()     &\\
@@ -183,7 +185,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 				
 				Thread.start()   & 和Java 线程启动相关的方法\\
 				\hline
-				Message.obtain() & \multirow{15}{0.4\linewidth}{和 Hanlder机制相关的方法}\\
+				Message.obtain() & \multirow{15}{0.4\linewidth}{\centering 和 Hanlder机制相关的方法}\\
 				Handler.enqueueMessage(MessageQueue,Message,long)&\\
 				Handler.dispatchMessage(Message)&\\
 				Handler.post(Runnable)&\\
@@ -304,7 +306,7 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 同时也在调用图中添加方法参数、方法实例对应的对象节点$o_p$、$o_i$以及方法对象和方法的关系$ \left\langle  o_p \joinrel\xrightarrow{parameter}   m \right\rangle   $、$ \left\langle   o_i \joinrel\xrightarrow{instance}   m \right\rangle  $（第9$\sim$10行）。
 如果此时当前线程栈$stack$的栈顶方法元素$top$存在，系统会创建从方法$top$到当前方法$m$的调用关系，$\left\langle top \to m \right \rangle  $，并将当前方法$m$压入栈$stack$中（第11$\sim$ 14行）。
 当读取到方法执行的结束日志时，该日志对应的方法必然是栈顶方法$top$，若栈顶方法$top$存在返回对象$o_r$，则只需要将$o_r$和$top$的关系添加到调用图中即可，最后弹出栈顶的$top$即可（第 16$\sim$ 18行）。
-在上述过程中，如果待添加的方法对象在调用图中已经存在时，该对象复用调用图原有的对象节点即可，无须重新添加，只需添加方法与对象间的关系即可。
+在上述过程中，如果待添加的方法对象在调用图中已存在，该对象复用调用图原有的对象节点即可，无须重新添加，只需添加方法与对象间的关系即可。
 
 
 
@@ -321,9 +323,29 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 
 
 
-\subsection{构建Activity的生命周期和事件回调}
+\subsection{构建Activity的生命周期及事件回调的触发关系}
 
 \point{构建Activity的生命周期}
+
+
+Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联。%，利用的是\code{Activity}生命周期方法的签名的不变性。
+生命周期的构建过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加Activity生命周期变化的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
+对于AndroidManifest文件中声明的每一个Activity组件对象 $o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
+若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第7$\sim$11行）。
+最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到{Activity}的生命周期（第12$\sim$13行）。
+
+这三个条件分别为：
+（1）方法$m$的方法签名和\autoref{fig:Activity-lifecycle}中的任何一个生命周期方法的签名保持一致；
+（2）方法$m$执行时所处的线程为主线程；
+（3）方法$m$在调用图$cg$中不在调用者，即在调用图$cg$中不存在方法$m' \in cg$，使得$m' \to m $成立。
+
+通常情况下，条件（1）$\sim$ （2）可以筛选出Activity组件相关的生命周期方法。
+但是，当生命周期方法重写时，子类方法往往需要回调父类方法，执行系统在该状态下的业务逻辑。
+例如，在重写方法\code{onCreate()}时，开发人员会调用\code{super.onCreate()}以完成Activity窗体的初始化。
+若只考虑前面两个条件，两个方法均会被看作生命周期方法。
+子类方法作为系统回调的一部分，应当保留在Activity的生命周期中，父类方法被子类方法调用，属于用户调用的范畴。
+为了区分上述两类场景下的方法调用，我们需要在筛选生命周期方法时考虑条件（3）。
+
 
 
 \begin{algorithm}[!hb]
@@ -378,8 +400,8 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 	}
 	% $o_p \stackrel{parameter}{\longrightarrow} m$
 	\Fn{patchUiEvent($ecg$)} {
-		\For{\emph{$o_{view} \in \{ o \mid o $ 为调用图 $ ecg $中\code{View}类型的对象节点  $ \}$} }{ 
-			\For{\emph{$o_{listener} \in \{ o \mid o $  为调用图 $ ecg $  中\code{View.OnClickListener} 类型的对象节点 $ \}$} }{		
+		\For{\emph{$o_{view} \in \{ o \mid o $ 为调用图 $ ecg $中{View}类型的对象节点  $ \}$} }{ 
+			\For{\emph{$o_{listener} \in \{ o \mid o $  为调用图 $ ecg $  中{View.OnClickListener} 类型的对象节点 $ \}$} }{		
 				\If {\emph{$o_{view}$，$o_{listener}$，$m_{register}$ 和 $m_{click}$  满足\autoref{equ:rule_ui}}
 					}{
 					$ecg$.addTriggerRel($m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click} $)	
@@ -390,29 +412,9 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 \end{algorithm}
 
 
-	
-Android 应用的Acticvity生命周期的构建就是将Activity生命周期方法按照时间顺序串联起来。%，利用的是\code{Activity}生命周期方法的签名的不变性。
-生命周期的构建过程以AndroidManifest文件作为输入，在原有的函数调用图的基础上，添加Activity生命周期变化的有向边，具体过程如\autoref{alg:buildActivityLifecycle}所示：
-对于AndroidManifest文件中声明的每一个Activity组件对象 $o_{activity}$，系统都会遍历以该对象为方法实例的方法$m$（即$m$、$o_{activity}$满足条件$o_{activity} \joinrel\xrightarrow{instance} m$）；
-若方法$m$同时满足三个条件，则将它添加到列表$lifecycleList$中（第7$\sim$11行）。
-最后，将列表$lifecycleList$按照时间顺序进行排序，并依次连接起来，即可得到\code{Activity}的生命周期（第12$\sim$13行）。
-
-这三个条件分别为：
-（1）方法$m$的方法签名和\autoref{fig:Activity-lifecycle}中的任何一个生命周期方法的签名保持一致；
-（2）方法$m$执行时所处的线程为主线程；
-（3）方法$m$在调用图$cg$中不在调用者，即在调用图$cg$中不存在方法$m' \in cg$，使得$m' \to m $成立。
-
-通常情况下，条件（1）$\sim$ （2）可以筛选出Activity组件相关的生命周期方法。
-但是，当生命周期方法重写时，子类方法往往需要回调父类方法，执行系统在该状态下的业务逻辑。
-例如，在重写方法\code{onCreate()}时，我们会调用\code{super.onCreate()}以完成Activity窗体的初始化。
-若只考虑前面两个条件，两个方法均会被看作生命周期方法。
-子类方法作为系统回调的一部分，应当保留在Activity的生命周期中，父类方法被子类方法调用，属于用户调用的范畴。
-为了区分上述两类场景下的方法调用，我们需要在筛选生命周期方法时考虑条件（3）。
-
-
 \point{构建Andoid事件回调的触发关系}
 
-在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有\code{View}类型的对象节点$o_{view}$和\code{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
+在构建Andoid事件回调的触发关系时，我们会遍历拓展调用图中的所有{View}类型的对象节点$o_{view}$和{View.OnClickListener}类型的对象节点$o_{listener}$的组合。
 对于组合$\left\langle o_{listener}  , o_{view}\right\rangle $，若调用图中存在方法节点$m_{register} $、$m_{click} $满足\autoref{equ:rule_ui}，方法节点$m_{register} $、$m_{click} $之间添加从$m_{register} $指向$m_{click} $的有向边，即$m_{register} \lhook\joinrel\xrightarrow{UiEvent}  m_{click}  $（第15$\sim$18行）。
 
 
@@ -431,7 +433,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 
  \subsection{构建多线程触发关系}
-基于函数调用图构建多线程触发关系主要分为两个方面，基于Java 的多线程交互与基于\code{Handler} 的多线程消息调度，具体的过程如\autoref{alg:buildTrigger}所示。
+基于函数调用图构建多线程触发关系主要分为两个方面，基于Java 的多线程交互与基于{Handler} 的多线程消息调度，具体的过程如\autoref{alg:buildTrigger}所示。
 
 
 
@@ -449,19 +451,19 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 		{// 在调用图$ecg$中创建基于Java 多线程交互的触发关系}
 		
 		
-		\For{\emph{$o_{thread} \in \{ o \mid o $  为调用图$ecg$中的 $Thread$ 类型的对象节点 $ \}$} }{
+		\For{\emph{$o_{thread} \in \{ o \mid o $  为调用图$ecg$中的 {Thread} 类型的对象节点 $ \}$} }{
 			\If{ \emph{$o_{thread}$、$m_{start}$ 和 $m_{run}$  满足\autoref{equ:rule_thread}}}{
 				$ecg$.addTriggerRel($m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run} $)	
 			}}
-		\For{\emph{$o_r \in \{ o \mid o $  为调用图$ecg$中的  $Runnable$ 类型的对象节点$  \}$} }{
+		\For{\emph{$o_r \in \{ o \mid o $  为调用图$ecg$中的  {Runnable} 类型的对象节点$  \}$} }{
 			\If{ \emph{$o_r$、$m_{runOnUiThread}$ 和 $m_{run}$  满足\autoref{equ:rule_runOnUiThread}}}{
 				$ecg$.addTriggerRel($m_{runOnUiThread}  \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run} $)	
 			}	
 		}
-		{// 在调用图$ecg$中创建基于\code{Handler} 多线程消息调度的触发关系}
+		{// 在调用图$ecg$中创建基于{Handler} 多线程消息调度的触发关系}
 		
 		
-			\For{\emph{ $o_m \in  \{ o\mid  o $  为调用图$ecg$中的 $Message$ 类型的对象节点$\}$} }{
+			\For{\emph{ $o_m \in  \{ o\mid  o $  为调用图$ecg$中的 {Message} 类型的对象节点$\}$} }{
 			\If{ \emph{$o_m$、$m_{handle}$和 $m_{dispatch}$  满足\autoref{equ:rule_handler}}}{
 		%		\tcp{Here means $m_{enqueue} \lhook\joinrel\xrightarrow{Handler} m_{dispatch} $.}
 			
@@ -481,13 +483,13 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 \point{基于Java 的多线程交互}
 
 
-基于Java的多线程交互往往是以\code{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} 和\code{Activity.runOnUiThread(Runnable)}等API，进而触发类\code{Thread}和\code{Runnable}的方法\code{run()}的执行。
+基于Java的多线程交互往往是以{Runnable}作为传递对象，通常通过调用方法\code{Thread.start()} 和\code{Activity.runOnUiThread(Runnable)}等API，进而触发类{Thread}和{Runnable}的方法\code{run()}的执行。
 
-对于方法\code{Thread.start()} 相关的触发关系，我们会遍历拓展调用图中的所有\code{Thread}类型的对象节点$o_{thread}$。
+对于方法\code{Thread.start()} 相关的触发关系，我们会遍历拓展调用图中的所有{Thread}类型的对象节点$o_{thread}$。
 判断调用图中是否存在方法节点$m_{start} $、$m_{run} $以及对象节点$o_{thread}$满足\autoref{equ:rule_thread}，方法节点$m_{start} $、$m_{run} $之间添加从$m_{start} $指向$m_{run} $的有向边，即$m_{start} \lhook\joinrel\xrightarrow{Thread}  m_{run}  $（第2$\sim$4行）。
 
 
-对于方法\code{Activity.runOnUiThread(Runnable)}相关的触发关系，我们会遍历拓展调用图中的所有\code{Runnable}类型的对象节点$o_{r}$。
+对于方法\code{Activity.runOnUiThread(Runnable)}相关的触发关系，我们会遍历拓展调用图中的所有{Runnable}类型的对象节点$o_{r}$。
 判断调用图中是否存在方法节点$m_{runOnUiThread} $、$m_{run} $以及对象节点$o_{r}$满足\autoref{equ:rule_runOnUiThread}，方法节点$m_{runOnUiThread} $、$m_{run} $之间添加从$m_{runOnUiThread} $指向$m_{run} $的有向边，即$m_{runOnUiThread} \lhook\joinrel\xrightarrow{runOnUiThread}  m_{run}  $（第5$\sim$7行）。
 
 
@@ -537,12 +539,12 @@ rel(m_{run}, o_r) = instance \\
 
 
 
-\point{基于\code{Handler} 的多线程消息调度}
+\point{基于{Handler} 的多线程消息调度}
 
-根据第\ref{chp:background}、\ref{chp:definition}章的介绍，我们已经知晓用户通过调用Handler提供的API，
+根据第\ref{chp:background}、\ref{chp:definition}章的介绍可知，用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
 %在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
-在构建\code{Handler} 触发关系过程中，首先，我们利用类\code{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+在构建{Handler} 触发关系过程中，首先，我们利用类{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
 找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第$8\sim$9 行）；
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
 从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第10行），
@@ -625,7 +627,7 @@ RETURN p,method,enqueue,dispatch
  \section{本章总结}
 
 本章详细介绍了RunDroid的设计。
-首先，本章简要介绍了RunDroid实现的基本功能，并通过示例介绍了RunDroid的整体运行流程。
+首先，本章简要说明了RunDroid实现的基本功能，然后具体解释说明RunDroid的整体运行流程。
 在此基础上，本章介绍了RunDroid各个的流程的设计细节。
-RunDroid利用源代码修改和运行时方法拦截相结合的方式，捕获用户方法和系统方法的执行信息，并将这些方法执行信息以日志的形式保存下来。
-RunDroid遍历各线程的方法执行日志结合栈的入栈、出栈操作，模拟各个线程的函数执行的过程，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并在此基础上构建Activity的生命周期，补全方法间的触发关系，形成最终的拓展函数调用图。
+RunDroid利用源代码修改和运行时方法拦截相结合的方式，捕获用户方法和系统方法的执行信息，并以日志的形式保存方法执行信息。
+RunDroid遍历各线程的方法执行日志结合栈的入栈、出栈操作，模拟各个线程的函数执行的过程，通过线程内部各个方法日志的嵌套关系还原出函数调用图，并在此基础上构建Activity的生命周期，补全方法间的触发关系，构建最终的拓展函数调用图。

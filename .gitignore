@@ -249,3 +249,4 @@ TSWLatexianTemp*
 *.sta
 .DS_Store
 .Rhistory
+.idea

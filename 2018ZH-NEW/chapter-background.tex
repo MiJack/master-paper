@@ -2,7 +2,7 @@
 \label{chp:background}
 
 
-本章首先会简要介绍Android系统架构，对Android中的Activity组件做基本介绍，着重介绍Android中常见的两种多线程交互方式。
+本章首先简要介绍Android系统架构，然后对Android中的Activity组件做基本介绍，最后着重介绍Android中常见的两种多线程交互方式。
 
 
 \section{Android系统架构}
@@ -10,18 +10,18 @@
 Android是基于Linux内核开发的的开源操作系统，隶属于Google公司，主要用于触屏移动设备如智能手机、平板电脑与其他便携式设备，是目前世界上最流行的移动终端操作系统之一。
 
 
-在系统架构上，Android自下到上，可以分为四层：Kernel层、Library和Android Runtime(Dalvik/ART)、Framework、Application等，如~\autoref{fig:Android-Framework}所示。
+在系统架构上，Android自下到上，可以分为四层：Kernel层、Library和Android Runtime(Dalvik/ART)、Framework、Application，如~\autoref{fig:Android-Framework}所示。
 Kernel层是硬件和软件层之间的抽象层，主要是设备的驱动程序，例如：显示驱动、音频驱动、蓝牙驱动、Binder IPC驱动等。
 Library和Android Runtime(Dalvik/ART): Library，顾名思义就是向上层提供各种这样的基础功能，例如SQLite数据库引擎，Surface Manager显示系统管理库。
 Android Runtime主要是运行Android程序的虚拟机\eat{，在不同版本的系统上对应着不同的虚拟机，例如在Android 5.0及以上是ART，而在Android 4.3及以下是Dalvik，而Android 4.4两者都有}。
-Framework层主要是系统管理类库，包括Activity的管理，消息通知的管理；同时，它是Application的基础架构，为应用程序层的开发者提供了API，其存在简化了程序的开发。
+Framework层主要是系统管理类库，包括Activity的管理，消息通知的管理；同时，它是Application的基础架构，为应用程序层的开发者提供了API，可简化应用程序的开发过程。
 而Application就是我们平时接触的应用，例如通讯录、电话、浏览器等。
 
 虽然Android应用程序是使用Java语言开发的，但是它和传统的Java程序有着很大的不同，具体有如下几点：
 
 \begin{figure*}[!h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/Android-Framework.png}
+	\includegraphics[height=0.6\textheight]{./Figures/Android-Framework.png}
 	\caption{Android系统框架图}
 	\label{fig:Android-Framework}
 \end{figure*}
@@ -33,20 +33,20 @@ Framework层主要是系统管理类库，包括Activity的管理，消息通知
 %这也使得Android应用程序的分发文件（即APK文件）相对较小。
 
 \textbf{面向组件的编程模式：}
-Android程序中较为常见的是组件（例如Activity、Service、Content Provider、Broadcast Receiver），它是应用程序运行的最小单元，具有组件特有的生命周期，生命周期受到Android Framework的直接调度。
+Android程序中，常见的组件有Activity、Service、Content Provider、Broadcast Receiver，它们是应用程序运行的最小单元，具有组件特有的生命周期，生命周期受到Android Framework的直接调度。
 开发人员通过继承这些组件，重写对应的生命周期函数，实现对应的业务需求，例如界面的布局、页面状态的保存。
 %而这些组件的生命周期由Framework直接调度完成。
 
 \textbf{逻辑实现依赖于回调函数和多线程通信：}
-由于Android应用程序采用的是基于单线程消息队列的事件驱动架构，因此，界面相关的操作只允许出现在主线程（UI Thread）中，耗时操作只能在工作线程（Worker Thread）中进行。
-通常的，开发人员往往会借助回调函数处理控件的响应事件，利用多线程交互串联界面相关操作和耗时操作，完成对应的业务。
+由于Android应用程序采用的是基于单线程消息队列的事件驱动架构，界面相关的操作只允许出现在主线程（UI Thread）中，耗时操作只能在工作线程（Worker Thread）中进行。
+具体而言，开发人员往往会借助回调函数处理控件的响应事件，利用多线程交互串联界面相关操作和耗时操作，完成对应的业务。
 
 
 \section{Android中的Activity组件}
 
 
 
-在Android应用程序运行过程中，Activity向用户展示图形界面，响应用户的反馈，和其他组件一同完成相关业务，扮演着最为重要的角色。%\cite{Activity2:online}。
+在Android应用程序运行过程中，Activity向用户展示图形界面，响应用户的反馈，和其它组件一同完成相关业务，扮演着最为重要的角色。%\cite{Activity2:online}。
 由于Android应用程序在架构选型上采用了事件驱动模型，为了便于协调应用内部状态的管理，Android组件通常有生命周期的概念，Activity也不例外。
 Android系统将Activity的运行状态分为以下四种，Activity的生命周期就是Activity在这些状态之间的跳转。
 
@@ -56,7 +56,7 @@ Android系统将Activity的运行状态分为以下四种，Activity的生命周
 		\setlength{\itemsep}{-5pt}
 		
 	\item 运行态：在该状态下， Activity处于页面最前端时，用户可以与Activity进行交互。
-	一般的，用户可见并可以进行交互的Activity均处于这个状态。
+	一般而言，用户可见并可以进行交互的Activity均处于这个状态。
 	
 	\item 暂停态：在该状态，Activity仍然可见，但是失去了窗口的焦点。
 	当一个Activity之上出现非全屏的窗体（例如对话框）但未被完全遮挡时，Activity就处于这个状态。
@@ -66,7 +66,7 @@ Android系统将Activity的运行状态分为以下四种，Activity的生命周
 	处于该状态的Activity仍然可以保留所有的内存数据，只是对用户不可见。
 	系统在需要内存的情况下，可以采用相应的策略对Activity进行杀死回收操作。
 	
-	\item 终止态：当用户自动退出Activity时，Activity将进入该状态；当Activity处于暂停态或者停止态时，系统由于内存原因可能会将上述两种Activity杀死回收。
+	\item 终止态：当用户自动退出Activity时，Activity将进入该状态；当Activity处于暂停态或者停止态时，系统由于内存原因可能会将上述两种Activity杀死并回收。
 \end{itemize}
 
 
@@ -81,8 +81,8 @@ Android系统将Activity的运行状态分为以下四种，Activity的生命周
 \end{figure*}
 
 Activity的生命周期受到Activity在运行时的内存分布、环境状态以及业务逻辑的影响，由Android系统直接负责调度。
-和\code{Activity}生命周期相关的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、 \code{ onStop()}和\code{onDestroy()}等，方便开发人员在\code{Activity}的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
-\code{Activity}的生命周期如\autoref{fig:Activity-lifecycle}所示：
+和{Activity}生命周期相关的方法包括\code{onCreate()}、 \code{onStart()}、\code{ onResume()}、 \code{onPaused()}、 \code{ onStop()}和\code{onDestroy()}等，方便开发人员在Activity的状态发生变化时对程序的运行时数据和应用状态做适当的处理操作。
+{Activity}的生命周期如\autoref{fig:Activity-lifecycle}所示：
 
 
 
@@ -90,14 +90,14 @@ Activity的生命周期受到Activity在运行时的内存分布、环境状态�
 在这个过程中，\code{onCreate()}、\code{onStart()}、\code{onResume()}等方法被回调，Activity最终处于运行态；
 
 
-当Activity被其他窗体遮挡，只失去焦点，仍处于可见状态时，Activity的状态从运行态变成暂停态，\code{onPause()}方法会被回调；当Activity重新获得焦点时，\code{onResume()}方法会被调用；
+当Activity被其它窗体遮挡，虽然失去交互焦点，但仍处于可见状态时，Activity的状态从运行态变成暂停态，\code{onPause()}方法会被回调；当Activity重新获得焦点时，\code{onResume()}方法会被调用；
 
 当Activity切换到另一个Activity时，原来Activity将从运行态变为停止态，\code{onPause()}、\code{onStop()}等方法会被调用；
 当返回原来的Activity时，\code{onStart()}、\code{onResume()}等方法会被调用，Activity从暂停态变为运行态。
 %将从从运行态变成暂停态时，Activity只失去焦点，仍处于可见状态，\code{onPause()}方法会被回调；当Activity重新获得焦点时，\code{onResume()}方法会被调用；
 
 当用户点击“返回键”返回到桌面时，Activity会失去焦点，在用户的视野中消失，直至被系统回收，
-对应的状态也从运行态经暂停态、停止态，变为终止态，期间\code{onPause()}、\code{onStop()}、\code{onDestroy()}等方法被回调。
+对应的状态也从运行态经过暂停态、停止态，最终变为终止态，期间\code{onPause()}、\code{onStop()}、\code{onDestroy()}等方法被回调。
 
 \eat{
 当用户从一个界面回到原来的界面时，原来的Activity从停止态重启，出现在设备界面上，获得交互焦点，
@@ -146,8 +146,8 @@ Android应用程序是在Java的基础上开发的，因此，开发人员可以
 \autoref{fig:handler-code}为关于Handler的使用示例。
 图中对应的场景为应用由于业务需要获取一个字符串，并将这个字符串展现在用户界面上。
 考虑到获取字符串的过程比较耗时，可能会阻塞主线程的相关业务，因此我们会在工作线程执行这部分逻辑（如\autoref{fig:handler-code}-左所示），而在主线程执行信息展现的逻辑（如\autoref{fig:handler-code}-右所示）。
-具体的，在工作线程中，用户生成的字符串和对应的逻辑代码\code{MSG\_CHANGE\_TEXT}封装到\code{Message}对象中，通过Handler发送出去；
-Handler在主线程中收到了该\code{Message}对象时，会根据逻辑代码（即\code{Message.what}的值）决定进行对应的逻辑处理（本例中，对应逻辑为更新界面信息）。
+具体而言，在工作线程中，用户生成的字符串和对应的逻辑代码\code{MSG\_CHANGE\_TEXT}封装到{Message}对象中，通过Handler发送出去；
+Handler在主线程中收到该{Message}对象时，会根据逻辑代码（即\code{Message.what}的值）决定进行对应的逻辑处理（本例中，对应逻辑为更新界面信息）。
 
 
 %用户在工作线程执行生成一个字符串，将生成的字符串传递给Message对象，并通过Handler对象通知主线程进行界面更新。
@@ -165,7 +165,7 @@ Handler在主线程中收到了该\code{Message}对象时，会根据逻辑代�
 \end{figure*}
 
 
-除了示例中的调用方式，Android 系统提供的API\cite{HandlerA26:online}还提供多种API（如\autoref{fig:handler-apis}所示），同时支持基于\code{Runnable}的消息调度和基于逻辑代码的消息调度：
+除了示例中的调用方式，Android 系统还提供多种API\cite{HandlerA26:online}（如\autoref{fig:handler-apis}所示），同时支持基于{Runnable}的消息调度和基于逻辑代码的消息调度：
 %开发人员可以通过\code{post(Runnable)}，\code{postAtTime(Runnable，long)}，\code{sendMessage(Message)}，\code{sendMessageDelayed(Message，long)}，\code{sendMessageAtTime(Message，long)}和\code{sendEmptyMessage(int)}等多种API形式实现消息调度。
  通过分析Android系统相关源代码，我们发现Android系统提供的Handler API间调用关系如\autoref{fig:handler-apis}所示。
  所有的Handler API最终都会调用到Handler类的私有方法\code{enqueueMessage(MessageQueue, Message, long)}。
@@ -197,11 +197,11 @@ Handler机制中各组成部分的相互关系如\autoref{fig:handler-framework}
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Figures/Handler-framework.png}
-	\caption{ Handler机制中各组成部分的相互关系}
+	\caption{ Handler机制}
 	\label{fig:handler-framework}
 \end{figure*}
 
-基于Handler的多线程消息调度，充分利用了Android的事件驱动架构，将业务逻辑抽象出Message对象，借助消息队列在线程间传递Message，达到了Android多线程交互的目的。
+基于Handler的多线程消息调度机制充分利用了Android的事件驱动架构，将业务逻辑抽象出Message对象，借助消息队列在线程间传递Message，达到了Android多线程交互的目的。
 Handler机制，不仅帮助开发人员实现业务逻辑在主线程和工作线程间的自由转移，而且其灵活的API设计降低应用的设计复杂程度，提升了系统架构的可拓展性。
 正因如此，在Android开发过程中，基于Handler消息调度的多线程交互十分常见。
 
