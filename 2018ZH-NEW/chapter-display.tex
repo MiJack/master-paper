@@ -12,13 +12,13 @@
 
 \section{实验验证——函数触发关系的普遍性}
 
-相比其他分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
+相比其它分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
 为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid\cite{FDroidFr21:online}中随机抽取了9个应用，
 利用RunDroid获取各个应用的运行时日志信息，构建对应的动态函数调用图。
 最终，我们对调用图中的用户方法节点数、系统方法节点数、方法间调用关系及函数触发关系等数据进行了统计，各项数据如\autoref{table:app_results}所示。
 %表中第一行的数据为\autoref{fig:code_demo}对应的统计数据。
 
-观察用户方法、系统方法、函数调用关系三列，我们发现等式$\text{用户方法}+\text{系统方法}-\text{函数调用关系}=1$并不成立。
+观察用户方法、系统方法、函数调用关系三列，我们发现等式“$\text{用户方法}+\text{系统方法}-\text{函数调用关系}=1$”并不成立。
 函数调用图的构建过程保证了函数调用图本身是一个有向无环图。
 因此，从图论的角度看，函数调用图不是图论中的树，而是有若干个树组成的森林。
 这也反映Android基于事件驱动的的系统架构：
@@ -30,7 +30,7 @@
 osmtracker-android中的触发关系只有0个。
 经过分析，我们发现osmtracker中，用户操作大多与菜单、对话框与ListView产生交互操作，多线程相关操作是通过AsyncTask进行的，而不是通过Handler进行。
 而archwiki-viewer捕获到的触发关系多达102个，是所有应用中函数触发关系最多的。
-通过分析，我们发现，archwiki-viewer是一个基于浏览器的应用程序。
+分析发现，archwiki-viewer是一个基于浏览器的应用程序。
 RunDroid捕获到的102个触发关系中并不属于事件回调相关的触发关系，都是基于Handler的触发关系，大部分对应的Handler是\code{org.chromium.base.SystemMessageHandler}，属于浏览器内部业务逻辑。
 archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更新浏览器界面，因此产生大量和Handler相关的触发关系。
 
@@ -124,7 +124,7 @@ archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更�
 
 \section{应用结果展示}  
 %\label{chp:display}
-在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid的产出结果进行对比，分析各自的优劣。
+在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid的输出结果进行对比，分析各自的优劣。
 
 我们研究的APK的主体代码如\autoref{fig:code_demo}所示。
 在\autoref{fig:code_demo}中，我们声明了Activity组件 {MainActivity}，他是应用层的主Activity，该Activity界面主要有3个按钮组成，
@@ -224,7 +224,7 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 
 
 其次，在运行过程中，斐波拉契数列的计算结果最终以Toast的形式展现在界面上。
-但方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，却出现在FlowDroid给出的结果：
+但方法\code{Toast.makeText(Context,CharSequence,int)}没有出现在RunDroid的结果中，却出现在FlowDroid给出的结果。
 出现这个现象的原因如下：该方法属于系统定义的方法，而运行时拦截器待拦截的方法列表中并未包含该方法，因此运行时未收集到相关的方法执行信息，导致RunDroid无法在调用图中还原相应方法的方法执行。
 这也反映了RunDroid的不足：关于系统函数的运行时信息的捕获需要提前将相应的方法告知运行时拦截器，生成的调用图才会包括相应的方法。
 虽然RunDroid得到函数调用图缺失了部分方法，存在局部不完整，但是调用图中只包含研究人员关心的方法执行信息，突出研究重点，避免了分析信息的繁杂。
@@ -286,11 +286,11 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 
 \subsection{多线程触发关系效果展示}
 
-多线程开发是Android开发中经常涉及的开发要求。
-为此，针对这一场景，我们进行了相关的测试。
+多线程开发是Android开发中过程的典型开发要求。
+本文针对此场景，我们进行了相关的测试。
 在本节，我们将点击按钮button3，获取\code{doHandleButton3()}相关的调用图情况。
 经过实验，RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler}、\autoref{fig:flowdroid-result-handler}所示。
-两幅图在以下节点上存在不同:
+两幅图在以下节点上存在不同。
 
 
 
@@ -344,7 +344,7 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 另外，在FlowDroid给出的结果中，我们发现方法\code{doHandleButton3()}还调用了类{Message}的类初始化方法\code{<clinit>()}。
 原因是方法\code{doHandleButton3()}调用类\code{Message}的静态方法\code{obtain()}，因此可能需要进行类的初始化。
 由于在程序运行过中，方法\code{doHandleButton3()}在执行方法\code{Message.obtain()}前，类{Message}已经完成了类的初始化，方法\code{Message.<clinit>()}并没有被调用。
-因此RunDroid的结果中显示上述两个方法不存在调用关系。
+在RunDroid的结果中，上述两个方法不存在调用关系。
 这从一个侧面方面反映出FlowDroid分析的结果和动态运行的过程可能存在一定的偏差。
 
 
@@ -436,7 +436,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 
 
 对于语句$s$，语句$s$的前驱节点集合$Pred(s)$指的是语句$s$在程序$P$中的控制依赖和数据依赖的合集（第3行）。
-匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
+在匹配过程中，每个测试用例按照语句$s$前驱节点集合$Pred(s)$的覆盖率情况表示成一维向量，并按照语句$s$是否覆盖将测试用例分为实验组和对照组
 （实验组（T=1）和对照组（T=0）分别与覆盖语句$s$的测试用例、未覆盖语句$s$的测试用例对应）；
 如果向量表示结果相同的测试用例同时出现实验组和对照组中，则保留对应的测试用例到集合$Mdata(s)$中，反之不保留（第4行）。
 匹配完毕后，当$Mdata(s)$不为空集，我们将使用\autoref{equ:expectEquation}计算语句$s$的错误估计值$\tau(s)$（第6行）。

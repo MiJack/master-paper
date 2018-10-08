@@ -28,7 +28,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 预处理器在RunDroid中的作用主要是用户方法的日志代码编织。
 在现有的技术上，代码编织主要分为两类：基于源代码的代码编织和基于字节码的代码编织。
-字节码编织技术以AspectJ\cite{TheAspecJ}为典型代表，技术成熟，应用广泛。
+字节码编织技术以技术成熟、应用广泛的AspectJ\cite{TheAspecJ} 为代表技术，。
 但是，字节码插桩技术在运行过程中会生成过多的方法数，在Android应用构建过程中可能存在方法数65K限制问题。
 为此，预处理器采用的方案是基于源代码的代码编织方案。
 
@@ -73,7 +73,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 
 
-相比定制化Android系统，通过Xposed实现的运行时拦截器兼容性良好，适用于市面上主流的Android系统版本，实现成本低。
+相比定制化Android系统，通过Xposed实现的运行时拦截器兼容性良好，适用于当前主流的Android系统版本，实现成本低。
 同时，待拦截方法列表的编辑功能的引入，使得在不修改插件代码的情况下，支持动态添加删除待拦截的方法，避免了Xposed插件修改后的系统重启操作，提高了RunDroid整体的执行效率。
  
 
@@ -126,10 +126,10 @@ Neo4j的数据分为节点和关系两种类型，支持自定义键值属性。
 
 
 
-关系生成器是\autoref{alg:buildCG} $\sim$\autoref{alg:buildTrigger}的具体实现，由Cypher脚本和Soot等技术共同实现。
+关系生成器是\autoref{alg:buildCG} $\sim$\autoref{alg:buildTrigger}的具体实现，基于Cypher脚本和Soot等技术共同实现。
 当我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$（\autoref{alg:buildTrigger}第11行）时，可以直接使用脚本\autoref{fig:cypher_code}
 直接在调用图中找到所有符合条件的节点。
-相比传统的编程语言，Cypher在实现相同逻辑时，表达形式简洁，代码可读性高，开发效率高效。
+相比传统的编程语言，Cypher在实现相同逻辑时具有表达形式简介、代表阅读性好、开发效率好的特点。
 Soot的工作主要是提供应用程序相关的类继承检索服务。
 例如，\autoref{alg:buildTrigger}第7行中，我们需要知道所有的Runnable对象，此处便需要通过Soot查询所有的Runnable子类。
 在算法\ref{alg:buildActivityLifecycle}中，我们也会将Soot和Cypher相结合用于查找所有Activity的生命周期方法。
