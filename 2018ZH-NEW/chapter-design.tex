@@ -231,6 +231,9 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 \subsection{构建函数调用图}
 
 
+由于在程序执行过程中，不存在一个调用关系跨越两个线程，因此，在整个构建过程中，RunDroid以产生日志的线程为基本构建单元，向调用图添加方法调用关系。
+函数调用图的构建过程如\autoref{alg:buildCG}所示。
+
 \begin{algorithm}[!hb]
 \tablewuhao
 	\caption{函数调用图的构建过程} 
@@ -298,8 +301,6 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 %虽然所有线程的日志都输出到一个日志文件中，但在每个线程的视图中，日志条目的输出顺序遵循调用图的顺序遍历：调用方法在被调用方法之前输出。
 %此外，每个方法执行对应于两个日志条目：方法入口和出口的日志条目。
 
-由于在程序执行过程中，不存在一个调用关系跨越两个线程，因此，在整个构建过程中，RunDroid以产生日志的线程为基本构建单元，向调用图添加方法调用关系。
-函数调用图的构建过程如\autoref{alg:buildCG}所示。
 
 对于每个线程，RunDroid顺序遍历对应的日志，使用栈$stack$的入栈、出栈操作来模拟对应线程的函数执行的过程，还原调用关系（第2$\sim$ 20行）：
 当读取到方法执行的开始日志时，系统会在调用图创建一个节点表示该方法的执行（第7$\sim$8行），
@@ -432,14 +433,17 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 }
 
 
+
  \subsection{构建多线程触发关系}
 基于函数调用图构建多线程触发关系主要分为两个方面，基于Java 的多线程交互与基于{Handler} 的多线程消息调度，具体的过程如\autoref{alg:buildTrigger}所示。
 
 
 
+ 
+ 
 \begin{algorithm}[!ht]
 	\tablewuhao
-	\caption{扩展函数调用图的构建过程}
+	\caption{构建多线程触发关系}
 	\label{alg:buildTrigger}
 	\KwIn {	$ecg$， 拓展函数调用图} 
 	\KwOut {	$ecg$，包含触发关系的拓展函数调用图}
@@ -544,11 +548,11 @@ rel(m_{run}, o_r) = instance \\
 根据第\ref{chp:background}、\ref{chp:definition}章的介绍可知，用户通过调用Handler提供的API，
 将相关业务逻辑借助Message对象传递给目标线程的Handler对象，在目标线程执行相应的业务逻辑处理。
 %在这个部分，我们需要找出用户调用的Handler API和对应目标线程的业务逻辑方法间的触发关系：
-在构建{Handler} 触发关系过程中，首先，我们利用类{Handler}的方法\code{enqueueMessage(Message)}（用$m_{enqueue}$表示）和\code{dispatchMessage(Message)}（用$m_{dispatch}$表示）公用同一个Message对象的特点，
+在构建{Handler} 触发关系过程中，首先，我们利用类{Handler}的消息分发方法$m_{enqueue}$和消息处理方法$m_{dispatch}$公用同一个Message对象$o_{message}$的特点，
 找到所有的Handler底层函数触发关系 ，$m_{enqueue}  \hookrightarrow  m_{dispatch}$ （第$8\sim$9 行）；
 对于每一个触发关系 $m_{enqueue}  \hookrightarrow  m_{dispatch}$，
-从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法（即用户调用的Handler API方法，$m_{send}$）（第10行），
-从$m_{dispatch}$ 顺着调用关系往下找到用户定义的方法\code{Handler.handleMessage(Message)}$m_{handle}$（第11行），
+从$m_{enqueue}$ 顺着调用关系往上找到最上层的Handler API方法$m_{send}$，即用户调用的Handler API方法（第10行），
+从$m_{dispatch}$ 顺着调用关系往下找到用户定义的消息处理方法$m_{handle}$（第11行），
 最后在调用图中提交方法$m_{send}$和$m_{handle}$之间的触发关系 $m_{send} \lhook\joinrel\xrightarrow{Handler} m_{handle}$（第12行）。
 %如果$m_{send}$和$m_{handle}$中有一个方法未找到，表示
 最终，我们得到用户通过Handler进行多线程消息调度的用户层面方法的触发关系。

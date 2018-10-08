@@ -198,7 +198,7 @@ RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 \begin{figure*}[!hb]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/doFibonacci-rundroid.png}
-	\caption{斐波拉契数列相关的RunDroid调用图（局部）}
+	\caption{斐波拉契数列相关的RunDroid调用图}
 	\label{fig:rundroid-result-Fibonacci}
 \end{figure*}
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
@@ -250,7 +250,7 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-lifecycle-rundroid.png}
-	\caption{Activity生命周期和事件回调的RunDroid调用图（局部）}
+	\caption{Activity生命周期和事件回调的RunDroid调用图}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
 
@@ -299,7 +299,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-handler-rundroid.png}
-	\caption{多线程触发关系相关的RunDroid调用图（局部）}
+	\caption{多线程触发关系相关的RunDroid调用图}
 	\label{fig:rundroid-result-handler}
 \end{figure*}
 
@@ -308,7 +308,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
-	\caption{多线程触发关系-FlowDroid生成的调用图（局部）}
+	\caption{多线程触发关系-FlowDroid生成的调用图}
 	\label{fig:flowdroid-result-handler}
 \end{figure*}
 
@@ -330,9 +330,9 @@ FlowDroid对方法\code{doHandleButton3()}进行推算出\autoref{fig:code_demo}
 
 \point{基于Handler的多线程触发方式}
 
-在WorkerThread的方法run()中，我们通过Handler进行了异步UI操作，触发了方法\code{MainActivity\$1.handleMessage(Message)}的执行。
+在WorkerThread的方法run()中，我们通过Handler进行了异步UI操作，触发了方法\code{MainActivity\$1.handleMessage(Message)}的执行\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此编译后的类名为\code{MainActivity\$1}。}。
 在构建拓展调用图过程中，RunDroid充分挖掘了这些方法和对应的方法对象的关联关系，进而补全方法\code{Handler.sendMessage()}和\code{MainActivity\$1.handleMessage(Message)}之间的触发关系。
-因此，在RunDroid展示的结果中，上述两个方法之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）\footnote{由于我们定义的Handler是MainActivity的匿名内部类，因此编译后的类名为\code{MainActivity\$1}。}。
+因此，在RunDroid展示的结果中，上述两个方法之间存在一个从前者指向后者的有向边，边上标识着相应的触发原因（通过Handler方式触发，Handler）。
 但是，FlowDroid分析相关代码时，由于缺少运行时上下文信息，无法分析出\code{WorkerThread.run()}中handler的具体类型，因此无法将这两个方法连接起来。
 
 

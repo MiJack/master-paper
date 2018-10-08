@@ -140,11 +140,11 @@
 \renewcommand{\contentsname}{\hfill\bfseries\Large 目录\hfill}   
 \renewcommand{\cftaftertoctitle}{\hfill}
 
-\renewcommand{\listtablename}{\hfill\bfseries\Large 表~~~~格\hfill} 
-\renewcommand{\listfigurename}{\hfill\bfseries\Large 插~~~~图\hfill} 
+\renewcommand{\listtablename}{\hfill\bfseries\Large 表~格~清~单\hfill} 
+\renewcommand{\listfigurename}{\hfill\bfseries\Large 插~图~清~单\hfill} 
 
 
-\renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算~~~~法}
+\renewcommand{\listalgorithmcfname}{\centering\bfseries\Large 算~法~清~单}
 \newcommand*{\fullref}[1]{\textbf{\hyperref[{#1}]{第\ref*{#1}章~}}}
 
 
@@ -180,6 +180,7 @@
 %===============================概念定义===============================% 
 
 \newcommand{\eat}[1]{}
+\newcommand{\weizi}[1]{#1}
 
 \newcommand{\anonymous}[2]{{ #2 }}
 \newcommand{\citeline}[1]{[\citenum{ #1 }]}
@@ -326,8 +327,10 @@
 \input {B3-Figure.tex}
 \clearPaperPage
 \input {B4-Table.tex}
-\clearPaperPage
+
 \input {B5-Algorithms.tex}
+\clearPaperPage
+%\input{B6-Symbol.tex}
 
 
 
@@ -398,13 +401,12 @@
 \clearPaperPage
 
 
+
 \fancypagestyle{plain}{%
 	\fancyhead[LE,RO]{华东师范大学硕士专业学位论文}
 	\fancyhead[RE,LO]{ 致  谢}
 }
 
-
-\addcontentsline{toc}{chapter}{致  谢}
 
 \input {D2-ACHNOWLEDGEMENT.tex}
 
@@ -417,8 +419,6 @@
 }
 
 
-
-\addcontentsline{toc}{chapter}{攻读学位期间发表的学术论文}
 \input {D3-MYACHIEVEMENTS.tex}
 
 
