@@ -150,8 +150,10 @@ RunDroid会遍历项目源代码中的Java源文件，将源文件和对应的�
 
 由于无法直接对系统方法进行源代码修改，RunDroid利用动态拦截技术对系统方法的执行进行拦截，达到获取系统方法的执行信息的目的。
 RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如\autoref{tbl:hookMethodList}所示。
-列表中的方法通常和Android特性相关，涵盖Activity的生命周期方法、Java Thread API以及Handler等多个方面。
-在目标应用程序开始运行前，运行时拦截器会为上述目标方法注册执行回调函数。
+列表中的方法通常和Android特性相关，涵盖Activity的生命周期方法、Java Thread API以及Handler机制等多个方面。
+
+
+在目标应用程序开始运行前，RunDroid会为上述目标方法注册执行回调函数。
 在目标方法执行前和执行后，对应的回调函数会被执行，进而通过日志记录器记录下这些方法执行的相关信息。
 在RunDroid中，系统方法执行信息的获取，可以填补调用图缺失的系统方法执行，进而还原出应用层和系统层之间以及系统内部的方法调用，使得产生的调用图更加完整。
 
@@ -160,7 +162,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 	%	\centering
 	\tablewuhao		
 	
-	\caption{运行时拦截器拦截的系统方法列表}
+	\caption{待拦截的系统方法列表}
 	
 	\label{tbl:hookMethodList}
 	
@@ -172,7 +174,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 				\hline
 				方法签名&说明\\
 				\hline
-				Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{和Activity生命周期相关的方法}\\
+				Activity.onCreate(Bundle)   &\multirow{6}{0.4\linewidth}{\centering 和Activity生命周期相关的方法}\\
 				%	\cline{1-1}
 				Activit.onStart()    &\\
 				Activity.onResume()     &\\
@@ -183,7 +185,7 @@ RunDroid为待拦截的系统方法维护了一个系统方法列表，具体如
 				
 				Thread.start()   & 和Java 线程启动相关的方法\\
 				\hline
-				Message.obtain() & \multirow{15}{0.4\linewidth}{和 Hanlder机制相关的方法}\\
+				Message.obtain() & \multirow{15}{0.4\linewidth}{\centering 和 Hanlder机制相关的方法}\\
 				Handler.enqueueMessage(MessageQueue,Message,long)&\\
 				Handler.dispatchMessage(Message)&\\
 				Handler.post(Runnable)&\\
@@ -321,7 +323,7 @@ RunDroid构建拓展函数调用图的过程分为如下几个阶段：
 
 
 
-\subsection{构建Activity的生命周期和事件回调}
+\subsection{构建Activity的生命周期及事件回调的触发关系}
 
 \point{构建Activity的生命周期}
 

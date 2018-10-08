@@ -3,15 +3,8 @@
 
 \label{chp:implement}
 
-\eat{
+RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术，由预处理器、运行时拦截器、日志记录器、调用图构建器等部分组成，整体架构图如\autoref{fig:rundroid_overview}所示。
 
-RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术，由预处理器、运行时拦截器、日志记录器、调用图构建器等部分组成。
-本章将详细的介绍上述技术及RunDroid各组成部分的实现细节。
-}
-
-
-
-在技术实现上，RunDroid主要分为预处理器、运行时拦截器、日志记录器、调用图构建器等4个部分，整体架构图如\autoref{fig:rundroid_overview}所示。
 %从功能上，预处理器和运行时拦截器两者的作用是一致的：在程序运行过程中，当相关方法执行时，触发日志记录器记录相应的信息。
 预处理器通过源代码插桩技术实现在用户方法运行时触发用户方法的信息记录，而运行时拦截器则是通过方法劫持技术实现对系统方法执行的拦截，进而触发日志记录。
 %系统方法的执行。
@@ -22,7 +15,7 @@ RunDroid使用Java作为开发语言，使用了srcML、Xposed、Neo4j等技术�
 
 \begin{figure*}[!hb]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./Figures/overview.png}
+	\includegraphics[width=0.9\textwidth]{./Figures/overview.png}
 	\caption{ RunDroid的整体架构图}
 	\label{fig:rundroid_overview}
 \end{figure*}
@@ -134,7 +127,7 @@ Neo4j的数据分为节点和关系两种类型，支持自定义键值属性。
 
 
 
-关系生成器是\autoref{alg:buildCG}、\autoref{alg:buildActivityLifecycle}、\autoref{alg:buildTrigger}的具体实现，由Cypher脚本和Soot等技术共同实现。
+关系生成器是\autoref{alg:buildCG} $\sim$\autoref{alg:buildTrigger}的具体实现，由Cypher脚本和Soot等技术共同实现。
 当我们需要找到使用$o_{m}$作为参数的方法$m_{enqueue}$、$m_{dispatch}$（\autoref{alg:buildTrigger}第11行）时，可以直接使用脚本\autoref{fig:cypher_code}
 直接在调用图中找到所有符合条件的节点。
 相比传统的编程语言，Cypher在实现相同逻辑时，表达形式简洁，代码可读性高，开发效率高效。

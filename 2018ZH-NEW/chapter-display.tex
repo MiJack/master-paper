@@ -242,9 +242,9 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 \subsection{Activity 生命周期和事件回调的效果展示}
 
 
-在本节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity生命周期方法的呈现效果。
+在本节中，应用运行时，我们将点击按钮button2，在\code{MainActivity}启动另一个\code{NewActivity}，对比RunDroid和FlowDroid在Activity 生命周期和事件回调的效果展示。
 最终，我们得到的RunDroid的运行结果如\autoref{fig:rundroid-result-lifecycle}所示。
-针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，将Activity的生命周期和UI事件回调串联起来，构造应用层面的方法\code{dummyMainMethod()}表示应用的执行过程，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
+针对Android 组件\code{Activity}的生命周期特性，FlowDroid 进行了针对性的建模，将 Activity 的生命周期和UI事件回调串联起来，构造应用层面的方法\code{dummyMainMethod()}表示应用的执行过程，相应的结果如\autoref{fig:flowdroid-result-lifecycle}所示。
 
 
 \begin{figure*}[!ht]
@@ -391,7 +391,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 具体过程如\autoref{alg:fault-localization}所示。
 
 
-\begin{algorithm}[hb]
+\begin{algorithm}[!ht]
 	
 \tablewuhao
 
@@ -517,7 +517,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 									\hline
 		\end{tabular}
 	\end{center}
-\tiny
+\wuhao
 	注： 第2列到第6列分别代表测试用例$t_1\sim t_5$；
 	每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；
 	测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；   
