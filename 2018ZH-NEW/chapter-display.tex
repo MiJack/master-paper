@@ -198,7 +198,7 @@ RunDroid的动态分析结果如\autoref{fig:rundroid-result-Fibonacci}所示：
 \begin{figure*}[!hb]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/doFibonacci-rundroid.png}
-	\caption{斐波拉契数列相关的RunDroid调用图}
+	\caption{RunDroid产生的方法doFibbonaci()有关的调用图}
 	\label{fig:rundroid-result-Fibonacci}
 \end{figure*}
 在本案例中，\code{doHandleButton1()}调用了方法\code{doFibonacci()}，因此前者有条有向边指向后者；
@@ -218,7 +218,7 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 \begin{figure*}[!hb]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/FlowDroid-Fibonacci.png}
-	\caption{斐波拉契数列相关的FlowDroid调用图}
+	\caption{FlowDroid产生的函数doFibbonaci()有关的调用图}
 	\label{fig:flowdroid-result-Fibonacci}
 \end{figure*}
 
@@ -299,7 +299,7 @@ RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-handler-rundroid.png}
-	\caption{多线程触发关系相关的RunDroid调用图}
+	\caption{RunDroid产生的多线程触发关系有关的调用图}
 	\label{fig:rundroid-result-handler}
 \end{figure*}
 
@@ -308,7 +308,7 @@ RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
-	\caption{多线程触发关系相关的FlowDroid调用图}
+	\caption{FlowDroid产生的多线程触发关系有关的调用图}
 	\label{fig:flowdroid-result-handler}
 \end{figure*}
 
