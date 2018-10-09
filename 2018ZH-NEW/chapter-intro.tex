@@ -127,9 +127,6 @@ Marvin\cite{lindorfer2015marvin}从静动态分析技术的分析结果中提取
 在对大规模数据验证时，Marvin可以识别出98.24\%的恶意软件，假阳性低于0.04\%。
 由于网络通信在Android应用中的普遍性，文献[\citenum{Shao2016The,Jia2017Open,bu2017program}]专门研究Android应用上的网络安全问题，涵盖UNIX Domain Socket、Internet Socket等多个不同的方面，探讨了不同使用场景下的网络安全问题。
 
-\eat{、、
-	、完整的安卓系统框架层调用图生成方法、、基于函数相似度的恶意软件研究、}
-
 
 
 
@@ -149,6 +146,9 @@ Wei Yang等人的工作\cite{yang2013grey}通过对APP的状态进行建模，�
 
 文献[\citenum{wong2009survey},\citenum{wong2016survey}]介绍上众多错误定位技术错误定位技术。
 其中最有为经典的就是基于程序频谱的错误定位（SBFL），包括Tarantula\cite{jones2005empirical}、Jaccard\cite{jain1988algorithms}、Zoltar\cite{janssen2009zoltar}等。
+%SBFL技术将程序语句的覆盖信息作为输入，利用故障模型公式计算语句的可疑性分数。
+%语句的得分越高，这条语句越有可能是程序错误。
+%研究人员还通过对比实验评估了不同故障模型公式的实验效果。
 在SBFL的基础上，Baah等提出了基于程序依赖图的错误定位模型\cite{baah2010causal,baah2011mitigating}，通过引入因果关系模型，计算语句出错的可能性。
 Mzoltar\cite{machado2013mzoltar}第一次使用SBFL技术Zoltar应用在Android上，实现了Android程序上的故障定位。
 Mirzaei等人\cite{mirzaei2015exception} 将切片技术和Tarantula和Jaccard等技术结合用于错误定位，根据可疑性分数对语句进行排名。
