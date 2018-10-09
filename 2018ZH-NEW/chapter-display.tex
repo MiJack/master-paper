@@ -4,13 +4,13 @@
 
 
 实验相关配置的环境如下：
-实验平台是ThinkPad E430，CPU为Intel 酷睿i5 3210M，内存为12GB。
+PC端为ThinkPad E430，CPU为Intel 酷睿i5 3210M，内存为12GB。
 手机型号为小米 MI 5，处理器型号为骁龙820，RAM为3GB，系统为Android 6.0，内置Xposed运行环境。
 
 
 
 
-\section{实验验证——函数触发关系的普遍性}
+\section{函数触发关系的普遍性验证}
 
 相比其它分析技术，RunDroid最为重要的创新点为在函数调用图中展示函数触发关系（例如多线程相关的触发关系）。
 为了验证函数触发关系在Android程序运行过程中的普遍性，我们从开源社区F-Droid\cite{FDroidFr21:online}中随机抽取了9个应用，
@@ -42,7 +42,7 @@ archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更�
 	\centering
 	{
 		\tablewuhao
-		\caption{各应用运行过程的统计数据}
+		\caption{动态函数调用图的数据统计}
 		\label{table:app_results}
 		\begin{tabular}{ |c |c|c|c|c|c|}
 			\hline
@@ -122,7 +122,7 @@ archwiki-viewer中的浏览器需要根据网页的加载情况，定时地更�
 
 
 
-\section{应用结果展示}  
+\section{动静态函数调用图对比}  
 %\label{chp:display}
 在本节中，我们会对RunDroid运行结果做出相应的展示，并将展现结果和静态分析工具FlowDroid的输出结果进行对比，分析各自的优劣。
 
@@ -185,7 +185,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-\subsection{函数调用图的构建结果展示}
+\subsection{函数调用图的构建结果对比}
 
 在应用程序运行时，点击按钮button1，应用会计算斐波拉契数列中的第5项，并将这个数以Toast的形式展示给用户。
 上述过程中，方法调用同时涉及到普通方法调用、递归函数调用。
@@ -239,7 +239,7 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 
 
 
-\subsection{Activity 生命周期和事件回调的效果展示}
+\subsection{Activity 生命周期和事件回调的效果对比}
 
 
 在本节中，应用运行时，我们将点击按钮button2，在{MainActivity}启动另一个{NewActivity}，对比RunDroid和FlowDroid在Activity 生命周期和事件回调的效果展示。
@@ -250,7 +250,7 @@ FlowDroid得到的函数调用图往往以方法体本身作为研究的基本�
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/android-lifecycle-rundroid.png}
-	\caption{Activity生命周期和事件回调的RunDroid调用图}
+	\caption{表示Activity生命周期和事件回调的状态变迁图（RunDroid）}
 	\label{fig:rundroid-result-lifecycle}
 \end{figure*}
 
@@ -266,7 +266,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/flowdroid-dummyMainMethod.png}
-	\caption{FlowDroid生成的函数dummyMainMethod()的调用图}
+	\caption{函数dummyMainMethod()的控制流图}
 	\label{fig:flowdroid-result-lifecycle}
 \end{figure*}
 
@@ -284,13 +284,13 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 相比FlowDroid，RunDroid的运行结果是程序运行时的直接反映，真实地反映了应用的状态变化。
 
 
-\subsection{多线程触发关系效果展示}
+\subsection{多线程触发关系的效果对比}
 
-多线程开发是Android开发中过程的典型开发要求。
-本文针对此场景，我们进行了相关的测试。
+%多线程开发是Android开发中过程的典型开发要求。
+本文针对Android中的多线程开发场景，我们进行了相关的测试。
 在本节，我们将点击按钮button3，获取\code{doHandleButton3()}相关的调用图情况。
-经过实验，RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler}、\autoref{fig:flowdroid-result-handler}所示。
-两幅图在以下节点上存在不同。
+RunDroid和FlowDroid的运行结果分别如\autoref{fig:rundroid-result-handler}、\autoref{fig:flowdroid-result-handler}所示，
+两者在以下几个方面存在不同。
 
 
 
@@ -308,7 +308,7 @@ RunDroid可以捕获到组件生命周期方法以及回调事件方法的实际
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/FlowDroid-handler.png}
-	\caption{多线程触发关系-FlowDroid生成的调用图}
+	\caption{多线程触发关系相关的FlowDroid调用图}
 	\label{fig:flowdroid-result-handler}
 \end{figure*}
 
@@ -381,12 +381,12 @@ Y =\alpha +\tau T+\beta X
 	
 \end{scriptsize}
 
-\subsection{原理简介}
+\subsection{错误定位技术原理简介}
 
 
 
-基于因果关联模型的错误定位技术，以程序本身$P$和程序在一组测试用例下的覆盖率信息作为输入，
-通过期望模型（\autoref{equ:expectEquation}）和线性回归模型（\autoref{equ:linearEquation}）计算程序$P$中的语句$s$的相应的错误估计值$\tau$。
+基于因果关联模型的错误定位技术，以程序本身$P$和一组测试用例的覆盖率信息作为输入，
+通过期望模型（\autoref{equ:expectEquation}）和线性回归模型（\autoref{equ:linearEquation}）计算程序$P$中的语句$s$的错误估计值$\tau$。
 $\tau$的值越大，语句$s$是错误的可能性越大。
 具体过程如\autoref{alg:fault-localization}所示。
 
@@ -395,12 +395,12 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 	
 \tablewuhao
 
-\caption{错误定位的计算方法} 
+\caption{错误定位的计算过程} 
 
 
 \label{alg:fault-localization}
 \KwIn{ $P$，应用程序}
-\KwIn{ $CoverageInfo$，应用程序的覆盖信息}
+\KwIn{ $CoverageInfo$，各测试用例的覆盖信息}
 \KwOut{ $sorted\_\tau$，程序语句的逆向排序}
 
 
@@ -452,7 +452,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 %由于结算结果中回归直线斜率不存在，所以$\tau(\Line{2})= \text{NA}$。
 
 
-\subsection{结果分析}
+\subsection{对比结果分析}
 
 
 为了验证RunDroid提供的动态调用图对因果影响模型有一定的提升作用，
@@ -463,7 +463,7 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 
 \begin{table}[!ht]
 	
-	\caption{结果对比}
+	\caption{使用RunDroid前后错误定位结果的对比}
 
 	
 	\label{tab:result}
@@ -513,19 +513,20 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 			
 			\hline
 			
-			&                                                  & 0 & 1 & 0 & 0 & 1 &   &               \\
+			&                                                  & \textbf{0} & \textbf{1} & \textbf{0} & \textbf{0} &\textbf{ 1} &   &               \\
 									\hline
 		\end{tabular}
+	\begin{tablenotes}[flushleft]
+	\item	注： 第2列到第6列分别代表测试用例$t_1\sim t_5$；
+		每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；
+		测试用例列的值表示相应的程序语句是否在该测试用例执行，1表示覆盖（$T=1$），0表示未覆盖（$T=0$）；   
+		最后一行表示各个测试用例的执行结果，“\textbf{1}”表示测试未通过（$Y=1$），“\textbf{0}”表示测试通过（$Y=0$）。 % \par
+		\end{tablenotes}
 			\end{threeparttable}
 		
 	
 
 	\end{center}
-\wuhao
-注： 第2列到第6列分别代表测试用例$t_1\sim t_5$；
-每个测试用例列的标题分别显示在第1行和第2行使用的v和num的值；
-测试用例列的值指示相应的程序语句是否由测试用例执行，1表示覆盖，0表示未覆盖；   
-最后一行表示各个测试用例的执行结果，“1”表示测试未通过（$Y=1$），“0”表示测试通过（$Y=0$）。  \par
 
 	
 \end{table}
@@ -541,13 +542,6 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 因此，$\tau'$的结果比结果$\tau$更好。
 
 
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=0.8\textwidth]{./Figures/fault-localization.png}
-	\end{center}
-	\caption{使用RunDroid前后关于语句\Line{13}的测试用例匹配的对比}
-	\label{fig:motivationResultTreatment}
-\end{figure}
 
 
 \Line{13} 分数提高的原因如下：
@@ -557,9 +551,16 @@ $\tau$的值越大，语句$s$是错误的可能性越大。
 \Line{13}的前驱节点增加了\Line{2}、\Line{5}和\Line{9}，变为$\{ \Line{2},\Line{5},\Line{9} ,\Line{12}\}$，实验组和对照组的$Mdata(\Line{13})$如\autoref{fig:motivationResultTreatment}-(b)所示。
 实验组中的测试用例$t_3$在对照组中找不到对应的测试用例，因此不参与计算。
 最后，根据测试用例$t_1$、$t_2$、$t_4$、$t_5$得到\Line{13}的错误估计值：$\tau =  \frac{1+1	}{2} - \frac{0+0}{2} = 1$。
-\Line{12}的前驱节点也发生了变化，但是由于实验组和对照组匹配结果保存不变，因此结果保存不变。
+\Line{12}的前驱节点也发生了变化，但是由于实验组和对照组匹配结果保持不变，因此结果保持不变。
 而对于其他语句，前驱节点的信息并没有发生变化，因此数值保持不变。
 
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{./Figures/fault-localization.png}
+	\end{center}
+	\caption{使用RunDroid前后关于语句\Line{13}的测试用例匹配的对比}
+	\label{fig:motivationResultTreatment}
+\end{figure}
 
 
 %RunDroid提供的函数调用图中不仅仅包括函数调用关系，还包括函数触发关系，两者均可以表示方法执行的因果关系。

@@ -1,4 +1,4 @@
-\chapter{Android系统介绍 }  
+\chapter{Android相关背景知识介绍 }  
 \label{chp:background}
 
 
@@ -76,7 +76,7 @@ Android系统将Activity的运行状态分为以下四种，Activity的生命周
 %	\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle.png}
 	\includegraphics[width=0.9\textwidth]{./Figures/Activity-lifecycle-Landscape.png}
 	
-	\caption{Activity的生命周期}
+	\caption{Activity生命周期的状态变迁图}
 	\label{fig:Activity-lifecycle}
 \end{figure*}
 
@@ -118,7 +118,7 @@ Android系统架构中的单线程消息队列以及主线程的非阻塞性，�
 这也导致了多线程交互在Android应用程序运行过程中十分常见。
 从整体上，系统提供的交互方式分为两种：基于Java的多线程交互和基于Handler的交互方式。%\cite{androidSourceCode}。
 
-\subsection{基于Java的多线程交互}
+\subsection{基于Java API的多线程交互}
 
 Android应用程序是在Java的基础上开发的，因此，开发人员可以采用和Java应用相同的调用方式启动工作线程，并在对应的线程上完成业务逻辑。
 但是，Java API只能实现业务逻辑从原有线程转移到新的工作线程上，不能重新返回到主线程上。
@@ -138,7 +138,7 @@ Android应用程序是在Java的基础上开发的，因此，开发人员可以
 \begin{figure*}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{./Figures/handler-code.png}
-	\caption{Handler的使用实例}
+	\caption{Handler示例代码}
 	\label{fig:handler-code}
 \end{figure*}
 
@@ -160,7 +160,7 @@ Handler在主线程中收到该{Message}对象时，会根据逻辑代码（即\
 \begin{figure*}[hb]
 	\centering
 	\includegraphics[width=\textwidth]{./Figures/Handler-apis.png}
-	\caption{ Handler 各API之间的调用关系}
+	\caption{ Handler 各API间的调用关系图}
 	\label{fig:handler-apis}
 \end{figure*}
 
@@ -197,7 +197,7 @@ Handler机制中各组成部分的相互关系如\autoref{fig:handler-framework}
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Figures/Handler-framework.png}
-	\caption{ Handler机制}
+	\caption{ Handler机制示意图}
 	\label{fig:handler-framework}
 \end{figure*}
 

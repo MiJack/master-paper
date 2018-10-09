@@ -11,14 +11,14 @@ RunDroid利用源程序代码插桩和运行时方法拦截的相结合的方式
 RunDroid提供的函数调用图从方法调用关系、方法间的触发关系以及方法执行的相关对象信息等多个方面较为全面地刻画了Android应用程序的执行过程。
 
 
-\section{整体设计}
+\section{RunDroid的整体设计}
 
 
 
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=0.8\textwidth]{./Figures/code-sample.png}
-	\caption{RunDroid的处理流程}
+	\caption{RunDroid的处理流程图}
 	\label{fig:code_sample}
 \end{figure*}
 
@@ -228,11 +228,11 @@ RunDroid构建\ecg 的过程分为如下几个阶段：
 
 
 
-\subsection{构建函数调用图}
+\subsection{函数调用图的构建}
 
 
-由于在程序执行过程中，不存在一个调用关系跨越两个线程，因此，在整个构建过程中，RunDroid以产生日志的线程为基本构建单元，向调用图添加方法调用关系。
-函数调用图的构建过程如\autoref{alg:buildCG}所示。
+由于在程序执行过程中，不存在一个调用关系跨越两个线程，因此，在整个构建过程中，RunDroid以产生日志的线程为基本构建单元，生成\ecg。
+该\ecg 包括了方法调用关系及方法对象关系，具体的构建过程如\autoref{alg:buildCG}所示。
 
 \begin{algorithm}[!hb]
 \tablewuhao
@@ -324,7 +324,7 @@ RunDroid构建\ecg 的过程分为如下几个阶段：
 
 
 
-\subsection{构建Activity的生命周期及事件回调的触发关系}
+\subsection{Activity的生命周期及事件回调触发关系的构建}
 
 \point{构建Activity的生命周期}
 
@@ -351,7 +351,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 \begin{algorithm}[!hb]
 \tablewuhao
-	\caption{构建Activity的生命周期和事件回调} 
+	\caption{Activity 生命周期和事件回调的构建过程} 
 	\label{alg:buildActivityLifecycle}
 	\KwIn{ $manifestFile$，AndroidManifest文件\\ \qquad  \quad $ecg$，函数调用图}	
 	\KwOut{ $ecg$，包括Activity生命周期的函数调用图}
@@ -434,7 +434,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
 
 
 
- \subsection{构建多线程触发关系}
+ \subsection{多线程触发关系的构建}
 基于函数调用图构建多线程触发关系主要分为两个方面，基于Java 的多线程交互与基于{Handler} 的多线程消息调度，具体的过程如\autoref{alg:buildTrigger}所示。
 
 
@@ -443,7 +443,7 @@ Android 应用的Acticvity生命周期的构建就是将Activity生命周期方�
  
 \begin{algorithm}[!ht]
 	\tablewuhao
-	\caption{构建多线程触发关系}
+	\caption{多线程触发关系的构建过程}
 	\label{alg:buildTrigger}
 	\KwIn {	$ecg$， \ecg } 
 	\KwOut {	$ecg$，包含触发关系的\ecg }

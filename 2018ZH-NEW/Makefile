@@ -1,2 +1,2 @@
 all:
-	xelatex 2018ZH; bibtex 2018ZH; xelatex 2018ZH; xelatex 2018ZH; open 2018ZH.pdf
+	xelatex 2019YYJ; bibtex 2019YYJ; xelatex 2019YYJ; xelatex 2019YYJ; cp 2019YYJ.pdf  10269_085211_51164500190_LW.pdf;open 10269_085211_51164500190_LW.pdf

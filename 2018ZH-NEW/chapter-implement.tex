@@ -141,7 +141,7 @@ Soot的工作主要是提供应用程序相关的类继承检索服务。
 	MATCH (m_enqueue:METHOD)-[:PARAM]->(o_m:OBJECT),
 					(m_dispatch:METHOD)-[:PARAM]->(o_m:OBJECT)
 	return o_m, m_enqueue, m_dispatch\end{lstlisting}
-	\caption{使用Cypher查找共用对象$o_m$的方法$m_{enqueue}$、$m_{dispatch}$}
+	\caption{用于查找共用对象$o_m$的方法$m_{enqueue}$、$m_{dispatch}$的Cypher语句}
 	\label{fig:cypher_code}
 \end{figure}
 
