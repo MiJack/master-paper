@@ -17,11 +17,16 @@
 \usepackage{amsmath} 
 \usepackage{amssymb}               % AMSLaTeX宏包 用来排出更加漂亮的公式
 %\usepackage[CJKbookmarks]{hyperref}
+
 \usepackage[hyphens]{url}
 \urlstyle{same}
 
 
+
+
+
 \usepackage[hidelinks,breaklinks]{hyperref}
+
 
 
 
@@ -291,6 +296,8 @@
 \setlength{\bibitemsep}{\baselineskip}
 
 
+\renewcommand{\bibfont}{\normalfont}
+
 
 \usepackage{lipsum}
 
@@ -411,7 +418,10 @@
 \clearPaperPage
 	\addcontentsline{toc}{chapter}{参考文献}
 	\bibliographystyle{GBT7714-2005}
+	{
+		
 	\bibliography{bib/tex}
+}
 
 \clearPaperPage
 
