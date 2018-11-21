@@ -150,7 +150,7 @@ FUNCTION {cmd.bibmodifydate}	{ "\providecommand{\bibmodifydate}[1]{#1}" }
 FUNCTION {cmd.bibcitedate} 		{ "\providecommand{\bibcitedate}[1]{#1}" }
 FUNCTION {cmd.bibyear} 			{ "\providecommand{\bibyear}[1]{#1}" }
 FUNCTION {cmd.bibdate} 			{ "\providecommand{\bibdate}[1]{#1}" }
-FUNCTION {cmd.biburl} 			{ "\providecommand{\biburl}[1]{\newline\url{#1}}" }
+FUNCTION {cmd.biburl} 			{ "\providecommand{\biburl}[1]{\url{#1}}" }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
@@ -848,7 +848,7 @@ FUNCTION {format.citedate} {                      % String Emtry::format_citedat
                                                   % // since if the URL contains special symbols such
                                                   % // as '%', the \biburl{} will be broken.
 FUNCTION {format.url} {                           % String Emtry::format_url(String url) {
-  "\newline\url{" swap$ * "}" *                   %   return "\newline\url{" + url + "}";
+  "\url{" swap$ * "}" *                           %   return "\url{" + url + "}";
 }                                                 % }
                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
