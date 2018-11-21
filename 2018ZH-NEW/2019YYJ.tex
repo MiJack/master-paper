@@ -17,8 +17,14 @@
 \usepackage{amsmath} 
 \usepackage{amssymb}               % AMSLaTeX宏包 用来排出更加漂亮的公式
 %\usepackage[CJKbookmarks]{hyperref}
-\usepackage{url}
-\usepackage[hidelinks]{hyperref}
+\usepackage[hyphens]{url}
+\urlstyle{same}
+
+
+\usepackage[hidelinks,breaklinks]{hyperref}
+
+
+
 \usepackage{shortvrb,indentfirst,ulem,makeidx}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
@@ -48,11 +54,6 @@
 \SetKwInput{KwIn}{\textbf{输入}}
 \SetKwInput{KwOut}{\textbf{输出}}
 \SetKwInput{KwReturn}{\textbf{return}}
-
-
-\usepackage{bibspacing}
-
-\setlength{\bibitemsep}{2\baselineskip plus .05\baselineskip minus .05\baselineskip}
 
 
 \usepackage{bm}                     % 处理数学公式中的黑斜体的宏包
@@ -120,7 +121,7 @@
 
 
 \renewcommand*{\bibfont}{\normalfont\normalsize\linespread{1}\selectfont}
-\setlength{\bibitemsep}{\baselineskip}
+
 
 
 
@@ -283,6 +284,23 @@
 	\NAT@swatrue\let\NAT@ctype\z@\NAT@parfalse\let\textsuperscript\relax% NEW
 	\NAT@citexnum[][]}
 \makeatother
+
+\usepackage{bibspacing}
+
+
+\setlength{\bibitemsep}{\baselineskip}
+
+
+
+\usepackage{lipsum}
+
+% ADD THE FOLLOWING COUPLE LINES INTO YOUR PREAMBLE
+\let\OLDthebibliography\thebibliography
+\renewcommand\thebibliography[1]{
+	\OLDthebibliography{#1}
+	\setlength{\parskip}{0pt}
+	\setlength{\itemsep}{0pt plus 0.3ex}
+}
 
 
 
